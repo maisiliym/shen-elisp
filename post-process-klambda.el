@@ -1,6 +1,9 @@
-;; [[file:shen-elisp.org::*Post-processing][Post-processing:1]]
+;; [[file:shen-elisp.org::*Converting%20The%20Symbol%20Table][Converting\ The\ Symbol\ Table:1]]
 (require 'shen-primitives)
 (require 'shen-shen)
+;; Converting\ The\ Symbol\ Table:1 ends here
+
+;; [[file:shen-elisp.org::*Converting%20The%20Symbol%20Table][Converting\ The\ Symbol\ Table:2]]
 (defun shen/migrate-symbol-table ()
   (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
     (if (not (hash-table-p SymbolTable))
@@ -11,7 +14,9 @@
       SymbolTable)))
 
 (shen/migrate-symbol-table)
+;; Converting\ The\ Symbol\ Table:2 ends here
 
+;; [[file:shen-elisp.org::*Converting%20The%20Symbol%20Table][Converting\ The\ Symbol\ Table:3]]
 (defun shen/shen.lookup-func
     (Name Table)
   (let ((Form (gethash Name Table)))
@@ -27,6 +32,8 @@
           (shen/shen.lambda-form Name Arity))))
     (puthash Name lambda-function (shen/value 'shen.*symbol-table*))
     (shen/value 'shen.*symbol-table*)))
+;; Converting\ The\ Symbol\ Table:3 ends here
 
+;; [[file:shen-elisp.org::*Converting%20The%20Symbol%20Table][Converting\ The\ Symbol\ Table:4]]
 (provide 'shen-post-process-klambda)
-;; Post-processing:1 ends here
+;; Converting\ The\ Symbol\ Table:4 ends here

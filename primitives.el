@@ -275,7 +275,7 @@
           (if (buffer-local-value 'shen/shen-buffer S)
               (write-char Byte S)
             (error (format "Buffer %s was not opened by Shen." S)))))
-       ((functionp S)
+       ((functionp S) ;; (ref:write-byte-function)
         (funcall S Byte))
        (t (write-char (shen/stoutput) Byte)))
     (funcall (shen/stoutput) Byte)))
@@ -573,8 +573,7 @@
 
 ;; [[file:shen-elisp.org::*Function%20Application][Primitive\ Macros]]
 (setq shen/*primitive-macros*
-      '(
-        shen/if
+      '(shen/if
         shen/and
         shen/or
         shen/cond
@@ -785,10 +784,6 @@
 ;; Getting\ the\ Tail\ Calls:1 ends here
 
 ;; [[file:shen-elisp.org::*Generating%20A%20TCO'ed%20Function][Generating\ A\ TCO\'ed\ Function:1]]
-(defstruct shen/recur tail-call)
-;; Generating\ A\ TCO\'ed\ Function:1 ends here
-
-;; [[file:shen-elisp.org::*Generating%20A%20TCO'ed%20Function][Generating\ A\ TCO\'ed\ Function:2]]
 (defun shen/trampoline-body (ast)
   (let* ((args (nth 2 ast))
          (body (nth 3 ast))
@@ -798,115 +793,9 @@
          (while (vectorp result)
            (setq result (apply (function ,tail-trampoline) (aref result 0))))
          result))))
-;; Generating\ A\ TCO\'ed\ Function:2 ends here
-
-;; [[file:shen-elisp.org::*Overrides][Overrides:1]]
-(setq shen/*overrides*
-      (let ((table (make-hash-table :test 'equal)))
-        (puthash 'function
-                 `(defun shen/function (S)
-                    (shen/shen\.lookup-func
-                     (shen/unprefix-symbol S)
-                     (shen/value 'shen\.*symbol-table*)))
-                 table)
-        (puthash 'map
-                 `(defun shen/map (F Xs)
-                    (mapcar (lambda (X)
-                              (shen/apply-higher-order-function F (list X)))
-                            Xs))
-                 table)
-        (puthash 'append
-                 `(defun shen/append (Xs Ys) (append Xs Ys))
-                 table)
-        (puthash 'shen.string->bytes
-                 `(defun shen/shen.string->bytes (S)
-                    (string-to-list S))
-                 table)
-        (puthash 'shen.sum
-                 `(defun shen/shen.sum (Xs) (apply #'+ Xs))
-                 table)
-        (puthash 'shen.mod
-                 `(defun shen/shen.mod (N Div) (mod N Div))
-                 table)
-        (puthash 'shen/hash
-                 `(defun shen/hash
-                      (String Limit)
-                    (let ((Hash (shen/mod (shen/sum (shen/shen.string->bytes String)) Limit)))
-                      (if (= 0 Hash) 1 Hash)))
-                 table)
-        (puthash 'get
-                 `(defun shen/get
-                      (Pointer Key Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (if (not Subtable)
-                          (shen/simple-error
-                           (format "pointer not found: %s\n" Pointer))
-                        (let ((Value (gethash Key Subtable)))
-                          (if (not Value)
-                              (shen/simple-error
-                               (format "value not found: %s\n" (list Pointer Key))))
-                          Value))))
-                 table)
-        (puthash 'put
-                 `(defun shen/put
-                      (Pointer Key Value Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (if (not Subtable)
-                          (let ((Subtable (make-hash-table :test 'equal)))
-                            (progn
-                              (puthash Pointer Subtable Table)
-                              (puthash Key Value Subtable)))
-                        (puthash Key Value Subtable))))
-                 table)
-        (puthash 'unput
-                 `(defun shen/unput
-                      (Pointer Key Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (and Subtable
-                           (remhash Key Subtable))
-                      Pointer))
-                 table)
-        (puthash 'shen.resize-vector
-                 `(defun shen/shen.resize-vector (Vector NewSize Fill)
-                    (let* ((VectorLimit (shen/<-address Vector 0))
-                           (Current-Index (+ 1 VectorLimit)))
-                      (puthash 0 NewSize Vector)
-                      (while (<= Current-Index NewSize)
-                        (puthash Current-Index Fill Vector)
-                        (setq Current-Index (+ Current-Index 1)))
-                      Vector))
-                 table)
-        (puthash 'shen.lazyderef
-                         `(defun shen/shen\.lazyderef
-                              (X ProcessN)
-                            (let ((Current X)
-                                  (KeepLooking 't))
-                              (while KeepLooking
-                                (shen/if
-                                 (shen/shen.pvar? Current)
-                                 (shen/let Value (shen/shen.valvector Current ProcessN)
-                                           (shen/if (shen/= Value 'shen.-null-)
-                                                    (setq KeepLooking nil)
-                                                    (setq Current Value)))
-                                 (setq KeepLooking nil)))
-                              Current))
-                         table)
-        (puthash '(set *property-vector* (vector 20000))
-                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
-                 table)
-        table))
-;; Overrides:1 ends here
+;; Generating\ A\ TCO\'ed\ Function:1 ends here
 
 ;; [[file:shen-elisp.org::*Modifying%20The%20AST][Modifying\ The\ AST:1]]
-(defun shen/patch-klambda (ast)
-  (if (eq (car ast) 'defun)
-        (let ((override (gethash (nth 1 ast) shen/*overrides*)))
-          (or override
-              (shen/parse-ast ast)))
-      (let ((patched (gethash ast shen/*overrides* )))
-        (or patched
-            (shen/parse-ast ast)))))
-
 (defun shen/parse-ast (ast)
   (if (not (consp ast))
       (if (shen/symbol-p ast) (list 'quote ast) ast)
@@ -1022,6 +911,107 @@
               (shen/nset-element-at path current-context value)))))))
 ;; \(Unused\)\ Isolating\ and\ Filling:1 ends here
 
+;; [[file:shen-elisp.org::*Overrides][Overrides:1]]
+(setq shen/*overrides*
+      (let ((table (make-hash-table :test 'equal)))
+        ;; (ref:performance)
+        (puthash 'map
+                 `(defun shen/map (F Xs)
+                    (mapcar (lambda (X)
+                              (shen/apply-higher-order-function F (list X)))
+                            Xs))
+                 table)
+        (puthash 'shen.lazyderef
+                 `(defun shen/shen\.lazyderef
+                      (X ProcessN)
+                    (let ((Current X)
+                          (KeepLooking 't))
+                      (while KeepLooking
+                        (shen/if
+                         (shen/shen.pvar? Current)
+                         (shen/let Value (shen/shen.valvector Current ProcessN)
+                                   (shen/if (shen/= Value 'shen.-null-)
+                                            (setq KeepLooking nil)
+                                            (setq Current Value)))
+                         (setq KeepLooking nil)))
+                      Current))
+                 table)
+        (puthash 'append
+                 `(defun shen/append (Xs Ys) (append Xs Ys))
+                 table)
+        (puthash 'shen.string->bytes
+                 `(defun shen/shen.string->bytes (S)
+                    (string-to-list S))
+                 table)
+        (puthash 'shen.sum
+                 `(defun shen/shen.sum (Xs) (apply #'+ Xs))
+                 table)
+        (puthash 'shen.mod
+                 `(defun shen/shen.mod (N Div) (mod N Div))
+                 table)
+
+        ;; (ref:hash-tables)
+        (puthash 'shen/hash
+                 `(defun shen/hash
+                      (String Limit)
+                    (let ((Hash (shen/mod (shen/sum (shen/shen.string->bytes String)) Limit)))
+                      (if (= 0 Hash) 1 Hash)))
+                 table)
+        (puthash '(set *property-vector* (vector 20000))
+                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
+                 table)
+        (puthash 'get
+                 `(defun shen/get
+                      (Pointer Key Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (if (not Subtable)
+                          (shen/simple-error
+                           (format "pointer not found: %s\n" Pointer))
+                        (let ((Value (gethash Key Subtable)))
+                          (if (not Value)
+                              (shen/simple-error
+                               (format "value not found: %s\n" (list Pointer Key))))
+                          Value))))
+                 table)
+        (puthash 'put
+                 `(defun shen/put
+                      (Pointer Key Value Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (if (not Subtable)
+                          (let ((Subtable (make-hash-table :test 'equal)))
+                            (progn
+                              (puthash Pointer Subtable Table)
+                              (puthash Key Value Subtable)))
+                        (puthash Key Value Subtable))))
+                 table)
+        (puthash 'unput
+                 `(defun shen/unput
+                      (Pointer Key Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (and Subtable
+                           (remhash Key Subtable))
+                      Pointer))
+                 table)
+        (puthash 'shen.resize-vector
+                 `(defun shen/shen.resize-vector (Vector NewSize Fill)
+                    (let* ((VectorLimit (shen/<-address Vector 0))
+                           (Current-Index (+ 1 VectorLimit)))
+                      (puthash 0 NewSize Vector)
+                      (while (<= Current-Index NewSize)
+                        (puthash Current-Index Fill Vector)
+                        (setq Current-Index (+ Current-Index 1)))
+                      Vector))
+                 table)
+        ;; (ref:namespacing)
+        (puthash 'function
+                 `(defun shen/function (S)
+                    (shen/shen\.lookup-func
+                     (shen/unprefix-symbol S)
+                     (shen/value 'shen\.*symbol-table*)))
+                 table)
+        table))
+;; Overrides:1 ends here
+
 ;; [[file:shen-elisp.org::*Consolidate%20Call%20Chains][Consolidate\ Call\ Chains:1]]
 (defun shen/consolidate (ast matcher-fn tx-fn)
   (let* ((current-ast ast)
@@ -1090,14 +1080,126 @@
      (t Result))))
 ;; Evaluate\ KLambda:2 ends here
 
-;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:3]]
+;; [[file:shen-elisp.org::*Overrides][Overrides:1]]
+(setq shen/*overrides*
+      (let ((table (make-hash-table :test 'equal)))
+        ;; (ref:performance)
+        (puthash 'map
+                 `(defun shen/map (F Xs)
+                    (mapcar (lambda (X)
+                              (shen/apply-higher-order-function F (list X)))
+                            Xs))
+                 table)
+        (puthash 'shen.lazyderef
+                 `(defun shen/shen\.lazyderef
+                      (X ProcessN)
+                    (let ((Current X)
+                          (KeepLooking 't))
+                      (while KeepLooking
+                        (shen/if
+                         (shen/shen.pvar? Current)
+                         (shen/let Value (shen/shen.valvector Current ProcessN)
+                                   (shen/if (shen/= Value 'shen.-null-)
+                                            (setq KeepLooking nil)
+                                            (setq Current Value)))
+                         (setq KeepLooking nil)))
+                      Current))
+                 table)
+        (puthash 'append
+                 `(defun shen/append (Xs Ys) (append Xs Ys))
+                 table)
+        (puthash 'shen.string->bytes
+                 `(defun shen/shen.string->bytes (S)
+                    (string-to-list S))
+                 table)
+        (puthash 'shen.sum
+                 `(defun shen/shen.sum (Xs) (apply #'+ Xs))
+                 table)
+        (puthash 'shen.mod
+                 `(defun shen/shen.mod (N Div) (mod N Div))
+                 table)
+
+        ;; (ref:hash-tables)
+        (puthash 'shen/hash
+                 `(defun shen/hash
+                      (String Limit)
+                    (let ((Hash (shen/mod (shen/sum (shen/shen.string->bytes String)) Limit)))
+                      (if (= 0 Hash) 1 Hash)))
+                 table)
+        (puthash '(set *property-vector* (vector 20000))
+                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
+                 table)
+        (puthash 'get
+                 `(defun shen/get
+                      (Pointer Key Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (if (not Subtable)
+                          (shen/simple-error
+                           (format "pointer not found: %s\n" Pointer))
+                        (let ((Value (gethash Key Subtable)))
+                          (if (not Value)
+                              (shen/simple-error
+                               (format "value not found: %s\n" (list Pointer Key))))
+                          Value))))
+                 table)
+        (puthash 'put
+                 `(defun shen/put
+                      (Pointer Key Value Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (if (not Subtable)
+                          (let ((Subtable (make-hash-table :test 'equal)))
+                            (progn
+                              (puthash Pointer Subtable Table)
+                              (puthash Key Value Subtable)))
+                        (puthash Key Value Subtable))))
+                 table)
+        (puthash 'unput
+                 `(defun shen/unput
+                      (Pointer Key Table)
+                    (let ((Subtable (gethash Pointer Table)))
+                      (and Subtable
+                           (remhash Key Subtable))
+                      Pointer))
+                 table)
+        (puthash 'shen.resize-vector
+                 `(defun shen/shen.resize-vector (Vector NewSize Fill)
+                    (let* ((VectorLimit (shen/<-address Vector 0))
+                           (Current-Index (+ 1 VectorLimit)))
+                      (puthash 0 NewSize Vector)
+                      (while (<= Current-Index NewSize)
+                        (puthash Current-Index Fill Vector)
+                        (setq Current-Index (+ Current-Index 1)))
+                      Vector))
+                 table)
+        ;; (ref:namespacing)
+        (puthash 'function
+                 `(defun shen/function (S)
+                    (shen/shen\.lookup-func
+                     (shen/unprefix-symbol S)
+                     (shen/value 'shen\.*symbol-table*)))
+                 table)
+        table))
+;; Overrides:1 ends here
+
+;; [[file:shen-elisp.org::*Evaluating%20Bootstrapped%20KLambda][Evaluating\ Bootstrapped\ KLambda:1]]
+(defun shen/patch-klambda (ast)
+ (if (eq (car ast) 'defun)
+       (let ((override (gethash (nth 1 ast) shen/*overrides*)))
+         (or override
+             (shen/parse-ast ast)))
+     (let ((patched (gethash ast shen/*overrides* )))
+       (or patched
+           (shen/parse-ast ast)))))
+;; Evaluating\ Bootstrapped\ KLambda:1 ends here
+
+;; [[file:shen-elisp.org::*Evaluating%20Bootstrapped%20KLambda][Evaluating\ Bootstrapped\ KLambda:2]]
 (defun shen/kl-to-buffer (X B)
   (with-current-buffer B
       (save-excursion
         (goto-char (point-max))
         (insert  "\n;;;###autoload\n")
         (insert (pp-to-string (shen/consolidate-@s (shen/consolidate-cons (shen/patch-klambda X))))))))
-;; Evaluate\ KLambda:3 ends here
+;; Evaluating\ Bootstrapped\ KLambda:2 ends here
 
 ;; [[file:shen-elisp.org::*Providing%20The%20Primitives][Providing\ The\ Primitives:1]]
 (provide 'shen-primitives)
