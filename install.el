@@ -12,15 +12,19 @@
 ;; Collecting\ KLambda\ files:2 ends here
 
 ;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:1]]
+(setq *klambda-syntax-table*
+      (let ((table (make-syntax-table lisp-mode-syntax-table)))
+        (modify-syntax-entry 59 "_" table) ;; semi-colon
+        (modify-syntax-entry ?, "_" table)
+        (modify-syntax-entry ?# "_" table)
+        (modify-syntax-entry ?' "_" table)
+        (modify-syntax-entry ?` "_" table)
+        table))
+
 (defun get-klambda-sexp-strings (klambda-file)
   (with-temp-buffer
     (insert-file-contents klambda-file)
-    (with-syntax-table (make-syntax-table lisp-mode-syntax-table)
-      (modify-syntax-entry 59 "_") ;; semi-colon
-      (modify-syntax-entry ?, "_")
-      (modify-syntax-entry ?# "_")
-      (modify-syntax-entry ?' "_")
-      (modify-syntax-entry ?` "_")
+    (with-syntax-table *klambda-syntax-table*
       (let* ((klambda-code (buffer-string))
              (current-sexp-end (scan-lists 0 1 0))
              (groups nil))
@@ -109,8 +113,8 @@
     (eval-klambda-files *klambda-files*)
     (byte-compile-file "/tmp/shen.el")
     (load "/tmp/shen.elc")
-    (byte-compile-file "/home/deech/Lisp/shen-elisp/overlays.el")
-    (load "/home/deech/Lisp/shen-elisp/overlays.elc")
+    (byte-compile-file  "/home/deech/Lisp/shen-elisp/post-process-klambda.el")
+    (load "/home/deech/Lisp/shen-elisp/post-process-klambda.elc")
     (byte-compile-file "/home/deech/Lisp/shen-elisp/repl.el")
     (load "/home/deech/Lisp/shen-elisp/repl.elc")
     (shen/shen.shen)))

@@ -3,9 +3,8 @@
 ;; [[file:shen-elisp.org::*Shen%20REPL][Shen\ REPL:2]]
 (require 'comint)
 (require 'shen-primitives)
-(require 'shen-overlays)
 (require 'shen-shen)
-
+(require 'shen-post-process-klambda)
 (defconst shen/repl-prompt-regex
   (rx line-start
       (char ?( )
@@ -94,7 +93,9 @@
   (progn
     (comint-send-input)
     (condition-case ex
-        (shen/repl-eval (string-to-list shen/repl-input))
+        (progn
+          (shen/shen.initialise_environment)
+          (shen/repl-eval (string-to-list shen/repl-input)))
       ('error
        (comint-output-filter (shen/repl-process) (format "%s\n%s" ex  (shen/make-prompt)))
        (signal (car ex) (cdr ex))))
