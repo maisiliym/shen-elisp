@@ -188,5 +188,5 @@
     (load "/home/deech/Lisp/shen-elisp/post-process-klambda.elc")
     (byte-compile-file "/home/deech/Lisp/shen-elisp/repl.el")
     (load "/home/deech/Lisp/shen-elisp/repl.elc")
-    (shen/shen.shen)))
+    (shen/repl)))
 ;; The\ Runner:1 ends here

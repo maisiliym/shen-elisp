@@ -1451,6 +1451,7 @@ Convert ~(@s "a" (@s "b" (blah)))~ into ~(concat (concat "a" "b") (blah))~
      (lambda (consolidated-args remaining-chain)
        (list 'concat (cons 'concat consolidated-args) remaining-chain))))
 #+END_SRC
+
 * Evaluate KLambda
 Now that the mechanisms for [[Function Application][applying functions]], and [[Modifying The AST][quoting/namespacing]] are in place
 converting KLambda to Elisp is just a couple of function calls.
@@ -1814,7 +1815,7 @@ And finally we provide this file:
 
   (defconst *shen-repl* "*shen-repl*")
 
-  (defun shen/shen.shen nil
+  (defun shen/repl nil
     (interactive)
     (let (old-point)
       (unless (get-buffer *shen-repl*)
@@ -2069,5 +2070,5 @@ KLambda code into Elisp.
       (load "/home/deech/Lisp/shen-elisp/post-process-klambda.elc")
       (byte-compile-file "/home/deech/Lisp/shen-elisp/repl.el")
       (load "/home/deech/Lisp/shen-elisp/repl.elc")
-      (shen/shen.shen)))
+      (shen/repl)))
 #+END_SRC

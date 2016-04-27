@@ -143,7 +143,7 @@
 
 (defconst *shen-repl* "*shen-repl*")
 
-(defun shen/shen.shen nil
+(defun shen/repl nil
   (interactive)
   (let (old-point)
     (unless (get-buffer *shen-repl*)
