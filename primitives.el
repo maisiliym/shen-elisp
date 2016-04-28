@@ -253,50 +253,50 @@
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:3]]
 (defun shen/close (Stream)
-    (if (not Stream)
-        (error "Stream is nil.")
-      (if (or (not (local-variable-p 'shen/shen-buffer Stream))
-              (not (buffer-local-value 'shen/shen-buffer Stream)))
-          (error (format "Buffer %s for file %s was not opened by Shen's (open ...) function." Stream (buffer-file-name Stream)))
-        (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
-              (t (with-current-buffer
-                     Stream
-                   (progn
-                     (write-file (buffer-file-name Stream))
-                     (kill-buffer Stream)
-                     '())))))))
+  (if (not Stream)
+      (error "Stream is nil.")
+    (if (or (not (local-variable-p 'shen/shen-buffer Stream))
+            (not (buffer-local-value 'shen/shen-buffer Stream)))
+        (error (format "Buffer %s for file %s was not opened by Shen's (open ...) function." Stream (buffer-file-name Stream)))
+      (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
+            (t (with-current-buffer
+                   Stream
+                 (progn
+                   (write-file (buffer-file-name Stream))
+                   (kill-buffer Stream)
+                   '())))))))
 
-  (defun shen/write-byte (Byte &optional S)
-    (if S
-        (cond
-         ((bufferp S)
-          (if (not (buffer-local-value 'buffer-read-only S))
-              (error (format "Buffer %s is read-only." S))
-            (if (buffer-local-value 'shen/shen-buffer S)
-                (write-char Byte S)
-              (error (format "Buffer %s was not opened by Shen." S)))))
-         ((functionp S) ;; (ref:write-byte-function)
-          (funcall S Byte))
-         (t (write-char (shen/stoutput) Byte)))
-      (funcall (shen/stoutput) Byte)))
+(defun shen/write-byte (Byte &optional S)
+  (if S
+      (cond
+       ((bufferp S)
+        (if (not (buffer-local-value 'buffer-read-only S))
+            (error (format "Buffer %s is read-only." S))
+          (if (buffer-local-value 'shen/shen-buffer S)
+              (write-char Byte S)
+            (error (format "Buffer %s was not opened by Shen." S)))))
+       ((functionp S) ;; (ref:write-byte-function)
+        (funcall S Byte))
+       (t (write-char (shen/stoutput) Byte)))
+    (funcall (shen/stoutput) Byte)))
 
-  (defun shen/read-byte (&optional S)
-    (cond
-     ((and (bufferp S) (buffer-file-name S))
-     (if (buffer-local-value 'shen/shen-buffer S)
-          (with-current-buffer S
-            (let ((current-byte))
-              (if (eq (point) (point-max))
-                  -1
-                (progn
-                  (setq current-byte (get-byte))
-                  (forward-char)
-                  current-byte))))
-        (error (format "Buffer %s was not opened by Shen." S))))
-     ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
-                                    -1
-                                  (pop (fake-standard-input-buffer S))))
-     (t (error (format "Unrecognized stream format %s" S)))))
+(defun shen/read-byte (&optional S)
+  (cond
+   ((and (bufferp S) (buffer-file-name S))
+    (if (buffer-local-value 'shen/shen-buffer S)
+        (with-current-buffer S
+          (let ((current-byte))
+            (if (eq (point) (point-max))
+                -1
+              (progn
+                (setq current-byte (get-byte))
+                (forward-char)
+                current-byte))))
+      (error (format "Buffer %s was not opened by Shen." S))))
+   ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
+                                  -1
+                                (pop (fake-standard-input-buffer S))))
+   (t (error (format "Unrecognized stream format %s" S)))))
 ;; Streams\ and\ I/O:3 ends here
 
 ;; [[file:shen-elisp.org::*Lookup][Lookup:1]]
@@ -1134,14 +1134,11 @@
 
 ;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:2]]
 (defun shen/eval-kl (X)
-  (let* ((Elisp (shen/kl-to-elisp X))
-         (Result (eval Elisp 't)))
-    (cond
-     ((and (consp Elisp) (eq (car Elisp) 'defun))
+  (if (and (consp X) (eq (car X) 'defun))
       (progn
-        (byte-compile Result)
-        (shen/unprefix-symbol Result)))
-     (t Result))))
+        (byte-compile (eval (shen/kl-to-elisp (copy-tree X)) 't))
+        (nth 1 X))
+    (eval (shen/kl-to-elisp X) 't)))
 ;; Evaluate\ KLambda:2 ends here
 
 ;; [[file:shen-elisp.org::*Overrides][Overrides:1]]

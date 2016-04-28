@@ -1526,18 +1526,17 @@ converting KLambda to Elisp is just a couple of function calls.
         (shen/consolidate-cons (shen/parse-ast Kl)))))))
 #+END_SRC
 
-The generated Elisp can now be immediately evaluated and generated functions
-are also byte-compiled for speed:
+Evaluating KLambda to Elisp is straight forward except that a copy of the AST is
+made when evaluating a ~defun~. This is important because the AST is
+destructively modified when compiled to Elisp and Shen requires the original
+source for introspecting, profiling and tracking.
 #+BEGIN_SRC elisp :tangle primitives.el
   (defun shen/eval-kl (X)
-    (let* ((Elisp (shen/kl-to-elisp X))
-           (Result (eval Elisp 't)))
-      (cond
-       ((and (consp Elisp) (eq (car Elisp) 'defun))
+    (if (and (consp X) (eq (car X) 'defun))
         (progn
-          (byte-compile Result)
-          (shen/unprefix-symbol Result)))
-       (t Result))))
+          (byte-compile (eval (shen/kl-to-elisp (copy-tree X)) 't))
+          (nth 1 X))
+      (eval (shen/kl-to-elisp X) 't)))
 #+END_SRC
 ** Overrides
 The following hash-table has the name of the function as the key and the new implementation
