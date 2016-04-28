@@ -24,7 +24,7 @@
 Symbols in KLambda (and Shen) are very much like symbols in Elisp :
 
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/symbol-p (X)
+  (defsubst shen/symbol-p (X)
     (not (or (consp X) (bufferp X) (vectorp X) (numberp X) (stringp X))))
 #+END_SRC
 
@@ -58,14 +58,14 @@ that need to be applied correctly.
 
 Interning a Shen symbol delegates to Elisp's ~intern~:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/intern (String)
+  (defsubst shen/intern (String)
     (intern String))
 #+END_SRC
 
 
 as does ~shen/symbol->string~:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/symbol->string (X)
+  (defsubst shen/symbol->string (X)
     (symbol-name X))
 #+END_SRC
 
@@ -171,7 +171,7 @@ before the body is spliced in.
 
 ** Other Generic Functions
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/= (X Y)
+  (defsubst shen/= (X Y)
     (shen/predicate->shen
      (cond ((and (consp X) (consp Y)) (equal X Y))
            ((and (stringp X) (stringp Y)) (string-equal X Y))
@@ -183,7 +183,7 @@ before the body is spliced in.
 #+BEGIN_SRC elisp :tangle primitives.el
   (defmacro shen/freeze (X)
     `(function (lambda nil ,X)))
-  (defun shen/type (X MyType) (declare (ignore MyType)) X)
+  (defsubst shen/type (X MyType) (declare (ignore MyType)) X)
 #+END_SRC
 
 ** Lists
@@ -197,15 +197,15 @@ Elisp also provides a ~cons~ so a straightforward translation is possible *but*
 it blows the recursion stack after a certain number of elements. They are [[Consolidate Cons][rewritten]] to
 ~list~ calls below but a ~cons~ is provided to adhere to the standard:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/cons (A Rest)
+  (defsubst shen/cons (A Rest)
     (cons A Rest))
 #+END_SRC
 
 The rest of the list operations function as expected:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/hd (List)    (car List))
-  (defun shen/tl (List)    (cdr List))
-  (defun shen/cons? (List) (shen/predicate->shen (consp List)))
+  (defsubst shen/hd (List)    (car List))
+  (defsubst shen/tl (List)    (cdr List))
+  (defsubst shen/cons? (List) (shen/predicate->shen (consp List)))
 #+END_SRC
 ** Strings
 - Printing KLambda datatypes.
@@ -226,20 +226,20 @@ The rest of the list operations function as expected:
 #+END_SRC
 - Given string ~S~ get the character at index ~N~:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/pos (S N) (string (aref S N)))
+  (defsubst shen/pos (S N) (string (aref S N)))
 #+END_SRC
 
 - Get the rest of a non-empty string:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/tlstr (X) (substring X 1))
+  (defsubst shen/tlstr (X) (substring X 1))
 #+END_SRC
 
 - Test for a string, join them and convert between characters and strings:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/string? (S) (shen/predicate->shen (stringp S)))
-  (defun shen/cn (Str1 Str2) (concat Str1 Str2))
-  (defun shen/n->string (N) (string N))
-  (defun shen/string->n (S) (string-to-char S))
+  (defsubst shen/string? (S) (shen/predicate->shen (stringp S)))
+  (defsubst shen/cn (Str1 Str2) (concat Str1 Str2))
+  (defsubst shen/n->string (N) (string N))
+  (defsubst shen/string->n (S) (string-to-char S))
 #+END_SRC
 
 NOTE: If a non-empty string is converted to a character only the first character
@@ -249,14 +249,14 @@ Elisp's ~error~ and ~condition-case~ covers the primitive error handling
 required by the spec:
 #+BEGIN_SRC elisp :tangle primitives.el
   (define-error 'shen/error "Shen error" 'error)
-  (defun shen/simple-error (E)
+  (defsubst shen/simple-error (E)
     (signal 'shen/error
             (if (stringp E)
                 (list E)
               E)))
   (defmacro shen/trap-error (X F)
     `(condition-case ex ,X ('error (funcall ,F ex))))
-  (defun shen/error-to-string (E) (format "%s" E))
+  (defsubst shen/error-to-string (E) (format "%s" E))
 #+END_SRC
 ** Vectors
 Hash tables are used to represent Klambda vectors. This is counter-intuitive
@@ -265,10 +265,10 @@ Since KLambda code tends to allocate huge vectors and resize often, switching
 from vectors to hash-tables where resizing is natively supported led to 4-5x
 speed-ups across the board.
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
-  (defun shen/address-> (Vector N Value) (puthash N Value Vector) Vector)
-  (defun shen/<-address (Vector N) (gethash N Vector))
-  (defun shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
+  (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
+  (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
+  (defsubst shen/<-address (Vector N) (gethash N Vector))
+  (defsubst shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
 #+END_SRC
 ** Arithmetic Operations
 In KLambda there is only ~number~ so we have to take care to coerce to between ~float~ and
@@ -302,14 +302,14 @@ a generic function to coerce to a float if necessary,
 
 and the standard arithmetic functions.
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/* (X Y) (shen/number-op X Y shen/multiplication-limit #'*))
-  (defun shen/+ (X Y) (shen/number-op X Y shen/addition-limit #'+))
-  (defun shen/- (X Y) (shen/number-op X Y shen/addition-limit #'-))
+  (defsubst shen/* (X Y) (shen/number-op X Y shen/multiplication-limit #'*))
+  (defsubst shen/+ (X Y) (shen/number-op X Y shen/addition-limit #'+))
+  (defsubst shen/- (X Y) (shen/number-op X Y shen/addition-limit #'-))
 #+END_SRC
 
 When we divide we leave the result an integer if we can:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen// (X Y)
+  (defsubst shen// (X Y)
     (cond
      ((or (not (numberp X)) (not (numberp Y)))
       (error (format "Both %s and %s must be numbers." X Y)))
@@ -325,11 +325,11 @@ When we divide we leave the result an integer if we can:
 And finally the standard number predicates are pretty compatible with Elisp so we just
 wrap the Elisp functions:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/> (X Y)     (shen/predicate->shen (> X Y)))
-  (defun shen/< (X Y)     (shen/predicate->shen (< X Y)))
-  (defun shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
-  (defun shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
-  (defun shen/number? (N) (shen/predicate->shen (numberp N)))
+  (defsubst shen/> (X Y)     (shen/predicate->shen (> X Y)))
+  (defsubst shen/< (X Y)     (shen/predicate->shen (< X Y)))
+  (defsubst shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
+  (defsubst shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
+  (defsubst shen/number? (N) (shen/predicate->shen (numberp N)))
 #+END_SRC
 
 ** Time
@@ -360,7 +360,7 @@ level ~X~ is a stream if it is a buffer with an associated file. That last bit
 is important, because per the spec, buffers that aren't tied to the underlying
 filesystem are not streams.
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/streamp (X) (and (bufferp X) (buffer-file-name X)))
+  (defsubst shen/streamp (X) (and (bufferp X) (buffer-file-name X)))
 #+END_SRC
 
 Opening a stream takes a path ~Path~ and, per the spec, makes it relative to the
@@ -447,7 +447,7 @@ when writing out to the [[Shen REPL]] requires calling a function with the chara
   (defun shen/read-byte (&optional S)
     (cond
      ((and (bufferp S) (buffer-file-name S))
-     (if (buffer-local-value 'shen/shen-buffer S)
+      (if (buffer-local-value 'shen/shen-buffer S)
           (with-current-buffer S
             (let ((current-byte))
               (if (eq (point) (point-max))
@@ -471,9 +471,9 @@ when writing out to the [[Shen REPL]] requires calling a function with the chara
 ** Boolean Operations
 Helpers for translating between Elisp's and Shen's boolean values:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/shen->predicate (X)
-    (equal X 'true))
-  (defun shen/predicate->shen (X)
+  (defsubst shen/shen->predicate (X)
+    (eq X 'true))
+  (defsubst shen/predicate->shen (X)
     (if X (quote true) (quote false)))
 #+END_SRC
 ** AST Utilities
@@ -794,15 +794,15 @@ While iterating over a list the following cases are encountered:
                                               (memq current-token locally-scoped-symbols))
                                         possibly-apply-function))
                               (setq current-index 1)))))
-                      (setq current-index (+ 1 current-index)))
+                      (setq current-index (1+ current-index)))
                   (if (and (not (eq current-token 'nil))
                            (shen/symbol-p current-token))
                       (progn
                         (if (not (memq current-token locally-scoped-symbols))
                             (push (cons current-index current-path)
                                   quote-only))
-                        (setq current-index (+ 1 current-index)))
-                    (setq current-index (+ 1 current-index))))))
+                        (setq current-index (1+ current-index)))
+                    (setq current-index (1+ current-index))))))
              ((and (< current-index current-list-length)             ;; (ref:a sublist)
                    (consp (nth current-index current-list)))
               (progn
@@ -998,7 +998,7 @@ to the end of the list and continue searching.
                         (lambda (action-index-pair)
                           (setq lists-left-to-search
                                 (let ((path-to-action
-                                       (append (list 1 (+ 1 (nth 1 action-index-pair)))
+                                       (append (list 1 (1+ (nth 1 action-index-pair)))
                                                search-candidate-path)))
                                   (append lists-left-to-search
                                           (list
@@ -1318,14 +1318,14 @@ There are three types of overrides, those which:
                    `(defun shen/append (Xs Ys) (append Xs Ys))
                    table)
           (puthash 'shen.string->bytes
-                   `(defun shen/shen.string->bytes (S)
+                   `(defun defun shen/shen.string->bytes (S)
                       (string-to-list S))
                    table)
           (puthash 'shen.sum
-                   `(defun shen/shen.sum (Xs) (apply #'+ Xs))
+                   `(defun defun shen/shen.sum (Xs) (apply #'+ Xs))
                    table)
           (puthash 'shen.mod
-                   `(defun shen/shen.mod (N Div) (mod N Div))
+                   `(defun defun shen/shen.mod (N Div) (mod N Div))
                    table)
 
           ;; (ref:hash-tables)
@@ -1373,7 +1373,7 @@ There are three types of overrides, those which:
           (puthash 'shen.resize-vector
                    `(defun shen/shen.resize-vector (Vector NewSize Fill)
                       (let* ((VectorLimit (shen/<-address Vector 0))
-                             (Current-Index (+ 1 VectorLimit)))
+                             (Current-Index (1+ VectorLimit)))
                         (puthash 0 NewSize Vector)
                         (while (<= Current-Index NewSize)
                           (puthash Current-Index Fill Vector)
@@ -1392,31 +1392,30 @@ There are three types of overrides, those which:
 
 * Optimizations
 ** Consolidate Call Chains
-KLambda code is rife with two argument call chains such as ~(cons x (cons y
+KLambda code is rife with two argument chains such as ~(cons x (cons y
 nil))~ for list building and ~(@s "x" (@s "y" ""))~ for string concatenation
-which blow Elisps' stack if long enough and which can easily be rewritten to
-more efficient variadic Elisp functions.
+which can easily be rewritten to more efficient variadic Elisp functions.
 
-A generic function that takes ~matcher-fn~ which finds these chains and ~tx-fn~
-which consolidates.
+A generic function that takes ~matcher-fn~ which finds these chains, a
+~collector-fn~ that accumulates them and ~tx-fn~ which rewrites:
 #+BEGIN_SRC elisp :tangle primitives.el
-  (defun shen/consolidate (ast matcher-fn tx-fn)
+  (defun shen/consolidate (ast matcher-fn collector-fn tx-fn)
     (let* ((current-ast ast)
            (location-containing-chain
             (shen/list-containing-first-occurrence-of matcher-fn ast)))
       (while (not (eq location-containing-chain 'shen/not-found))
         (let ((current-chain (shen/get-element-at location-containing-chain current-ast))
-              (reversed-list))
+              (accum))
           (progn
             (while (funcall matcher-fn current-chain)
-              (progn
-                (setq reversed-list (cons (nth 1 current-chain) reversed-list))
-                (setq current-chain (nth 2 current-chain))))
+              (let ((collected (funcall collector-fn accum current-chain)))
+                (setq accum (nth 0 collected))
+                (setq current-chain (nth 1 collected))))
             (setq current-ast
                   (shen/nset-element-at
                    location-containing-chain
                    current-ast
-                   (funcall tx-fn (reverse reversed-list) current-chain)))
+                   (funcall tx-fn accum current-chain)))
             (setq location-containing-chain
                   (shen/list-containing-first-occurrence-of matcher-fn current-ast)))))
       current-ast))
@@ -1432,10 +1431,13 @@ Convert ~(cons a (cons b (blah)))~ into ~(append (list 'a 'b) (blah))~
             (consp current-list)
             (eq 3 (length current-list))
             (eq (nth 0 current-list) 'shen/cons)))
-     (lambda (consolidated-args remaining-chain)
+     (lambda (accum current-chain)
+       (list (cons (nth 1 current-chain) accum)
+             (nth 2 current-chain)))
+     (lambda (accum remaining-chain)
        (if (eq remaining-chain 'nil)
-           (cons 'list consolidated-args)
-         (list 'append (cons 'list consolidated-args) remaining-chain)))))
+           (cons 'list (reverse accum))
+         (list 'append (cons 'list (reverse accum)) remaining-chain)))))
 #+END_SRC
 ** Consolidate @s
 Convert ~(@s "a" (@s "b" (blah)))~ into ~(concat (concat "a" "b") (blah))~
@@ -1448,8 +1450,68 @@ Convert ~(@s "a" (@s "b" (blah)))~ into ~(concat (concat "a" "b") (blah))~
             (consp current-list)
             (eq 3 (length current-list))
             (eq (nth 0 current-list) 'shen/@s)))
-     (lambda (consolidated-args remaining-chain)
-       (list 'concat (cons 'concat consolidated-args) remaining-chain))))
+     (lambda (accum current-chain)
+       (list (cons (nth 1 current-chain) accum)
+             (nth 2 current-chain)))
+     (lambda (accum remaining-chain)
+       (list 'concat (cons 'concat (reverse accum)) remaining-chain))))
+#+END_SRC
+
+** Consolidate tl
+#+BEGIN_SRC elisp :tangle primitives.el
+  (defun shen/consolidate-tl (ast)
+    (shen/consolidate
+     ast
+     (lambda (current-list)
+       (and current-list
+            (consp current-list)
+            (eq 2 (length current-list))
+            (eq (nth 0 current-list) 'shen/tl)))
+     (lambda (accum current-chain)
+       (list (if (not accum) 1 (+ accum 1))
+             (nth 1 current-chain)))
+     (lambda (accum remaining-chain)
+       (list 'nthcdr accum remaining-chain))))
+#+END_SRC
+
+** Add 1+'s
+Rewrite ~(+ X 1)~ or ~(+ 1 X)~ to ~(1+ X)~
+#+BEGIN_SRC elisp :tangle primitives.el
+  (defun shen/add-1+ (ast)
+    (shen/consolidate
+     ast
+     (lambda (current-list)
+       (and current-list
+            (consp current-list)
+            (eq 3 (length current-list))
+            (and (eq (nth 0 current-list) 'shen/+)
+                 (or (eq (nth 1 current-list) 1)
+                     (eq (nth 2 current-list) 1)))))
+     (lambda (accum current-list)
+       (if (eq (nth 1 current-list) 1)
+           (list (nth 2 current-list) nil)
+         (list (nth 1 current-list) nil)))
+     (lambda (accum remaining-chain)
+       (list '1+ accum))))
+#+END_SRC
+** Nil Comparisons To Null
+#+BEGIN_SRC elisp :tangle primitives.el
+  (defun shen/nil-to-null (ast)
+    (shen/consolidate
+     ast
+     (lambda (current-list)
+       (and current-list
+            (consp current-list)
+            (eq 3 (length current-list))
+            (and (eq (nth 0 current-list) 'shen/+)
+                 (or (eq (nth 1 current-list) 'nil)
+                     (eq (nth 2 current-list) 'nil)))))
+     (lambda (accum current-list)
+       (if (eq (nth 1 current-list) 1)
+           (list (nth 2 current-list) nil)
+         (list (nth 1 current-list) nil)))
+     (lambda (accum remaining-chain)
+       (list 'null accum))))
 #+END_SRC
 
 * Evaluate KLambda
@@ -1457,7 +1519,11 @@ Now that the mechanisms for [[Function Application][applying functions]], and [[
 converting KLambda to Elisp is just a couple of function calls.
 #+BEGIN_SRC elisp :tangle primitives.el
   (defun shen/kl-to-elisp (Kl)
-    (shen/consolidate-@s (shen/consolidate-cons (shen/parse-ast Kl))))
+    (shen/nil-to-null
+     (shen/add-1+
+      (shen/consolidate-tl
+       (shen/consolidate-@s
+        (shen/consolidate-cons (shen/parse-ast Kl)))))))
 #+END_SRC
 
 The generated Elisp can now be immediately evaluated and generated functions
@@ -1520,8 +1586,16 @@ There are three types of overrides, those which:
           (puthash 'shen.mod
                    `(defun shen/shen.mod (N Div) (mod N Div))
                    table)
-
-          ;; (ref:hash-tables)
+          (puthash 'integer?
+                   `(defun shen/integer? (N) (integerp N))
+                   table)
+          (puthash 'abs
+                   `(defun shen/shen.abs (N) (abs N))
+                   table)
+          (puthash 'nth
+                   `(defun shen/nth (I Xs) (nth I Xs))
+                   table)
+           ;; (ref:hash-tables)
           (puthash 'shen/hash
                    `(defun shen/hash
                         (String Limit)
@@ -1566,11 +1640,11 @@ There are three types of overrides, those which:
           (puthash 'shen.resize-vector
                    `(defun shen/shen.resize-vector (Vector NewSize Fill)
                       (let* ((VectorLimit (shen/<-address Vector 0))
-                             (Current-Index (+ 1 VectorLimit)))
+                             (Current-Index (1+ VectorLimit)))
                         (puthash 0 NewSize Vector)
                         (while (<= Current-Index NewSize)
                           (puthash Current-Index Fill Vector)
-                          (setq Current-Index (+ Current-Index 1)))
+                          (setq Current-Index (1+ Current-Index)))
                         Vector))
                    table)
           ;; (ref:namespacing)
@@ -1600,10 +1674,16 @@ incoming code with overrides before parsing the AST:
 #+BEGIN_SRC elisp :tangle primitives.el
   (defun shen/kl-to-buffer (X B)
     (with-current-buffer B
-        (save-excursion
-          (goto-char (point-max))
-          (insert  "\n;;;###autoload\n")
-          (insert (pp-to-string (shen/consolidate-@s (shen/consolidate-cons (shen/patch-klambda X))))))))
+      (save-excursion
+        (goto-char (point-max))
+        (insert  "\n;;;###autoload\n")
+        (insert (pp-to-string
+                 (shen/nil-to-null
+                  (shen/add-1+
+                   (shen/consolidate-tl
+                    (shen/consolidate-@s
+                     (shen/consolidate-cons
+                      (shen/patch-klambda X)))))))))))
 #+END_SRC
 
 * Providing The Primitives
@@ -1685,16 +1765,16 @@ And finally we provide this file:
               (char ?))
         (char ? )))
 
-  (defun shen/shen.y-or-n? (S)
+  (defun shen/y-or-n? (S)
     (progn
-      (shen/shen.output S)
-      (let ((Input (shen/shen.make-string "~S" (read-from-minibuffer " (y/n) " ))))
+      (shen/shen.prhush (shen/shen.proc-nl S) (shen/stoutput))
+      (let ((Input (format "%s" (read-from-minibuffer " (y/n) " ))))
         (cond
          ((string-equal Input "y") 'true)
          ((string-equal Input "n") 'false)
          (t (progn
-              (shen/shen.output "please answer y or n~%")
-              (shen/shen.y-or-n? S)))))))
+              (shen/shen.prhush  "please answer y or n~%" (shen/stoutput))
+              (shen/y-or-n? S)))))))
 
   (defun shen/shen.pause-for-user nil
     (let ((Byte (read-from-minibuffer "")))
@@ -1733,7 +1813,7 @@ And finally we provide this file:
                    (NewLineread (shen/shen.retrieve-from-history-if-needed
                                  (shen/@p Lineread input-string)
                                  History))
-                   (NewHistory (shen/shen.update_history NewLineread History))
+                                 (NewHistory (shen/shen.update_history NewLineread History))
                    (Parsed (shen/fst NewLineread)))
               (shen/shen.toplevel Parsed)
               (funcall (shen/value '*stoutput*) t)
@@ -2024,8 +2104,10 @@ Now we can finally collect, and parse all the s-expressions in the
 KLambda files and then pass the result to ~shen/eval-kl~ to transform
 KLambda code into Elisp.
 #+BEGIN_SRC elisp :tangle install.el
-  (setq *temp-shen-buffer* (find-file-noselect "/tmp/shen.el"))
-  (setq *temp-shen-autoloads* (find-file-noselect "/tmp/shen-autoloads.el"))
+  (setq *temp-shen-buffer*
+        (find-file-noselect
+            (concat (file-name-as-directory default-directory)
+                (file-relative-name "shen.el"))))
   (defun eval-klambda-files (klambda-files)
     (with-current-buffer *temp-shen-buffer*
       (progn
@@ -2055,20 +2137,20 @@ KLambda code into Elisp.
     (progn
       (load "/home/deech/Lisp/shen-elisp/primitives.el")
       (load "/home/deech/Lisp/shen-elisp/install.el")))
+  (defun compile-and-load (F)
+    (byte-compile-file
+     (concat (file-name-as-directory default-directory)
+             (file-relative-name F))
+     't))
   (defun runner ()
     (progn
       (setq max-lisp-eval-depth 60000)
       (setq max-specpdl-size 13000)
-      (byte-compile-file "/home/deech/Lisp/shen-elisp/primitives.el")
-      (load "/home/deech/Lisp/shen-elisp/primitives.elc")
-      (byte-compile-file "/home/deech/Lisp/shen-elisp/install.el")
-      (load "/home/deech/Lisp/shen-elisp/install.elc")
+      (compile-and-load "primitives.el")
+      (compile-and-load "install.el")
       (eval-klambda-files *klambda-files*)
-      (byte-compile-file "/tmp/shen.el")
-      (load "/tmp/shen.elc")
-      (byte-compile-file  "/home/deech/Lisp/shen-elisp/post-process-klambda.el")
-      (load "/home/deech/Lisp/shen-elisp/post-process-klambda.elc")
-      (byte-compile-file "/home/deech/Lisp/shen-elisp/repl.el")
-      (load "/home/deech/Lisp/shen-elisp/repl.elc")
+      (compile-and-load "shen.el")
+      (compile-and-load "post-process-klambda.el")
+      (compile-and-load "repl.el")
       (shen/repl)))
 #+END_SRC

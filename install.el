@@ -142,8 +142,10 @@
 ;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:6 ends here
 
 ;; [[file:shen-elisp.org::*Iterating%20over%20KLambda%20Files][Iterating\ over\ KLambda\ Files:1]]
-(setq *temp-shen-buffer* (find-file-noselect "/tmp/shen.el"))
-(setq *temp-shen-autoloads* (find-file-noselect "/tmp/shen-autoloads.el"))
+(setq *temp-shen-buffer*
+      (find-file-noselect
+          (concat (file-name-as-directory default-directory)
+              (file-relative-name "shen.el"))))
 (defun eval-klambda-files (klambda-files)
   (with-current-buffer *temp-shen-buffer*
     (progn
@@ -173,20 +175,20 @@
   (progn
     (load "/home/deech/Lisp/shen-elisp/primitives.el")
     (load "/home/deech/Lisp/shen-elisp/install.el")))
+(defun compile-and-load (F)
+  (byte-compile-file
+   (concat (file-name-as-directory default-directory)
+           (file-relative-name F))
+   't))
 (defun runner ()
   (progn
     (setq max-lisp-eval-depth 60000)
     (setq max-specpdl-size 13000)
-    (byte-compile-file "/home/deech/Lisp/shen-elisp/primitives.el")
-    (load "/home/deech/Lisp/shen-elisp/primitives.elc")
-    (byte-compile-file "/home/deech/Lisp/shen-elisp/install.el")
-    (load "/home/deech/Lisp/shen-elisp/install.elc")
+    (compile-and-load "primitives.el")
+    (compile-and-load "install.el")
     (eval-klambda-files *klambda-files*)
-    (byte-compile-file "/tmp/shen.el")
-    (load "/tmp/shen.elc")
-    (byte-compile-file  "/home/deech/Lisp/shen-elisp/post-process-klambda.el")
-    (load "/home/deech/Lisp/shen-elisp/post-process-klambda.elc")
-    (byte-compile-file "/home/deech/Lisp/shen-elisp/repl.el")
-    (load "/home/deech/Lisp/shen-elisp/repl.elc")
+    (compile-and-load "shen.el")
+    (compile-and-load "post-process-klambda.el")
+    (compile-and-load "repl.el")
     (shen/repl)))
 ;; The\ Runner:1 ends here

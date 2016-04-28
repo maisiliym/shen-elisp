@@ -13,16 +13,16 @@
             (char ?))
       (char ? )))
 
-(defun shen/shen.y-or-n? (S)
+(defun shen/y-or-n? (S)
   (progn
-    (shen/shen.output S)
-    (let ((Input (shen/shen.make-string "~S" (read-from-minibuffer " (y/n) " ))))
+    (shen/shen.prhush (shen/shen.proc-nl S) (shen/stoutput))
+    (let ((Input (format "%s" (read-from-minibuffer " (y/n) " ))))
       (cond
        ((string-equal Input "y") 'true)
        ((string-equal Input "n") 'false)
        (t (progn
-            (shen/shen.output "please answer y or n~%")
-            (shen/shen.y-or-n? S)))))))
+            (shen/shen.prhush  "please answer y or n~%" (shen/stoutput))
+            (shen/y-or-n? S)))))))
 
 (defun shen/shen.pause-for-user nil
   (let ((Byte (read-from-minibuffer "")))
@@ -61,7 +61,7 @@
                  (NewLineread (shen/shen.retrieve-from-history-if-needed
                                (shen/@p Lineread input-string)
                                History))
-                 (NewHistory (shen/shen.update_history NewLineread History))
+                               (NewHistory (shen/shen.update_history NewLineread History))
                  (Parsed (shen/fst NewLineread)))
             (shen/shen.toplevel Parsed)
             (funcall (shen/value '*stoutput*) t)

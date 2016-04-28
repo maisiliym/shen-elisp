@@ -5,17 +5,17 @@
 ;; Implementation\ Constants:1 ends here
 
 ;; [[file:shen-elisp.org::*Symbols][Symbols:1]]
-(defun shen/symbol-p (X)
+(defsubst shen/symbol-p (X)
   (not (or (consp X) (bufferp X) (vectorp X) (numberp X) (stringp X))))
 ;; Symbols:1 ends here
 
 ;; [[file:shen-elisp.org::*Symbols][Symbols:2]]
-(defun shen/intern (String)
+(defsubst shen/intern (String)
   (intern String))
 ;; Symbols:2 ends here
 
 ;; [[file:shen-elisp.org::*Symbols][Symbols:3]]
-(defun shen/symbol->string (X)
+(defsubst shen/symbol->string (X)
   (symbol-name X))
 ;; Symbols:3 ends here
 
@@ -78,7 +78,7 @@
 ;; Defuns:1 ends here
 
 ;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:1]]
-(defun shen/= (X Y)
+(defsubst shen/= (X Y)
   (shen/predicate->shen
    (cond ((and (consp X) (consp Y)) (equal X Y))
          ((and (stringp X) (stringp Y)) (string-equal X Y))
@@ -90,18 +90,18 @@
 ;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:2]]
 (defmacro shen/freeze (X)
   `(function (lambda nil ,X)))
-(defun shen/type (X MyType) (declare (ignore MyType)) X)
+(defsubst shen/type (X MyType) (declare (ignore MyType)) X)
 ;; Other\ Generic\ Functions:2 ends here
 
 ;; [[file:shen-elisp.org::*Lists][Lists:1]]
-(defun shen/cons (A Rest)
+(defsubst shen/cons (A Rest)
   (cons A Rest))
 ;; Lists:1 ends here
 
 ;; [[file:shen-elisp.org::*Lists][Lists:2]]
-(defun shen/hd (List)    (car List))
-(defun shen/tl (List)    (cdr List))
-(defun shen/cons? (List) (shen/predicate->shen (consp List)))
+(defsubst shen/hd (List)    (car List))
+(defsubst shen/tl (List)    (cdr List))
+(defsubst shen/cons? (List) (shen/predicate->shen (consp List)))
 ;; Lists:2 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:1]]
@@ -117,37 +117,37 @@
 ;; Strings:1 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:2]]
-(defun shen/pos (S N) (string (aref S N)))
+(defsubst shen/pos (S N) (string (aref S N)))
 ;; Strings:2 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:3]]
-(defun shen/tlstr (X) (substring X 1))
+(defsubst shen/tlstr (X) (substring X 1))
 ;; Strings:3 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:4]]
-(defun shen/string? (S) (shen/predicate->shen (stringp S)))
-(defun shen/cn (Str1 Str2) (concat Str1 Str2))
-(defun shen/n->string (N) (string N))
-(defun shen/string->n (S) (string-to-char S))
+(defsubst shen/string? (S) (shen/predicate->shen (stringp S)))
+(defsubst shen/cn (Str1 Str2) (concat Str1 Str2))
+(defsubst shen/n->string (N) (string N))
+(defsubst shen/string->n (S) (string-to-char S))
 ;; Strings:4 ends here
 
 ;; [[file:shen-elisp.org::*Error%20Handling][Error\ Handling:1]]
 (define-error 'shen/error "Shen error" 'error)
-(defun shen/simple-error (E)
+(defsubst shen/simple-error (E)
   (signal 'shen/error
           (if (stringp E)
               (list E)
             E)))
 (defmacro shen/trap-error (X F)
   `(condition-case ex ,X ('error (funcall ,F ex))))
-(defun shen/error-to-string (E) (format "%s" E))
+(defsubst shen/error-to-string (E) (format "%s" E))
 ;; Error\ Handling:1 ends here
 
 ;; [[file:shen-elisp.org::*Vectors][Vectors:1]]
-(defun shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
-(defun shen/address-> (Vector N Value) (puthash N Value Vector) Vector)
-(defun shen/<-address (Vector N) (gethash N Vector))
-(defun shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
+(defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
+(defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
+(defsubst shen/<-address (Vector N) (gethash N Vector))
+(defsubst shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
 ;; Vectors:1 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:1]]
@@ -171,13 +171,13 @@
 ;; Arithmetic\ Operations:2 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:3]]
-(defun shen/* (X Y) (shen/number-op X Y shen/multiplication-limit #'*))
-(defun shen/+ (X Y) (shen/number-op X Y shen/addition-limit #'+))
-(defun shen/- (X Y) (shen/number-op X Y shen/addition-limit #'-))
+(defsubst shen/* (X Y) (shen/number-op X Y shen/multiplication-limit #'*))
+(defsubst shen/+ (X Y) (shen/number-op X Y shen/addition-limit #'+))
+(defsubst shen/- (X Y) (shen/number-op X Y shen/addition-limit #'-))
 ;; Arithmetic\ Operations:3 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:4]]
-(defun shen// (X Y)
+(defsubst shen// (X Y)
   (cond
    ((or (not (numberp X)) (not (numberp Y)))
     (error (format "Both %s and %s must be numbers." X Y)))
@@ -191,11 +191,11 @@
 ;; Arithmetic\ Operations:4 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:5]]
-(defun shen/> (X Y)     (shen/predicate->shen (> X Y)))
-(defun shen/< (X Y)     (shen/predicate->shen (< X Y)))
-(defun shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
-(defun shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
-(defun shen/number? (N) (shen/predicate->shen (numberp N)))
+(defsubst shen/> (X Y)     (shen/predicate->shen (> X Y)))
+(defsubst shen/< (X Y)     (shen/predicate->shen (< X Y)))
+(defsubst shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
+(defsubst shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
+(defsubst shen/number? (N) (shen/predicate->shen (numberp N)))
 ;; Arithmetic\ Operations:5 ends here
 
 ;; [[file:shen-elisp.org::*Time][Time:1]]
@@ -213,7 +213,7 @@
 ;; Time:1 ends here
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:1]]
-(defun shen/streamp (X) (and (bufferp X) (buffer-file-name X)))
+(defsubst shen/streamp (X) (and (bufferp X) (buffer-file-name X)))
 ;; Streams\ and\ I/O:1 ends here
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:2]]
@@ -253,50 +253,50 @@
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:3]]
 (defun shen/close (Stream)
-  (if (not Stream)
-      (error "Stream is nil.")
-    (if (or (not (local-variable-p 'shen/shen-buffer Stream))
-            (not (buffer-local-value 'shen/shen-buffer Stream)))
-        (error (format "Buffer %s for file %s was not opened by Shen's (open ...) function." Stream (buffer-file-name Stream)))
-      (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
-            (t (with-current-buffer
-                   Stream
-                 (progn
-                   (write-file (buffer-file-name Stream))
-                   (kill-buffer Stream)
-                   '())))))))
+    (if (not Stream)
+        (error "Stream is nil.")
+      (if (or (not (local-variable-p 'shen/shen-buffer Stream))
+              (not (buffer-local-value 'shen/shen-buffer Stream)))
+          (error (format "Buffer %s for file %s was not opened by Shen's (open ...) function." Stream (buffer-file-name Stream)))
+        (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
+              (t (with-current-buffer
+                     Stream
+                   (progn
+                     (write-file (buffer-file-name Stream))
+                     (kill-buffer Stream)
+                     '())))))))
 
-(defun shen/write-byte (Byte &optional S)
-  (if S
-      (cond
-       ((bufferp S)
-        (if (not (buffer-local-value 'buffer-read-only S))
-            (error (format "Buffer %s is read-only." S))
-          (if (buffer-local-value 'shen/shen-buffer S)
-              (write-char Byte S)
-            (error (format "Buffer %s was not opened by Shen." S)))))
-       ((functionp S) ;; (ref:write-byte-function)
-        (funcall S Byte))
-       (t (write-char (shen/stoutput) Byte)))
-    (funcall (shen/stoutput) Byte)))
+  (defun shen/write-byte (Byte &optional S)
+    (if S
+        (cond
+         ((bufferp S)
+          (if (not (buffer-local-value 'buffer-read-only S))
+              (error (format "Buffer %s is read-only." S))
+            (if (buffer-local-value 'shen/shen-buffer S)
+                (write-char Byte S)
+              (error (format "Buffer %s was not opened by Shen." S)))))
+         ((functionp S) ;; (ref:write-byte-function)
+          (funcall S Byte))
+         (t (write-char (shen/stoutput) Byte)))
+      (funcall (shen/stoutput) Byte)))
 
-(defun shen/read-byte (&optional S)
-  (cond
-   ((and (bufferp S) (buffer-file-name S))
-   (if (buffer-local-value 'shen/shen-buffer S)
-        (with-current-buffer S
-          (let ((current-byte))
-            (if (eq (point) (point-max))
-                -1
-              (progn
-                (setq current-byte (get-byte))
-                (forward-char)
-                current-byte))))
-      (error (format "Buffer %s was not opened by Shen." S))))
-   ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
-                                  -1
-                                (pop (fake-standard-input-buffer S))))
-   (t (error (format "Unrecognized stream format %s" S)))))
+  (defun shen/read-byte (&optional S)
+    (cond
+     ((and (bufferp S) (buffer-file-name S))
+     (if (buffer-local-value 'shen/shen-buffer S)
+          (with-current-buffer S
+            (let ((current-byte))
+              (if (eq (point) (point-max))
+                  -1
+                (progn
+                  (setq current-byte (get-byte))
+                  (forward-char)
+                  current-byte))))
+        (error (format "Buffer %s was not opened by Shen." S))))
+     ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
+                                    -1
+                                  (pop (fake-standard-input-buffer S))))
+     (t (error (format "Unrecognized stream format %s" S)))))
 ;; Streams\ and\ I/O:3 ends here
 
 ;; [[file:shen-elisp.org::*Lookup][Lookup:1]]
@@ -305,9 +305,9 @@
 ;; Lookup:1 ends here
 
 ;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:1]]
-(defun shen/shen->predicate (X)
-  (equal X 'true))
-(defun shen/predicate->shen (X)
+(defsubst shen/shen->predicate (X)
+  (eq X 'true))
+(defsubst shen/predicate->shen (X)
   (if X (quote true) (quote false)))
 ;; Boolean\ Operations:1 ends here
 
@@ -546,15 +546,15 @@
                                             (memq current-token locally-scoped-symbols))
                                       possibly-apply-function))
                             (setq current-index 1)))))
-                    (setq current-index (+ 1 current-index)))
+                    (setq current-index (1+ current-index)))
                 (if (and (not (eq current-token 'nil))
                          (shen/symbol-p current-token))
                     (progn
                       (if (not (memq current-token locally-scoped-symbols))
                           (push (cons current-index current-path)
                                 quote-only))
-                      (setq current-index (+ 1 current-index)))
-                  (setq current-index (+ 1 current-index))))))
+                      (setq current-index (1+ current-index)))
+                  (setq current-index (1+ current-index))))))
            ((and (< current-index current-list-length)             ;; (ref:a sublist)
                  (consp (nth current-index current-list)))
             (progn
@@ -691,7 +691,7 @@
                       (lambda (action-index-pair)
                         (setq lists-left-to-search
                               (let ((path-to-action
-                                     (append (list 1 (+ 1 (nth 1 action-index-pair)))
+                                     (append (list 1 (1+ (nth 1 action-index-pair)))
                                              search-candidate-path)))
                                 (append lists-left-to-search
                                         (list
@@ -940,14 +940,14 @@
                  `(defun shen/append (Xs Ys) (append Xs Ys))
                  table)
         (puthash 'shen.string->bytes
-                 `(defun shen/shen.string->bytes (S)
+                 `(defun defun shen/shen.string->bytes (S)
                     (string-to-list S))
                  table)
         (puthash 'shen.sum
-                 `(defun shen/shen.sum (Xs) (apply #'+ Xs))
+                 `(defun defun shen/shen.sum (Xs) (apply #'+ Xs))
                  table)
         (puthash 'shen.mod
-                 `(defun shen/shen.mod (N Div) (mod N Div))
+                 `(defun defun shen/shen.mod (N Div) (mod N Div))
                  table)
 
         ;; (ref:hash-tables)
@@ -995,7 +995,7 @@
         (puthash 'shen.resize-vector
                  `(defun shen/shen.resize-vector (Vector NewSize Fill)
                     (let* ((VectorLimit (shen/<-address Vector 0))
-                           (Current-Index (+ 1 VectorLimit)))
+                           (Current-Index (1+ VectorLimit)))
                       (puthash 0 NewSize Vector)
                       (while (<= Current-Index NewSize)
                         (puthash Current-Index Fill Vector)
@@ -1013,23 +1013,23 @@
 ;; Overrides:1 ends here
 
 ;; [[file:shen-elisp.org::*Consolidate%20Call%20Chains][Consolidate\ Call\ Chains:1]]
-(defun shen/consolidate (ast matcher-fn tx-fn)
+(defun shen/consolidate (ast matcher-fn collector-fn tx-fn)
   (let* ((current-ast ast)
          (location-containing-chain
           (shen/list-containing-first-occurrence-of matcher-fn ast)))
     (while (not (eq location-containing-chain 'shen/not-found))
       (let ((current-chain (shen/get-element-at location-containing-chain current-ast))
-            (reversed-list))
+            (accum))
         (progn
           (while (funcall matcher-fn current-chain)
-            (progn
-              (setq reversed-list (cons (nth 1 current-chain) reversed-list))
-              (setq current-chain (nth 2 current-chain))))
+            (let ((collected (funcall collector-fn accum current-chain)))
+              (setq accum (nth 0 collected))
+              (setq current-chain (nth 1 collected))))
           (setq current-ast
                 (shen/nset-element-at
                  location-containing-chain
                  current-ast
-                 (funcall tx-fn (reverse reversed-list) current-chain)))
+                 (funcall tx-fn accum current-chain)))
           (setq location-containing-chain
                 (shen/list-containing-first-occurrence-of matcher-fn current-ast)))))
     current-ast))
@@ -1044,10 +1044,13 @@
           (consp current-list)
           (eq 3 (length current-list))
           (eq (nth 0 current-list) 'shen/cons)))
-   (lambda (consolidated-args remaining-chain)
+   (lambda (accum current-chain)
+     (list (cons (nth 1 current-chain) accum)
+           (nth 2 current-chain)))
+   (lambda (accum remaining-chain)
      (if (eq remaining-chain 'nil)
-         (cons 'list consolidated-args)
-       (list 'append (cons 'list consolidated-args) remaining-chain)))))
+         (cons 'list (reverse accum))
+       (list 'append (cons 'list (reverse accum)) remaining-chain)))))
 ;; Consolidate\ Cons:1 ends here
 
 ;; [[file:shen-elisp.org::*Consolidate%20@s][Consolidate\ @s:1]]
@@ -1059,13 +1062,74 @@
           (consp current-list)
           (eq 3 (length current-list))
           (eq (nth 0 current-list) 'shen/@s)))
-   (lambda (consolidated-args remaining-chain)
-     (list 'concat (cons 'concat consolidated-args) remaining-chain))))
+   (lambda (accum current-chain)
+     (list (cons (nth 1 current-chain) accum)
+           (nth 2 current-chain)))
+   (lambda (accum remaining-chain)
+     (list 'concat (cons 'concat (reverse accum)) remaining-chain))))
 ;; Consolidate\ @s:1 ends here
+
+;; [[file:shen-elisp.org::*Consolidate%20tl][Consolidate\ tl:1]]
+(defun shen/consolidate-tl (ast)
+  (shen/consolidate
+   ast
+   (lambda (current-list)
+     (and current-list
+          (consp current-list)
+          (eq 2 (length current-list))
+          (eq (nth 0 current-list) 'shen/tl)))
+   (lambda (accum current-chain)
+     (list (if (not accum) 1 (+ accum 1))
+           (nth 1 current-chain)))
+   (lambda (accum remaining-chain)
+     (list 'nthcdr accum remaining-chain))))
+;; Consolidate\ tl:1 ends here
+
+;; [[file:shen-elisp.org::*Add%201+'s][Add\ 1+\'s:1]]
+(defun shen/add-1+ (ast)
+  (shen/consolidate
+   ast
+   (lambda (current-list)
+     (and current-list
+          (consp current-list)
+          (eq 3 (length current-list))
+          (and (eq (nth 0 current-list) 'shen/+)
+               (or (eq (nth 1 current-list) 1)
+                   (eq (nth 2 current-list) 1)))))
+   (lambda (accum current-list)
+     (if (eq (nth 1 current-list) 1)
+         (list (nth 2 current-list) nil)
+       (list (nth 1 current-list) nil)))
+   (lambda (accum remaining-chain)
+     (list '1+ accum))))
+;; Add\ 1+\'s:1 ends here
+
+;; [[file:shen-elisp.org::*Nil%20Comparisons%20To%20Null][Nil\ Comparisons\ To\ Null:1]]
+(defun shen/nil-to-null (ast)
+  (shen/consolidate
+   ast
+   (lambda (current-list)
+     (and current-list
+          (consp current-list)
+          (eq 3 (length current-list))
+          (and (eq (nth 0 current-list) 'shen/+)
+               (or (eq (nth 1 current-list) 'nil)
+                   (eq (nth 2 current-list) 'nil)))))
+   (lambda (accum current-list)
+     (if (eq (nth 1 current-list) 1)
+         (list (nth 2 current-list) nil)
+       (list (nth 1 current-list) nil)))
+   (lambda (accum remaining-chain)
+     (list 'null accum))))
+;; Nil\ Comparisons\ To\ Null:1 ends here
 
 ;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:1]]
 (defun shen/kl-to-elisp (Kl)
-  (shen/consolidate-@s (shen/consolidate-cons (shen/parse-ast Kl))))
+  (shen/nil-to-null
+   (shen/add-1+
+    (shen/consolidate-tl
+     (shen/consolidate-@s
+      (shen/consolidate-cons (shen/parse-ast Kl)))))))
 ;; Evaluate\ KLambda:1 ends here
 
 ;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:2]]
@@ -1118,8 +1182,16 @@
         (puthash 'shen.mod
                  `(defun shen/shen.mod (N Div) (mod N Div))
                  table)
-
-        ;; (ref:hash-tables)
+        (puthash 'integer?
+                 `(defun shen/integer? (N) (integerp N))
+                 table)
+        (puthash 'abs
+                 `(defun shen/shen.abs (N) (abs N))
+                 table)
+        (puthash 'nth
+                 `(defun shen/nth (I Xs) (nth I Xs))
+                 table)
+         ;; (ref:hash-tables)
         (puthash 'shen/hash
                  `(defun shen/hash
                       (String Limit)
@@ -1164,11 +1236,11 @@
         (puthash 'shen.resize-vector
                  `(defun shen/shen.resize-vector (Vector NewSize Fill)
                     (let* ((VectorLimit (shen/<-address Vector 0))
-                           (Current-Index (+ 1 VectorLimit)))
+                           (Current-Index (1+ VectorLimit)))
                       (puthash 0 NewSize Vector)
                       (while (<= Current-Index NewSize)
                         (puthash Current-Index Fill Vector)
-                        (setq Current-Index (+ Current-Index 1)))
+                        (setq Current-Index (1+ Current-Index)))
                       Vector))
                  table)
         ;; (ref:namespacing)
@@ -1195,10 +1267,16 @@
 ;; [[file:shen-elisp.org::*Evaluating%20Bootstrapped%20KLambda][Evaluating\ Bootstrapped\ KLambda:2]]
 (defun shen/kl-to-buffer (X B)
   (with-current-buffer B
-      (save-excursion
-        (goto-char (point-max))
-        (insert  "\n;;;###autoload\n")
-        (insert (pp-to-string (shen/consolidate-@s (shen/consolidate-cons (shen/patch-klambda X))))))))
+    (save-excursion
+      (goto-char (point-max))
+      (insert  "\n;;;###autoload\n")
+      (insert (pp-to-string
+               (shen/nil-to-null
+                (shen/add-1+
+                 (shen/consolidate-tl
+                  (shen/consolidate-@s
+                   (shen/consolidate-cons
+                    (shen/patch-klambda X)))))))))))
 ;; Evaluating\ Bootstrapped\ KLambda:2 ends here
 
 ;; [[file:shen-elisp.org::*Providing%20The%20Primitives][Providing\ The\ Primitives:1]]
