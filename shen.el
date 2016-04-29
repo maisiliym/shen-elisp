@@ -1,13 +1,14 @@
 ;; -*- lexical-binding: t -*-
-(require 'shen-primitives)
-
-;;;###autoload
+;; Local Variables:
+;; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)
+;; End:
+(require 'shen-primitives "shen-primitives.el")
+(setq max-lisp-eval-depth 60000)
+(setq max-specpdl-size 13000)
 (defun shen/shen\.shen nil
   (shen/do
    (shen/shen\.credits)
    (shen/shen\.loop)))
-
-;;;###autoload
 (defun shen/shen\.loop nil
   (cl-flet
       ((tail-trampoline nil
@@ -33,8 +34,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.credits nil
   (shen/do
    (shen/shen\.prhush "\nShen, copyright (C) 2010-2015 Mark Tarver\n"
@@ -67,13 +66,9 @@
                           "\n" 'shen\.a))
                 'shen\.a))
       (shen/stoutput))))))
-
-;;;###autoload
 (defun shen/shen\.initialise_environment nil
   (shen/shen\.multiple-set
    (list 'shen\.*call* 0 'shen\.*infs* 0 'shen\.*process-counter* 0 'shen\.*catch* 0)))
-
-;;;###autoload
 (defun shen/shen\.multiple-set
     (V15590)
   (cl-flet
@@ -105,16 +100,10 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/destroy
     (V15592)
   (shen/declare V15592 'symbol))
-
-;;;###autoload
 (shen/set 'shen\.*history* nil)
-
-;;;###autoload
 (defun shen/shen\.read-evaluate-print nil
   (shen/let Lineread
             (shen/shen\.toplineread)
@@ -127,8 +116,6 @@
                                           (shen/let Parsed
                                                     (shen/fst NewLineread)
                                                     (shen/shen\.toplevel Parsed)))))))
-
-;;;###autoload
 (defun shen/shen\.retrieve-from-history-if-needed
     (V15604 V15605)
   (cl-flet
@@ -252,14 +239,8 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.percent nil 37)
-
-;;;###autoload
 (defun shen/shen\.exclamation nil 33)
-
-;;;###autoload
 (defun shen/shen\.prbytes
     (V15607)
   (shen/do
@@ -270,23 +251,17 @@
                   (shen/stoutput)))
     V15607)
    (shen/nl 1)))
-
-;;;###autoload
 (defun shen/shen\.update_history
     (V15610 V15611)
   (shen/set 'shen\.*history*
             (append
              (list V15610)
              V15611)))
-
-;;;###autoload
 (defun shen/shen\.toplineread nil
   (shen/shen\.toplineread_loop
    (shen/read-byte
     (shen/stinput))
    nil))
-
-;;;###autoload
 (defun shen/shen\.toplineread_loop
     (V15615 V15616)
   (cl-flet
@@ -335,17 +310,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.hat nil 94)
-
-;;;###autoload
 (defun shen/shen\.newline nil 10)
-
-;;;###autoload
 (defun shen/shen\.carriage-return nil 13)
-
-;;;###autoload
 (defun shen/tc
     (V15622)
   (shen/cond
@@ -355,8 +322,6 @@
     (shen/set 'shen\.*tc* 'false))
    (shen/true
     (shen/simple-error "tc expects a + or -"))))
-
-;;;###autoload
 (defun shen/shen\.prompt nil
   (shen/if
    (shen/value 'shen\.*tc*)
@@ -374,14 +339,10 @@
                (shen/value 'shen\.*history*))
               "-) " 'shen\.a))
     (shen/stoutput))))
-
-;;;###autoload
 (defun shen/shen\.toplevel
     (V15624)
   (shen/shen\.toplevel_evaluate V15624
                                 (shen/value 'shen\.*tc*)))
-
-;;;###autoload
 (defun shen/shen\.find-past-inputs
     (V15627 V15628)
   (shen/let F
@@ -390,8 +351,6 @@
              (shen/empty\? F)
              (shen/simple-error "input not found\n")
              F)))
-
-;;;###autoload
 (defun shen/shen\.make-key
     (V15631 V15632)
   (shen/let Atom
@@ -418,8 +377,6 @@
                           (shen/shen\.prefix\? V15631
                                                (shen/shen\.trim-gubbins
                                                 (shen/snd X)))))))
-
-;;;###autoload
 (defun shen/shen\.trim-gubbins
     (V15634)
   (cl-flet
@@ -476,17 +433,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.space nil 32)
-
-;;;###autoload
 (defun shen/shen\.tab nil 9)
-
-;;;###autoload
 (defun shen/shen\.left-round nil 40)
-
-;;;###autoload
 (defun shen/shen\.find
     (V15643 V15644)
   (cl-flet
@@ -520,8 +469,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.prefix\?
     (V15658 V15659)
   (cl-flet
@@ -551,8 +498,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.print-past-inputs
     (V15671 V15672 V15673)
   (cl-flet
@@ -598,8 +543,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.toplevel_evaluate
     (V15676 V15677)
   (cl-flet
@@ -671,8 +614,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.typecheck-and-evaluate
     (V15680 V15681)
   (shen/let Typecheck
@@ -690,16 +631,12 @@
                                                            (shen/shen\.app Type "" 'shen\.r))
                                                   'shen\.s)
                                   (shen/stoutput)))))))
-
-;;;###autoload
 (defun shen/shen\.pretty-type
     (V15683)
   (shen/shen\.mult_subst
    (shen/value 'shen\.*alphabet*)
    (shen/shen\.extract-pvars V15683)
    V15683))
-
-;;;###autoload
 (defun shen/shen\.extract-pvars
     (V15689)
   (shen/cond
@@ -712,8 +649,6 @@
      (shen/shen\.extract-pvars
       (nthcdr 1 V15689))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.mult_subst
     (V15697 V15698 V15699)
   (cl-flet
@@ -746,8 +681,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.shen->kl
     (V13104 V13105)
   (shen/compile
@@ -758,8 +691,6 @@
     V13105)
    (shen/lambda X
                 (shen/shen\.shen-syntax-error V13104 X))))
-
-;;;###autoload
 (defun shen/shen\.shen-syntax-error
     (V13112 V13113)
   (shen/cond
@@ -777,8 +708,6 @@
     (shen/simple-error
      (shen/cn "syntax error in "
               (shen/shen\.app V13112 "\n" 'shen\.a))))))
-
-;;;###autoload
 (defun shen/shen\.<define>
     (V13115)
   (shen/let YaccParse
@@ -836,8 +765,6 @@
                                    (shen/fail)))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<name>
     (V13117)
   (shen/if
@@ -861,8 +788,6 @@
                (shen/simple-error
                 (shen/shen\.app Parse_X " is not a legitimate function name.\n" 'shen\.a)))))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.sysfunc\?
     (V13119)
   (shen/element\? V13119
@@ -870,8 +795,6 @@
                    (shen/intern "shen")
                    'shen\.external-symbols
                    (shen/value '*property-vector*))))
-
-;;;###autoload
 (defun shen/shen\.<signature>
     (V13121)
   (shen/if
@@ -911,8 +834,6 @@
                (shen/fail))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.curry-type
     (V13123)
   (cl-flet
@@ -982,8 +903,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.<signature-help>
     (V13125)
   (shen/let YaccParse
@@ -1031,8 +950,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<rules>
     (V13127)
   (shen/let YaccParse
@@ -1076,8 +993,6 @@
                            (shen/shen\.hdtl Parse_shen\.<rule>))))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<rule>
     (V13129)
   (shen/let YaccParse
@@ -1273,8 +1188,6 @@
                                    YaccParse))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.fail_if
     (V13132 V13133)
   (shen/if
@@ -1282,8 +1195,6 @@
                                      (list V13133))
    (shen/fail)
    V13133))
-
-;;;###autoload
 (defun shen/shen\.succeeds\?
     (V13139)
   (shen/cond
@@ -1291,8 +1202,6 @@
             (shen/fail))
     'false)
    (shen/true 'true)))
-
-;;;###autoload
 (defun shen/shen\.<patterns>
     (V13141)
   (shen/let YaccParse
@@ -1333,8 +1242,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<pattern>
     (V13148)
   (shen/let YaccParse
@@ -1729,14 +1636,10 @@
                                    YaccParse))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.constructor-error
     (V13150)
   (shen/simple-error
    (shen/shen\.app V13150 " is not a legitimate constructor\n" 'shen\.a)))
-
-;;;###autoload
 (defun shen/shen\.<simple_pattern>
     (V13152)
   (shen/let YaccParse
@@ -1780,8 +1683,6 @@
                          (shen/fail)))
               (shen/fail))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<pattern1>
     (V13154)
   (shen/let Parse_shen\.<pattern>
@@ -1795,8 +1696,6 @@
               (shen/hd Parse_shen\.<pattern>)
               (shen/shen\.hdtl Parse_shen\.<pattern>))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<pattern2>
     (V13156)
   (shen/let Parse_shen\.<pattern>
@@ -1810,8 +1709,6 @@
               (shen/hd Parse_shen\.<pattern>)
               (shen/shen\.hdtl Parse_shen\.<pattern>))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<action>
     (V13158)
   (shen/if
@@ -1828,8 +1725,6 @@
                 (shen/shen\.hdtl V13158)))
               Parse_X))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<guard>
     (V13160)
   (shen/if
@@ -1846,8 +1741,6 @@
                 (shen/shen\.hdtl V13160)))
               Parse_X))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.compile_to_machine_code
     (V13163 V13164)
   (shen/let Lambda+
@@ -1857,8 +1750,6 @@
                       (shen/let Record
                                 (shen/shen\.record-source V13163 KL)
                                 KL))))
-
-;;;###autoload
 (defun shen/shen\.record-source
     (V13169 V13170)
   (shen/cond
@@ -1867,8 +1758,6 @@
    (shen/true
     (shen/put V13169 'shen\.source V13170
               (shen/value '*property-vector*)))))
-
-;;;###autoload
 (defun shen/shen\.compile_to_lambda+
     (V13173 V13174)
   (shen/let Arity
@@ -1898,16 +1787,12 @@
                                                                                       (shen/shen\.application_build Variables X))
                                                                          Abstractions)
                                                                         (list Variables Applications)))))))))
-
-;;;###autoload
 (defun shen/shen\.update-symbol-table
     (V13177 V13178)
   (shen/set 'shen\.*symbol-table*
             (shen/shen\.update-symbol-table-h V13177 V13178
                                               (shen/value 'shen\.*symbol-table*)
                                               nil)))
-
-;;;###autoload
 (defun shen/shen\.update-symbol-table-h
     (V13186 V13187 V13188 V13189)
   (cl-flet
@@ -1966,8 +1851,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.free_variable_check
     (V13192 V13193)
   (shen/cond
@@ -1988,8 +1871,6 @@
                         (shen/shen\.free_variable_warnings V13192 Free))))
    (shen/true
     (shen/shen\.f_error 'shen\.free_variable_check))))
-
-;;;###autoload
 (defun shen/shen\.extract_vars
     (V13195)
   (shen/cond
@@ -2002,8 +1883,6 @@
      (shen/shen\.extract_vars
       (nthcdr 1 V13195))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.extract_free_vars
     (V13207 V13208)
   (cl-flet
@@ -2093,8 +1972,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.free_variable_warnings
     (V13213 V13214)
   (shen/cond
@@ -2109,8 +1986,6 @@
                                         (shen/shen\.list_variables V13214)
                                         "" 'shen\.a))
                               'shen\.a))))))
-
-;;;###autoload
 (defun shen/shen\.list_variables
     (V13216)
   (shen/cond
@@ -2131,8 +2006,6 @@
                (nthcdr 1 V13216)))))
    (shen/true
     (shen/shen\.f_error 'shen\.list_variables))))
-
-;;;###autoload
 (defun shen/shen\.strip-protect
     (V13218)
   (cl-flet
@@ -2169,8 +2042,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.linearise
     (V13220)
   (shen/cond
@@ -2189,8 +2060,6 @@
       (nthcdr 1 V13220))))
    (shen/true
     (shen/shen\.f_error 'shen\.linearise))))
-
-;;;###autoload
 (defun shen/shen\.flatten
     (V13222)
   (shen/cond
@@ -2204,8 +2073,6 @@
       (nthcdr 1 V13222))))
    (shen/true
     (list V13222))))
-
-;;;###autoload
 (defun shen/shen\.linearise_help
     (V13226 V13227 V13228)
   (cl-flet
@@ -2254,8 +2121,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.linearise_X
     (V13241 V13242 V13243)
   (shen/cond
@@ -2277,8 +2142,6 @@
                 (list L)
                 (nthcdr 1 V13243)))))
    (shen/true V13243)))
-
-;;;###autoload
 (defun shen/shen\.aritycheck
     (V13246 V13247)
   (cl-flet
@@ -2370,8 +2233,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.aritycheck-name
     (V13260 V13261 V13262)
   (shen/cond
@@ -2386,8 +2247,6 @@
                (shen/shen\.app V13260 " can cause errors.\n" 'shen\.a))
       (shen/stoutput))
      V13262))))
-
-;;;###autoload
 (defun shen/shen\.aritycheck-action
     (V13268)
   (shen/cond
@@ -2401,8 +2260,6 @@
                    (shen/shen\.aritycheck-action Y))
       V13268)))
    (shen/true 'shen\.skip)))
-
-;;;###autoload
 (defun shen/shen\.aah
     (V13271 V13272)
   (shen/let Arity
@@ -2428,8 +2285,6 @@
                                                  'shen\.a))
                         (shen/stoutput))
                        'shen\.skip))))
-
-;;;###autoload
 (defun shen/shen\.abstract_rule
     (V13274)
   (shen/cond
@@ -2446,8 +2301,6 @@
       (nthcdr 1 V13274))))
    (shen/true
     (shen/shen\.f_error 'shen\.abstract_rule))))
-
-;;;###autoload
 (defun shen/shen\.abstraction_build
     (V13277 V13278)
   (shen/cond
@@ -2461,8 +2314,6 @@
            V13278)))
    (shen/true
     (shen/shen\.f_error 'shen\.abstraction_build))))
-
-;;;###autoload
 (defun shen/shen\.parameters
     (V13280)
   (shen/cond
@@ -2474,8 +2325,6 @@
       (shen/gensym 'V))
      (shen/shen\.parameters
       (shen/- V13280 1))))))
-
-;;;###autoload
 (defun shen/shen\.application_build
     (V13283 V13284)
   (cl-flet
@@ -2501,8 +2350,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.compile_to_kl
     (V13287 V13288)
   (shen/cond
@@ -2548,8 +2395,6 @@
                                                                 KL)))))))
    (shen/true
     (shen/shen\.f_error 'shen\.compile_to_kl))))
-
-;;;###autoload
 (defun shen/shen\.get-type
     (V13294)
   (shen/cond
@@ -2563,8 +2408,6 @@
                (shen/empty\? FType)
                'shen\.skip
                (nthcdr 1 FType))))))
-
-;;;###autoload
 (defun shen/shen\.typextable
     (V13305 V13306)
   (cl-flet
@@ -2615,8 +2458,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.assign-types
     (V13310 V13311 V13312)
   (shen/cond
@@ -2717,8 +2558,6 @@
                 (shen/element\? V13312 V13310)
                 V13312
                 (shen/shen\.atom-type V13312)))))))
-
-;;;###autoload
 (defun shen/shen\.atom-type
     (V13314)
   (shen/if
@@ -2734,8 +2573,6 @@
       (shen/symbol\? V13314)
       (list 'type V13314 'symbol)
       V13314)))))
-
-;;;###autoload
 (defun shen/shen\.store-arity
     (V13319 V13320)
   (shen/cond
@@ -2744,8 +2581,6 @@
    (shen/true
     (shen/put V13319 'arity V13320
               (shen/value '*property-vector*)))))
-
-;;;###autoload
 (defun shen/shen\.reduce
     (V13322)
   (shen/do
@@ -2758,8 +2593,6 @@
                (shen/reverse
                 (shen/value 'shen\.*teststack*)))
               Result))))
-
-;;;###autoload
 (defun shen/shen\.reduce_help
     (V13324)
   (cl-flet
@@ -3272,8 +3105,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.+string\?
     (V13326)
   (shen/cond
@@ -3281,8 +3112,6 @@
     'false)
    (shen/true
     (shen/string\? V13326))))
-
-;;;###autoload
 (defun shen/shen\.+vector
     (V13328)
   (shen/cond
@@ -3291,8 +3120,6 @@
     'false)
    (shen/true
     (shen/vector\? V13328))))
-
-;;;###autoload
 (defun shen/shen\.ebr
     (V13342 V13343 V13344)
   (shen/cond
@@ -3377,16 +3204,12 @@
      (shen/shen\.ebr V13342 V13343
                      (nthcdr 1 V13344))))
    (shen/true V13344)))
-
-;;;###autoload
 (defun shen/shen\.add_test
     (V13346)
   (shen/set 'shen\.*teststack*
             (append
              (list V13346)
              (shen/value 'shen\.*teststack*))))
-
-;;;###autoload
 (defun shen/shen\.cond-expression
     (V13350 V13351 V13352)
   (shen/let Err
@@ -3396,8 +3219,6 @@
                       (shen/let EncodeChoices
                                 (shen/shen\.encode-choices Cases V13350)
                                 (shen/shen\.cond-form EncodeChoices)))))
-
-;;;###autoload
 (defun shen/shen\.cond-form
     (V13356)
   (shen/cond
@@ -3424,8 +3245,6 @@
     (append
      (list 'cond)
      V13356))))
-
-;;;###autoload
 (defun shen/shen\.encode-choices
     (V13361 V13362)
   (shen/cond
@@ -3622,8 +3441,6 @@
       V13362)))
    (shen/true
     (shen/shen\.f_error 'shen\.encode-choices))))
-
-;;;###autoload
 (defun shen/shen\.case-form
     (V13369 V13370)
   (shen/cond
@@ -3787,8 +3604,6 @@
       V13370)))
    (shen/true
     (shen/shen\.f_error 'shen\.case-form))))
-
-;;;###autoload
 (defun shen/shen\.embed-and
     (V13372)
   (shen/cond
@@ -3804,27 +3619,19 @@
            (nthcdr 1 V13372))))
    (shen/true
     (shen/shen\.f_error 'shen\.embed-and))))
-
-;;;###autoload
 (defun shen/shen\.err-condition
     (V13374)
   (list 'true
         (list 'shen\.f_error V13374)))
-
-;;;###autoload
 (defun shen/shen\.sys-error
     (V13376)
   (shen/simple-error
    (shen/cn "system function "
             (shen/shen\.app V13376 ": unexpected argument\n" 'shen\.a))))
-
-;;;###autoload
 (defun shen/thaw
     (V14536)
   (shen/apply-higher-order-function V14536
                                     (list)))
-
-;;;###autoload
 (defun shen/eval
     (V14538)
   (shen/let Macroexpand
@@ -3839,15 +3646,11 @@
                            (shen/shen\.eval-without-macros Z))
               (shen/shen\.package-contents Macroexpand))
              (shen/shen\.eval-without-macros Macroexpand))))
-
-;;;###autoload
 (defun shen/shen\.eval-without-macros
     (V14540)
   (shen/eval-kl
    (shen/shen\.elim-def
     (shen/shen\.proc-input+ V14540))))
-
-;;;###autoload
 (defun shen/shen\.proc-input+
     (V14542)
   (shen/cond
@@ -3895,8 +3698,6 @@
                   (shen/shen\.proc-input+ Z))
      V14542))
    (shen/true V14542)))
-
-;;;###autoload
 (defun shen/shen\.elim-def
     (V14544)
   (cl-flet
@@ -3962,8 +3763,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.add-macro
     (V14546)
   (shen/let MacroReg
@@ -3980,8 +3779,6 @@
                                   (list
                                    (shen/function V14546))
                                   (shen/value '*macros*)))))))
-
-;;;###autoload
 (defun shen/shen\.packaged\?
     (V14554)
   (shen/cond
@@ -3997,8 +3794,6 @@
         (nthcdr 2 V14554)))))
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/external
     (V14556)
   (shen/trap-error
@@ -4008,8 +3803,6 @@
                 (shen/simple-error
                  (shen/cn "package "
                           (shen/shen\.app V14556 " has not been used.\n" 'shen\.a))))))
-
-;;;###autoload
 (defun shen/internal
     (V14558)
   (shen/trap-error
@@ -4019,8 +3812,6 @@
                 (shen/simple-error
                  (shen/cn "package "
                           (shen/shen\.app V14558 " has not been used.\n" 'shen\.a))))))
-
-;;;###autoload
 (defun shen/shen\.package-contents
     (V14562)
   (shen/cond
@@ -4057,8 +3848,6 @@
      (nthcdr 3 V14562)))
    (shen/true
     (shen/shen\.f_error 'shen\.package-contents))))
-
-;;;###autoload
 (defun shen/shen\.walk
     (V14565 V14566)
   (shen/cond
@@ -4072,8 +3861,6 @@
    (shen/true
     (shen/apply-higher-order-function V14565
                                       (list V14566)))))
-
-;;;###autoload
 (defun shen/compile
     (V14570 V14571 V14572)
   (shen/let O
@@ -4091,8 +3878,6 @@
              (shen/apply-higher-order-function V14572
                                                (list O))
              (shen/shen\.hdtl O))))
-
-;;;###autoload
 (defun shen/fail-if
     (V14575 V14576)
   (shen/if
@@ -4100,17 +3885,11 @@
                                      (list V14576))
    (shen/fail)
    V14576))
-
-;;;###autoload
 (defun shen/@s
     (V14579 V14580)
   (shen/cn V14579 V14580))
-
-;;;###autoload
 (defun shen/tc\? nil
   (shen/value 'shen\.*tc*))
-
-;;;###autoload
 (defun shen/ps
     (V14582)
   (shen/trap-error
@@ -4119,12 +3898,8 @@
    (shen/lambda E
                 (shen/simple-error
                  (shen/shen\.app V14582 " not found.\n" 'shen\.a)))))
-
-;;;###autoload
 (defun shen/stinput nil
   (shen/value '*stinput*))
-
-;;;###autoload
 (defun shen/shen\.+vector\?
     (V14584)
   (shen/and
@@ -4132,8 +3907,6 @@
    (shen/>
     (shen/<-address V14584 0)
     0)))
-
-;;;###autoload
 (defun shen/vector
     (V14586)
   (shen/let Vector
@@ -4148,8 +3921,6 @@
                                  (shen/shen\.fillvector ZeroStamp 1 V14586
                                                         (shen/fail)))
                                 Standard))))
-
-;;;###autoload
 (defun shen/shen\.fillvector
     (V14592 V14593 V14594 V14595)
   (cl-flet
@@ -4173,8 +3944,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/vector\?
     (V14597)
   (shen/and
@@ -4184,16 +3953,12 @@
      (shen/<-address V14597 0)
      0)
     (shen/lambda E 'false))))
-
-;;;###autoload
 (defun shen/vector->
     (V14601 V14602 V14603)
   (shen/if
    (shen/= V14602 0)
    (shen/simple-error "cannot access 0th element of a vector\n")
    (shen/address-> V14601 V14602 V14603)))
-
-;;;###autoload
 (defun shen/<-vector
     (V14606 V14607)
   (shen/if
@@ -4206,20 +3971,14 @@
                       (shen/fail))
               (shen/simple-error "vector element not found\n")
               VectorElement))))
-
-;;;###autoload
 (defun shen/shen\.posint\?
     (V14609)
   (shen/and
    (shen/integer\? V14609)
    (shen/>= V14609 0)))
-
-;;;###autoload
 (defun shen/limit
     (V14611)
   (shen/<-address V14611 0))
-
-;;;###autoload
 (defun shen/symbol\?
     (V14613)
   (shen/cond
@@ -4235,8 +3994,6 @@
                (shen/str V14613)
                (shen/shen\.analyse-symbol\? String))
      (shen/lambda E 'false)))))
-
-;;;###autoload
 (defun shen/shen\.analyse-symbol\?
     (V14615)
   (shen/cond
@@ -4248,14 +4005,10 @@
       (shen/tlstr V14615))))
    (shen/true
     (shen/shen\.f_error 'shen\.analyse-symbol\?))))
-
-;;;###autoload
 (defun shen/shen\.alpha\?
     (V14617)
   (shen/element\? V14617
                   (list "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "=" "*" "/" "+" "-" "_" "?" "$" "!" "@" "~" ">" "<" "&" "%" "{" "}" ":" ";" "`" "#" "'" ".")))
-
-;;;###autoload
 (defun shen/shen\.alphanums\?
     (V14619)
   (shen/cond
@@ -4269,21 +4022,15 @@
       (shen/tlstr V14619))))
    (shen/true
     (shen/shen\.f_error 'shen\.alphanums\?))))
-
-;;;###autoload
 (defun shen/shen\.alphanum\?
     (V14621)
   (shen/or
    (shen/shen\.alpha\? V14621)
    (shen/shen\.digit\? V14621)))
-
-;;;###autoload
 (defun shen/shen\.digit\?
     (V14623)
   (shen/element\? V14623
                   (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0")))
-
-;;;###autoload
 (defun shen/variable\?
     (V14625)
   (shen/cond
@@ -4299,8 +4046,6 @@
                (shen/str V14625)
                (shen/shen\.analyse-variable\? String))
      (shen/lambda E 'false)))))
-
-;;;###autoload
 (defun shen/shen\.analyse-variable\?
     (V14627)
   (shen/cond
@@ -4312,30 +4057,22 @@
       (shen/tlstr V14627))))
    (shen/true
     (shen/shen\.f_error 'shen\.analyse-variable\?))))
-
-;;;###autoload
 (defun shen/shen\.uppercase\?
     (V14629)
   (shen/element\? V14629
                   (list "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z")))
-
-;;;###autoload
 (defun shen/gensym
     (V14631)
   (shen/concat V14631
                (shen/set 'shen\.*gensym*
                          (1+
                           (shen/value 'shen\.*gensym*)))))
-
-;;;###autoload
 (defun shen/concat
     (V14634 V14635)
   (shen/intern
    (shen/cn
     (shen/str V14634)
     (shen/str V14635))))
-
-;;;###autoload
 (defun shen/@p
     (V14638 V14639)
   (shen/let Vector
@@ -4347,18 +4084,12 @@
                                 (shen/let Snd
                                           (shen/address-> Vector 2 V14639)
                                           Vector)))))
-
-;;;###autoload
 (defun shen/fst
     (V14641)
   (shen/<-address V14641 1))
-
-;;;###autoload
 (defun shen/snd
     (V14643)
   (shen/<-address V14643 2))
-
-;;;###autoload
 (defun shen/tuple\?
     (V14645)
   (shen/trap-error
@@ -4367,13 +4098,9 @@
     (shen/= 'shen\.tuple
             (shen/<-address V14645 0)))
    (shen/lambda E 'false)))
-
-;;;###autoload
 (defun shen/append
     (Xs Ys)
   (append Xs Ys))
-
-;;;###autoload
 (defun shen/@v
     (V14652 V14653)
   (shen/let Limit
@@ -4387,8 +4114,6 @@
                                  (shen/= Limit 0)
                                  X+NewVector
                                  (shen/shen\.@v-help V14653 1 Limit X+NewVector))))))
-
-;;;###autoload
 (defun shen/shen\.@v-help
     (V14659 V14660 V14661 V14662)
   (cl-flet
@@ -4414,16 +4139,12 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.copyfromvector
     (V14667 V14668 V14669 V14670)
   (shen/trap-error
    (shen/vector-> V14668 V14670
                   (shen/<-vector V14667 V14669))
    (shen/lambda E V14668)))
-
-;;;###autoload
 (defun shen/hdv
     (V14672)
   (shen/trap-error
@@ -4432,8 +4153,6 @@
                 (shen/simple-error
                  (shen/cn "hdv needs a non-empty vector as an argument; not "
                           (shen/shen\.app V14672 "\n" 'shen\.s))))))
-
-;;;###autoload
 (defun shen/tlv
     (V14674)
   (shen/let Limit
@@ -4450,8 +4169,6 @@
                         (shen/shen\.tlv-help V14674 2 Limit
                                              (shen/vector
                                               (shen/- Limit 1))))))))
-
-;;;###autoload
 (defun shen/shen\.tlv-help
     (V14680 V14681 V14682 V14683)
   (cl-flet
@@ -4477,8 +4194,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/assoc
     (V14695 V14696)
   (cl-flet
@@ -4512,8 +4227,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/boolean\?
     (V14702)
   (shen/cond
@@ -4522,8 +4235,6 @@
    ((shen/= 'false V14702)
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/nl
     (V14704)
   (cl-flet
@@ -4548,8 +4259,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/difference
     (V14709 V14710)
   (cl-flet
@@ -4584,13 +4293,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/do
     (V14713 V14714)
   V14714)
-
-;;;###autoload
 (defun shen/element\?
     (V14726 V14727)
   (cl-flet
@@ -4620,23 +4325,17 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/empty\?
     (V14733)
   (shen/cond
    ((shen/= nil V14733)
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/fix
     (V14736 V14737)
   (shen/shen\.fix-help V14736 V14737
                        (shen/apply-higher-order-function V14736
                                                          (list V14737))))
-
-;;;###autoload
 (defun shen/shen\.fix-help
     (V14748 V14749 V14750)
   (cl-flet
@@ -4659,8 +4358,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/put
     (Pointer Key Value Table)
   (let
@@ -4675,8 +4372,6 @@
             (puthash Pointer Subtable Table)
             (puthash Key Value Subtable)))
       (puthash Key Value Subtable))))
-
-;;;###autoload
 (defun shen/unput
     (Pointer Key Table)
   (let
@@ -4685,8 +4380,6 @@
     (and Subtable
          (remhash Key Subtable))
     Pointer))
-
-;;;###autoload
 (defun shen/shen\.remove-pointer
     (V14772 V14773 V14774)
   (shen/cond
@@ -4732,8 +4425,6 @@
                                 (nthcdr 1 V14774))))
    (shen/true
     (shen/shen\.f_error 'shen\.remove-pointer))))
-
-;;;###autoload
 (defun shen/shen\.change-pointer-value
     (V14783 V14784 V14785 V14786)
   (shen/cond
@@ -4790,8 +4481,6 @@
                                       (nthcdr 1 V14786))))
    (shen/true
     (shen/shen\.f_error 'shen\.change-pointer-value))))
-
-;;;###autoload
 (defun shen/get
     (Pointer Key Table)
   (let
@@ -4810,8 +4499,6 @@
              (format "value not found: %s\n"
                      (list Pointer Key))))
         Value))))
-
-;;;###autoload
 (defun shen/hash
     (V14795 V14796)
   (shen/let Hash
@@ -4825,13 +4512,9 @@
             (shen/if
              (shen/= 0 Hash)
              1 Hash)))
-
-;;;###autoload
 (defun shen/shen\.mod
     (N Div)
   (mod N Div))
-
-;;;###autoload
 (defun shen/shen\.multiples
     (V14803 V14804)
   (cl-flet
@@ -4863,8 +4546,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.modh
     (V14809 V14810)
   (cl-flet
@@ -4904,8 +4585,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/sum
     (V14812)
   (shen/cond
@@ -4918,8 +4597,6 @@
       (nthcdr 1 V14812))))
    (shen/true
     (shen/shen\.f_error 'sum))))
-
-;;;###autoload
 (defun shen/head
     (V14820)
   (shen/cond
@@ -4927,8 +4604,6 @@
     (shen/hd V14820))
    (shen/true
     (shen/simple-error "head expects a non-empty list"))))
-
-;;;###autoload
 (defun shen/tail
     (V14828)
   (shen/cond
@@ -4936,13 +4611,9 @@
     (nthcdr 1 V14828))
    (shen/true
     (shen/simple-error "tail expects a non-empty list"))))
-
-;;;###autoload
 (defun shen/hdstr
     (V14830)
   (shen/pos V14830 0))
-
-;;;###autoload
 (defun shen/intersection
     (V14835 V14836)
   (cl-flet
@@ -4977,13 +4648,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/reverse
     (V14838)
   (shen/shen\.reverse_help V14838 nil))
-
-;;;###autoload
 (defun shen/shen\.reverse_help
     (V14841 V14842)
   (cl-flet
@@ -5011,8 +4678,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/union
     (V14845 V14846)
   (cl-flet
@@ -5047,8 +4712,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/y-or-n\?
     (V14848)
   (cl-flet
@@ -5086,13 +4749,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/not
     (V14850)
   (shen/if V14850 'false 'true))
-
-;;;###autoload
 (defun shen/subst
     (V14863 V14864 V14865)
   (shen/cond
@@ -5104,14 +4763,10 @@
                   (shen/subst V14863 V14864 W))
      V14865))
    (shen/true V14865)))
-
-;;;###autoload
 (defun shen/explode
     (V14867)
   (shen/shen\.explode-h
    (shen/shen\.app V14867 "" 'shen\.a)))
-
-;;;###autoload
 (defun shen/shen\.explode-h
     (V14869)
   (shen/cond
@@ -5125,8 +4780,6 @@
       (shen/tlstr V14869))))
    (shen/true
     (shen/shen\.f_error 'shen\.explode-h))))
-
-;;;###autoload
 (defun shen/cd
     (V14871)
   (shen/set '*home-directory*
@@ -5134,8 +4787,6 @@
              (shen/= V14871 "")
              ""
              (shen/shen\.app V14871 "/" 'shen\.a))))
-
-;;;###autoload
 (defun shen/map
     (F Xs)
   (mapcar
@@ -5144,8 +4795,6 @@
      (shen/apply-higher-order-function F
                                        (list X)))
    Xs))
-
-;;;###autoload
 (defun shen/shen\.map-h
     (V14881 V14882 V14883)
   (cl-flet
@@ -5175,13 +4824,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/length
     (V14885)
   (shen/shen\.length-h V14885 0))
-
-;;;###autoload
 (defun shen/shen\.length-h
     (V14888 V14889)
   (cl-flet
@@ -5204,8 +4849,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/occurrences
     (V14901 V14902)
   (shen/cond
@@ -5218,26 +4861,18 @@
      (shen/occurrences V14901
                        (nthcdr 1 V14902))))
    (shen/true 0)))
-
-;;;###autoload
 (defun shen/nth
     (I Xs)
   (nth I Xs))
-
-;;;###autoload
 (defun shen/integer\?
     (N)
   (integerp N))
-
-;;;###autoload
 (defun shen/shen\.abs
     (V14916)
   (shen/if
    (shen/> V14916 0)
    V14916
    (shen/- 0 V14916)))
-
-;;;###autoload
 (defun shen/shen\.magless
     (V14919 V14920)
   (cl-flet
@@ -5259,8 +4894,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.integer-test\?
     (V14926 V14927)
   (cl-flet
@@ -5288,8 +4921,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/mapcan
     (V14932 V14933)
   (shen/cond
@@ -5304,20 +4935,14 @@
                   (nthcdr 1 V14933))))
    (shen/true
     (shen/shen\.f_error 'mapcan))))
-
-;;;###autoload
 (defun shen/==
     (V14945 V14946)
   (shen/cond
    ((shen/= V14946 V14945)
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/abort nil
   (shen/simple-error ""))
-
-;;;###autoload
 (defun shen/bound\?
     (V14948)
   (shen/and
@@ -5329,31 +4954,19 @@
              (shen/if
               (shen/= Val 'shen\.this-symbol-is-unbound)
               'false 'true))))
-
-;;;###autoload
 (defun shen/shen\.string->bytes
     (S)
   (string-to-list S))
-
-;;;###autoload
 (defun shen/maxinferences
     (V14952)
   (shen/set 'shen\.*maxinferences* V14952))
-
-;;;###autoload
 (defun shen/inferences nil
   (shen/value 'shen\.*infs*))
-
-;;;###autoload
 (defun shen/protect
     (V14954)
   V14954)
-
-;;;###autoload
 (defun shen/stoutput nil
   (shen/value '*stoutput*))
-
-;;;###autoload
 (defun shen/string->symbol
     (V14956)
   (shen/let Symbol
@@ -5364,8 +4977,6 @@
              (shen/simple-error
               (shen/cn "cannot intern "
                        (shen/shen\.app V14956 " to a symbol" 'shen\.s))))))
-
-;;;###autoload
 (defun shen/optimise
     (V14962)
   (shen/cond
@@ -5375,36 +4986,20 @@
     (shen/set 'shen\.*optimise* 'false))
    (shen/true
     (shen/simple-error "optimise expects a + or a -.\n"))))
-
-;;;###autoload
 (defun shen/os nil
   (shen/value '*os*))
-
-;;;###autoload
 (defun shen/language nil
   (shen/value '*language*))
-
-;;;###autoload
 (defun shen/version nil
   (shen/value '*version*))
-
-;;;###autoload
 (defun shen/port nil
   (shen/value '*port*))
-
-;;;###autoload
 (defun shen/porters nil
   (shen/value '*porters*))
-
-;;;###autoload
 (defun shen/implementation nil
   (shen/value '*implementation*))
-
-;;;###autoload
 (defun shen/release nil
   (shen/value '*release*))
-
-;;;###autoload
 (defun shen/package\?
     (V14964)
   (shen/trap-error
@@ -5412,15 +5007,11 @@
     (shen/external V14964)
     'true)
    (shen/lambda E 'false)))
-
-;;;###autoload
 (defun shen/function
     (S)
   (shen/shen\.lookup-func
    (shen/unprefix-symbol S)
    (shen/value 'shen\.*symbol-table*)))
-
-;;;###autoload
 (defun shen/shen\.lookup-func
     (V14976 V14977)
   (cl-flet
@@ -5456,8 +5047,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.datatype-error
     (V14350)
   (shen/cond
@@ -5476,8 +5065,6 @@
                "\n" 'shen\.a))))
    (shen/true
     (shen/shen\.f_error 'shen\.datatype-error))))
-
-;;;###autoload
 (defun shen/shen\.<datatype-rules>
     (V14352)
   (shen/let YaccParse
@@ -5518,8 +5105,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<datatype-rule>
     (V14354)
   (shen/let YaccParse
@@ -5605,8 +5190,6 @@
                                    (shen/fail)))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<side-conditions>
     (V14356)
   (shen/let YaccParse
@@ -5647,8 +5230,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<side-condition>
     (V14358)
   (shen/let YaccParse
@@ -5713,8 +5294,6 @@
                          (shen/fail)))
               (shen/fail))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<variable\?>
     (V14360)
   (shen/if
@@ -5734,8 +5313,6 @@
                Parse_X)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<expr>
     (V14362)
   (shen/if
@@ -5761,8 +5338,6 @@
                (shen/shen\.remove-bar Parse_X))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.remove-bar
     (V14364)
   (shen/cond
@@ -5794,8 +5369,6 @@
      (shen/shen\.remove-bar
       (nthcdr 1 V14364))))
    (shen/true V14364)))
-
-;;;###autoload
 (defun shen/shen\.<premises>
     (V14366)
   (shen/let YaccParse
@@ -5844,8 +5417,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<semicolon-symbol>
     (V14368)
   (shen/if
@@ -5865,8 +5436,6 @@
                'shen\.skip)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<premise>
     (V14370)
   (shen/let YaccParse
@@ -5939,8 +5508,6 @@
                                    (shen/fail)))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<conclusion>
     (V14372)
   (shen/let YaccParse
@@ -6009,13 +5576,9 @@
                                    (shen/fail)))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.sequent
     (V14375 V14376)
   (shen/@p V14375 V14376))
-
-;;;###autoload
 (defun shen/shen\.<formulae>
     (V14378)
   (shen/let YaccParse
@@ -6081,8 +5644,6 @@
                                    (shen/fail)))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<comma-symbol>
     (V14380)
   (shen/if
@@ -6103,8 +5664,6 @@
                'shen\.skip)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<formula>
     (V14382)
   (shen/let YaccParse
@@ -6159,8 +5718,6 @@
                          (shen/shen\.hdtl Parse_shen\.<expr>))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<type>
     (V14384)
   (shen/let Parse_shen\.<expr>
@@ -6175,8 +5732,6 @@
               (shen/shen\.curry-type
                (shen/shen\.hdtl Parse_shen\.<expr>)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<doubleunderline>
     (V14386)
   (shen/if
@@ -6196,8 +5751,6 @@
                Parse_X)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<singleunderline>
     (V14388)
   (shen/if
@@ -6217,16 +5770,12 @@
                Parse_X)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.singleunderline\?
     (V14390)
   (shen/and
    (shen/symbol\? V14390)
    (shen/shen\.sh\?
     (shen/str V14390))))
-
-;;;###autoload
 (defun shen/shen\.sh\?
     (V14392)
   (shen/cond
@@ -6239,16 +5788,12 @@
       "_")
      (shen/shen\.sh\?
       (shen/tlstr V14392))))))
-
-;;;###autoload
 (defun shen/shen\.doubleunderline\?
     (V14394)
   (shen/and
    (shen/symbol\? V14394)
    (shen/shen\.dh\?
     (shen/str V14394))))
-
-;;;###autoload
 (defun shen/shen\.dh\?
     (V14396)
   (shen/cond
@@ -6261,15 +5806,11 @@
       "=")
      (shen/shen\.dh\?
       (shen/tlstr V14396))))))
-
-;;;###autoload
 (defun shen/shen\.process-datatype
     (V14399 V14400)
   (shen/shen\.remember-datatype
    (shen/shen\.s-prolog
     (shen/shen\.rules->horn-clauses V14399 V14400))))
-
-;;;###autoload
 (defun shen/shen\.remember-datatype
     (V14406)
   (shen/cond
@@ -6287,8 +5828,6 @@
       (shen/hd V14406))))
    (shen/true
     (shen/shen\.f_error 'shen\.remember-datatype))))
-
-;;;###autoload
 (defun shen/shen\.rules->horn-clauses
     (V14411 V14412)
   (cl-flet
@@ -6338,20 +5877,14 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.double->singles
     (V14414)
   (list
    (shen/shen\.right-rule V14414)
    (shen/shen\.left-rule V14414)))
-
-;;;###autoload
 (defun shen/shen\.right-rule
     (V14416)
   (shen/@p 'shen\.single V14416))
-
-;;;###autoload
 (defun shen/shen\.left-rule
     (V14418)
   (shen/cond
@@ -6398,8 +5931,6 @@
                                             NewPremises NewConclusion))))))
    (shen/true
     (shen/shen\.f_error 'shen\.left-rule))))
-
-;;;###autoload
 (defun shen/shen\.right->left
     (V14424)
   (shen/cond
@@ -6410,8 +5941,6 @@
     (shen/snd V14424))
    (shen/true
     (shen/simple-error "syntax error with ==========\n"))))
-
-;;;###autoload
 (defun shen/shen\.rule->horn-clause
     (V14427 V14428)
   (shen/cond
@@ -6444,15 +5973,11 @@
         (nthcdr 2 V14428))))))
    (shen/true
     (shen/shen\.f_error 'shen\.rule->horn-clause))))
-
-;;;###autoload
 (defun shen/shen\.rule->horn-clause-head
     (V14431 V14432)
   (list V14431
         (shen/shen\.mode-ify V14432)
         'Context_1957))
-
-;;;###autoload
 (defun shen/shen\.mode-ify
     (V14434)
   (shen/cond
@@ -6480,8 +6005,6 @@
                  '+))
           '-))
    (shen/true V14434)))
-
-;;;###autoload
 (defun shen/shen\.rule->horn-clause-body
     (V14438 V14439 V14440)
   (shen/let Variables
@@ -6508,8 +6031,6 @@
                                                                V14439)
                                                               (shen/append SearchLiterals
                                                                            (shen/append SideLiterals PremissLiterals)))))))))
-
-;;;###autoload
 (defun shen/shen\.construct-search-literals
     (V14449 V14450 V14451 V14452)
   (shen/cond
@@ -6519,8 +6040,6 @@
     nil)
    (shen/true
     (shen/shen\.csl-help V14449 V14450 V14451 V14452))))
-
-;;;###autoload
 (defun shen/shen\.csl-help
     (V14459 V14460 V14461 V14462)
   (shen/cond
@@ -6546,8 +6065,6 @@
       (shen/gensym 'Context))))
    (shen/true
     (shen/shen\.f_error 'shen\.csl-help))))
-
-;;;###autoload
 (defun shen/shen\.construct-search-clauses
     (V14466 V14467 V14468)
   (cl-flet
@@ -6586,16 +6103,12 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.construct-search-clause
     (V14472 V14473 V14474)
   (shen/shen\.s-prolog
    (list
     (shen/shen\.construct-base-search-clause V14472 V14473 V14474)
     (shen/shen\.construct-recursive-search-clause V14472 V14473 V14474))))
-
-;;;###autoload
 (defun shen/shen\.construct-base-search-clause
     (V14478 V14479 V14480)
   (list
@@ -6608,8 +6121,6 @@
           'In_1957)
     V14480)
    ':- nil))
-
-;;;###autoload
 (defun shen/shen\.construct-recursive-search-clause
     (V14484 V14485 V14486)
   (list
@@ -6627,8 +6138,6 @@
     (append
      (list V14484 'Assumptions_1957 'Out_1957)
      V14486))))
-
-;;;###autoload
 (defun shen/shen\.construct-side-literals
     (V14492)
   (cl-flet
@@ -6704,8 +6213,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.construct-premiss-literal
     (V14499 V14500)
   (shen/cond
@@ -6719,8 +6226,6 @@
     (list 'cut 'Throwcontrol))
    (shen/true
     (shen/shen\.f_error 'shen\.construct-premiss-literal))))
-
-;;;###autoload
 (defun shen/shen\.construct-context
     (V14503 V14504)
   (shen/cond
@@ -6740,8 +6245,6 @@
                                         (nthcdr 1 V14504))))
    (shen/true
     (shen/shen\.f_error 'shen\.construct-context))))
-
-;;;###autoload
 (defun shen/shen\.recursive_cons_form
     (V14506)
   (shen/cond
@@ -6752,8 +6255,6 @@
           (shen/shen\.recursive_cons_form
            (nthcdr 1 V14506))))
    (shen/true V14506)))
-
-;;;###autoload
 (defun shen/preclude
     (V14508)
   (shen/shen\.preclude-h
@@ -6761,8 +6262,6 @@
     (shen/lambda X
                  (shen/shen\.intern-type X))
     V14508)))
-
-;;;###autoload
 (defun shen/shen\.preclude-h
     (V14510)
   (shen/let FilterDatatypes
@@ -6771,8 +6270,6 @@
                        (shen/value 'shen\.*datatypes*)
                        V14510))
             (shen/value 'shen\.*datatypes*)))
-
-;;;###autoload
 (defun shen/include
     (V14512)
   (shen/shen\.include-h
@@ -6780,8 +6277,6 @@
     (shen/lambda X
                  (shen/shen\.intern-type X))
     V14512)))
-
-;;;###autoload
 (defun shen/shen\.include-h
     (V14514)
   (shen/let ValidTypes
@@ -6792,8 +6287,6 @@
                                 (shen/union ValidTypes
                                             (shen/value 'shen\.*datatypes*)))
                       (shen/value 'shen\.*datatypes*))))
-
-;;;###autoload
 (defun shen/preclude-all-but
     (V14516)
   (shen/shen\.preclude-h
@@ -6803,8 +6296,6 @@
      (shen/lambda X
                   (shen/shen\.intern-type X))
      V14516))))
-
-;;;###autoload
 (defun shen/include-all-but
     (V14518)
   (shen/shen\.include-h
@@ -6814,8 +6305,6 @@
      (shen/lambda X
                   (shen/shen\.intern-type X))
      V14518))))
-
-;;;###autoload
 (defun shen/shen\.synonyms-help
     (V14524)
   (cl-flet
@@ -6867,8 +6356,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.pushnew
     (V14527 V14528)
   (shen/if
@@ -6879,8 +6366,6 @@
              (append
               (list V14527)
               (shen/value V14528)))))
-
-;;;###autoload
 (defun shen/shen\.demod-rule
     (V14530)
   (shen/cond
@@ -6900,8 +6385,6 @@
        (nthcdr 1 V14530)))))
    (shen/true
     (shen/shen\.f_error 'shen\.demod-rule))))
-
-;;;###autoload
 (defun shen/shen\.demodulation-function
     (V14533 V14534)
   (shen/do
@@ -6917,12 +6400,8 @@
               (shen/tc '+)
               'shen\.skip)
      'synonyms))))
-
-;;;###autoload
 (defun shen/shen\.default-rule nil
   (list 'X '-> 'X))
-
-;;;###autoload
 (defun shen/shen\.yacc
     (V15926)
   (shen/cond
@@ -6939,8 +6418,6 @@
      (nthcdr 2 V15926)))
    (shen/true
     (shen/shen\.f_error 'shen\.yacc))))
-
-;;;###autoload
 (defun shen/shen\.yacc->shen
     (V15929 V15930)
   (shen/let CCRules
@@ -6954,8 +6431,6 @@
                                 (shen/shen\.yacc_cases CCBody)
                                 (list 'define V15929 'Stream '->
                                       (shen/shen\.kill-code YaccCases))))))
-
-;;;###autoload
 (defun shen/shen\.kill-code
     (V15932)
   (shen/cond
@@ -6966,12 +6441,8 @@
           (list 'lambda 'E
                 (list 'shen\.analyse-kill 'E))))
    (shen/true V15932)))
-
-;;;###autoload
 (defun shen/kill nil
   (shen/simple-error "yacc kill"))
-
-;;;###autoload
 (defun shen/shen\.analyse-kill
     (V15934)
   (shen/let String
@@ -6980,8 +6451,6 @@
              (shen/= String "yacc kill")
              (shen/fail)
              V15934)))
-
-;;;###autoload
 (defun shen/shen\.split_cc_rules
     (V15940 V15941 V15942)
   (cl-flet
@@ -7028,8 +6497,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.split_cc_rule
     (V15950 V15951 V15952)
   (cl-flet
@@ -7105,8 +6572,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.semantic-completion-warning
     (V15963 V15964)
   (shen/cond
@@ -7124,8 +6589,6 @@
       (shen/shen\.prhush "has no semantics.\n"
                          (shen/stoutput)))))
    (shen/true 'shen\.skip)))
-
-;;;###autoload
 (defun shen/shen\.default_semantics
     (V15966)
   (shen/cond
@@ -7154,8 +6617,6 @@
            (nthcdr 1 V15966))))
    (shen/true
     (shen/shen\.f_error 'shen\.default_semantics))))
-
-;;;###autoload
 (defun shen/shen\.grammar_symbol\?
     (V15968)
   (shen/and
@@ -7171,8 +6632,6 @@
                (shen/hd
                 (shen/reverse Cs))
                ">")))))
-
-;;;###autoload
 (defun shen/shen\.yacc_cases
     (V15970)
   (shen/cond
@@ -7193,8 +6652,6 @@
                           P))))
    (shen/true
     (shen/shen\.f_error 'shen\.yacc_cases))))
-
-;;;###autoload
 (defun shen/shen\.cc_body
     (V15972)
   (shen/cond
@@ -7212,8 +6669,6 @@
       (nthcdr 1 V15972))))
    (shen/true
     (shen/shen\.f_error 'shen\.cc_body))))
-
-;;;###autoload
 (defun shen/shen\.syntax
     (V15976 V15977 V15978)
   (shen/cond
@@ -7277,8 +6732,6 @@
            " is not legal syntax\n" 'shen\.a))))))))
    (shen/true
     (shen/shen\.f_error 'shen\.syntax))))
-
-;;;###autoload
 (defun shen/shen\.list-stream
     (V15983 V15984 V15985 V15986)
   (shen/let Test
@@ -7309,8 +6762,6 @@
                                                                                       Placeholder))
                                           (list 'if Test Action
                                                 (list 'fail)))))))
-
-;;;###autoload
 (defun shen/shen\.decons
     (V15988)
   (shen/cond
@@ -7355,8 +6806,6 @@
       (shen/hd
        (nthcdr 2 V15988)))))
    (shen/true V15988)))
-
-;;;###autoload
 (defun shen/shen\.insert-runon
     (V16003 V16004 V16005)
   (shen/cond
@@ -7385,8 +6834,6 @@
                   (shen/shen\.insert-runon V16003 V16004 Z))
      V16005))
    (shen/true V16005)))
-
-;;;###autoload
 (defun shen/shen\.strip-pathname
     (V16011)
   (cl-flet
@@ -7411,8 +6858,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.recursive_descent
     (V16015 V16016 V16017)
   (shen/cond
@@ -7442,8 +6887,6 @@
                                               Action Else))))))
    (shen/true
     (shen/shen\.f_error 'shen\.recursive_descent))))
-
-;;;###autoload
 (defun shen/shen\.variable-match
     (V16021 V16022 V16023)
   (shen/cond
@@ -7469,8 +6912,6 @@
                                   (list 'if Test Action Else)))))
    (shen/true
     (shen/shen\.f_error 'shen\.variable-match))))
-
-;;;###autoload
 (defun shen/shen\.terminal\?
     (V16033)
   (shen/cond
@@ -7479,16 +6920,12 @@
    ((shen/variable\? V16033)
     'false)
    (shen/true 'true)))
-
-;;;###autoload
 (defun shen/shen\.jump_stream\?
     (V16039)
   (shen/cond
    ((shen/= V16039 '_)
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/shen\.check_stream
     (V16043 V16044 V16045)
   (shen/cond
@@ -7514,8 +6951,6 @@
                                   (list 'if Test Action Else)))))
    (shen/true
     (shen/shen\.f_error 'shen\.check_stream))))
-
-;;;###autoload
 (defun shen/shen\.jump_stream
     (V16049 V16050 V16051)
   (shen/cond
@@ -7536,8 +6971,6 @@
                                   (list 'if Test Action Else)))))
    (shen/true
     (shen/shen\.f_error 'shen\.jump_stream))))
-
-;;;###autoload
 (defun shen/shen\.semantics
     (V16053)
   (shen/cond
@@ -7554,8 +6987,6 @@
                   (shen/shen\.semantics Z))
      V16053))
    (shen/true V16053)))
-
-;;;###autoload
 (defun shen/shen\.snd-or-fail
     (V16061)
   (shen/cond
@@ -7570,22 +7001,14 @@
      (nthcdr 1 V16061)))
    (shen/true
     (shen/fail))))
-
-;;;###autoload
 (defun shen/fail nil 'shen\.fail!)
-
-;;;###autoload
 (defun shen/shen\.pair
     (V16064 V16065)
   (list V16064 V16065))
-
-;;;###autoload
 (defun shen/shen\.hdtl
     (V16067)
   (shen/hd
    (nthcdr 1 V16067)))
-
-;;;###autoload
 (defun shen/shen\.<!>
     (V16075)
   (shen/cond
@@ -7600,8 +7023,6 @@
           (shen/hd V16075)))
    (shen/true
     (shen/fail))))
-
-;;;###autoload
 (defun shen/<e>
     (V16081)
   (shen/cond
@@ -7617,8 +7038,6 @@
      nil))
    (shen/true
     (shen/shen\.f_error '<e>))))
-
-;;;###autoload
 (defun shen/read-file-as-bytelist
     (V14083)
   (shen/let Stream
@@ -7630,8 +7049,6 @@
                                 (shen/let Close
                                           (shen/close Stream)
                                           (shen/reverse Bytes))))))
-
-;;;###autoload
 (defun shen/shen\.read-file-as-bytelist-help
     (V14087 V14088 V14089)
   (cl-flet
@@ -7656,8 +7073,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/read-file-as-string
     (V14091)
   (shen/let Stream
@@ -7665,8 +7080,6 @@
             (shen/shen\.rfas-h Stream
                                (shen/read-byte Stream)
                                "")))
-
-;;;###autoload
 (defun shen/shen\.rfas-h
     (V14095 V14096 V14097)
   (cl-flet
@@ -7692,14 +7105,10 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/input
     (V14099)
   (shen/eval-kl
    (shen/read V14099)))
-
-;;;###autoload
 (defun shen/input+
     (V14102 V14103)
   (shen/let Mono\?
@@ -7717,8 +7126,6 @@
                                                           (shen/shen\.app V14102 "\n" 'shen\.r))
                                                  'shen\.r)))
                        (shen/eval-kl Input)))))
-
-;;;###autoload
 (defun shen/shen\.monotype
     (V14105)
   (shen/cond
@@ -7734,20 +7141,14 @@
       (shen/cn "input+ expects a monotype: not "
                (shen/shen\.app V14105 "\n" 'shen\.a)))
      V14105))))
-
-;;;###autoload
 (defun shen/read
     (V14107)
   (shen/hd
    (shen/shen\.read-loop V14107
                          (shen/read-byte V14107)
                          nil)))
-
-;;;###autoload
 (defun shen/it nil
   (shen/value 'shen\.*it*))
-
-;;;###autoload
 (defun shen/shen\.read-loop
     (V14115 V14116 V14117)
   (cl-flet
@@ -7801,21 +7202,15 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.terminator\?
     (V14119)
   (shen/element\? V14119
                   (list 9 10 13 32 34 41 93)))
-
-;;;###autoload
 (defun shen/lineread
     (V14121)
   (shen/shen\.lineread-loop
    (shen/read-byte V14121)
    nil V14121))
-
-;;;###autoload
 (defun shen/shen\.lineread-loop
     (V14126 V14127 V14128)
   (cl-flet
@@ -7873,8 +7268,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.record-it
     (V14130)
   (shen/let TrimLeft
@@ -7885,8 +7278,6 @@
                       (shen/let Trimmed
                                 (shen/reverse TrimRight)
                                 (shen/shen\.record-it-h Trimmed)))))
-
-;;;###autoload
 (defun shen/shen\.trim-whitespace
     (V14132)
   (cl-flet
@@ -7911,8 +7302,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.record-it-h
     (V14134)
   (shen/do
@@ -7923,8 +7312,6 @@
                             (shen/n->string X))
                V14134)))
    V14134))
-
-;;;###autoload
 (defun shen/shen\.cn-all
     (V14136)
   (shen/cond
@@ -7937,8 +7324,6 @@
       (nthcdr 1 V14136))))
    (shen/true
     (shen/shen\.f_error 'shen\.cn-all))))
-
-;;;###autoload
 (defun shen/read-file
     (V14138)
   (shen/let Bytelist
@@ -7949,8 +7334,6 @@
              Bytelist
              (shen/lambda X
                           (shen/shen\.read-error X)))))
-
-;;;###autoload
 (defun shen/read-from-string
     (V14140)
   (shen/let Ns
@@ -7964,8 +7347,6 @@
              Ns
              (shen/lambda X
                           (shen/shen\.read-error X)))))
-
-;;;###autoload
 (defun shen/shen\.read-error
     (V14148)
   (shen/cond
@@ -7987,8 +7368,6 @@
                "\n" 'shen\.a))))
    (shen/true
     (shen/simple-error "read error\n"))))
-
-;;;###autoload
 (defun shen/shen\.compress-50
     (V14155 V14156)
   (shen/cond
@@ -8005,8 +7384,6 @@
       (nthcdr 1 V14156))))
    (shen/true
     (shen/shen\.f_error 'shen\.compress-50))))
-
-;;;###autoload
 (defun shen/shen\.<st_input>
     (V14158)
   (shen/let YaccParse
@@ -8409,8 +7786,6 @@
                                    YaccParse))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<lsb>
     (V14160)
   (shen/if
@@ -8428,8 +7803,6 @@
       (shen/shen\.hdtl V14160)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<rsb>
     (V14162)
   (shen/if
@@ -8447,8 +7820,6 @@
       (shen/shen\.hdtl V14162)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<lcurly>
     (V14164)
   (shen/if
@@ -8466,8 +7837,6 @@
       (shen/shen\.hdtl V14164)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<rcurly>
     (V14166)
   (shen/if
@@ -8485,8 +7854,6 @@
       (shen/shen\.hdtl V14166)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<bar>
     (V14168)
   (shen/if
@@ -8504,8 +7871,6 @@
       (shen/shen\.hdtl V14168)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<semicolon>
     (V14170)
   (shen/if
@@ -8523,8 +7888,6 @@
       (shen/shen\.hdtl V14170)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<colon>
     (V14172)
   (shen/if
@@ -8542,8 +7905,6 @@
       (shen/shen\.hdtl V14172)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<comma>
     (V14174)
   (shen/if
@@ -8561,8 +7922,6 @@
       (shen/shen\.hdtl V14174)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<equal>
     (V14176)
   (shen/if
@@ -8580,8 +7939,6 @@
       (shen/shen\.hdtl V14176)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<minus>
     (V14178)
   (shen/if
@@ -8599,8 +7956,6 @@
       (shen/shen\.hdtl V14178)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<lrb>
     (V14180)
   (shen/if
@@ -8618,8 +7973,6 @@
       (shen/shen\.hdtl V14180)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<rrb>
     (V14182)
   (shen/if
@@ -8637,8 +7990,6 @@
       (shen/shen\.hdtl V14182)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<atom>
     (V14184)
   (shen/let YaccParse
@@ -8691,8 +8042,6 @@
                                    (shen/fail)))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.control-chars
     (V14186)
   (shen/cond
@@ -8728,8 +8077,6 @@
       (nthcdr 1 V14186))))
    (shen/true
     (shen/shen\.f_error 'shen\.control-chars))))
-
-;;;###autoload
 (defun shen/shen\.code-point
     (V14190)
   (shen/cond
@@ -8752,8 +8099,6 @@
     (shen/simple-error
      (shen/cn "code point parse error "
               (shen/shen\.app V14190 "\n" 'shen\.a))))))
-
-;;;###autoload
 (defun shen/shen\.after-codepoint
     (V14196)
   (cl-flet
@@ -8782,16 +8127,12 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.decimalise
     (V14198)
   (shen/shen\.pre
    (shen/reverse
     (shen/shen\.digits->integers V14198))
    0))
-
-;;;###autoload
 (defun shen/shen\.digits->integers
     (V14204)
   (shen/cond
@@ -8876,8 +8217,6 @@
      (shen/shen\.digits->integers
       (nthcdr 1 V14204))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.<sym>
     (V14206)
   (shen/let Parse_shen\.<alpha>
@@ -8902,8 +8241,6 @@
                           (shen/shen\.hdtl Parse_shen\.<alphanums>)))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<alphanums>
     (V14208)
   (shen/let YaccParse
@@ -8944,8 +8281,6 @@
                          "")
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<alphanum>
     (V14210)
   (shen/let YaccParse
@@ -8975,8 +8310,6 @@
                          (shen/shen\.hdtl Parse_shen\.<num>))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<num>
     (V14212)
   (shen/if
@@ -8996,8 +8329,6 @@
                (shen/n->string Parse_Byte))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.numbyte\?
     (V14218)
   (shen/cond
@@ -9022,8 +8353,6 @@
    ((shen/= 57 V14218)
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/shen\.<alpha>
     (V14220)
   (shen/if
@@ -9043,8 +8372,6 @@
                (shen/n->string Parse_Byte))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.symbol-code\?
     (V14222)
   (shen/or
@@ -9069,8 +8396,6 @@
         (shen/> V14222 34)
         (shen/< V14222 40))
        (shen/= V14222 33)))))))
-
-;;;###autoload
 (defun shen/shen\.<str>
     (V14224)
   (shen/let Parse_shen\.<dbq>
@@ -9100,8 +8425,6 @@
                                    (shen/fail)))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<dbq>
     (V14226)
   (shen/if
@@ -9121,8 +8444,6 @@
                Parse_Byte)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<strcontents>
     (V14228)
   (shen/let YaccParse
@@ -9163,8 +8484,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<byte>
     (V14230)
   (shen/if
@@ -9181,8 +8500,6 @@
                 (shen/shen\.hdtl V14230)))
               (shen/n->string Parse_Byte)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<strc>
     (V14232)
   (shen/if
@@ -9203,8 +8520,6 @@
                (shen/n->string Parse_Byte))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<number>
     (V14234)
   (shen/let YaccParse
@@ -9405,8 +8720,6 @@
                                    YaccParse))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<E>
     (V14236)
   (shen/if
@@ -9424,8 +8737,6 @@
       (shen/shen\.hdtl V14236)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<log10>
     (V14238)
   (shen/let YaccParse
@@ -9470,8 +8781,6 @@
                           0))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<plus>
     (V14240)
   (shen/if
@@ -9491,8 +8800,6 @@
                Parse_Byte)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<stop>
     (V14242)
   (shen/if
@@ -9512,8 +8819,6 @@
                Parse_Byte)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<predigits>
     (V14244)
   (shen/let YaccParse
@@ -9543,8 +8848,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<postdigits>
     (V14246)
   (shen/let Parse_shen\.<digits>
@@ -9558,8 +8861,6 @@
               (shen/hd Parse_shen\.<digits>)
               (shen/shen\.hdtl Parse_shen\.<digits>))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<digits>
     (V14248)
   (shen/let YaccParse
@@ -9601,8 +8902,6 @@
                           (shen/shen\.hdtl Parse_shen\.<digit>)))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<digit>
     (V14250)
   (shen/if
@@ -9622,8 +8921,6 @@
                (shen/shen\.byte->digit Parse_X))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.byte->digit
     (V14252)
   (shen/cond
@@ -9649,8 +8946,6 @@
     9)
    (shen/true
     (shen/shen\.f_error 'shen\.byte->digit))))
-
-;;;###autoload
 (defun shen/shen\.pre
     (V14257 V14258)
   (shen/cond
@@ -9666,8 +8961,6 @@
       (1+ V14258))))
    (shen/true
     (shen/shen\.f_error 'shen\.pre))))
-
-;;;###autoload
 (defun shen/shen\.post
     (V14263 V14264)
   (shen/cond
@@ -9684,8 +8977,6 @@
       (1+ V14264))))
    (shen/true
     (shen/shen\.f_error 'shen\.post))))
-
-;;;###autoload
 (defun shen/shen\.expt
     (V14269 V14270)
   (shen/cond
@@ -9701,8 +8992,6 @@
              (shen/shen\.expt V14269
                               (1+ V14270))
              V14269)))))
-
-;;;###autoload
 (defun shen/shen\.<st_input1>
     (V14272)
   (shen/let Parse_shen\.<st_input>
@@ -9716,8 +9005,6 @@
               (shen/hd Parse_shen\.<st_input>)
               (shen/shen\.hdtl Parse_shen\.<st_input>))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<st_input2>
     (V14274)
   (shen/let Parse_shen\.<st_input>
@@ -9731,8 +9018,6 @@
               (shen/hd Parse_shen\.<st_input>)
               (shen/shen\.hdtl Parse_shen\.<st_input>))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<comment>
     (V14276)
   (shen/let YaccParse
@@ -9762,8 +9047,6 @@
                          'shen\.skip)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<singleline>
     (V14278)
   (shen/let Parse_shen\.<backslash>
@@ -9801,8 +9084,6 @@
                                    (shen/fail)))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<backslash>
     (V14280)
   (shen/if
@@ -9820,8 +9101,6 @@
       (shen/shen\.hdtl V14280)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<anysingle>
     (V14282)
   (shen/let YaccParse
@@ -9859,8 +9138,6 @@
                          'shen\.skip)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<non-return>
     (V14284)
   (shen/if
@@ -9882,8 +9159,6 @@
                'shen\.skip)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<return>
     (V14286)
   (shen/if
@@ -9904,8 +9179,6 @@
                'shen\.skip)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<multiline>
     (V14288)
   (shen/let Parse_shen\.<backslash>
@@ -9935,8 +9208,6 @@
                                    (shen/fail)))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<times>
     (V14290)
   (shen/if
@@ -9954,8 +9225,6 @@
       (shen/shen\.hdtl V14290)))
     'shen\.skip)
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<anymulti>
     (V14292)
   (shen/let YaccParse
@@ -10028,8 +9297,6 @@
                          (shen/fail))
                         YaccParse))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<whitespaces>
     (V14294)
   (shen/let YaccParse
@@ -10067,8 +9334,6 @@
                          'shen\.skip)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<whitespace>
     (V14296)
   (shen/if
@@ -10095,8 +9360,6 @@
                'shen\.skip)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.cons_form
     (V14298)
   (shen/cond
@@ -10128,8 +9391,6 @@
            (nthcdr 1 V14298))))
    (shen/true
     (shen/shen\.f_error 'shen\.cons_form))))
-
-;;;###autoload
 (defun shen/shen\.package-macro
     (V14303 V14304)
   (shen/cond
@@ -10208,8 +9469,6 @@
     (append
      (list V14303)
      V14304))))
-
-;;;###autoload
 (defun shen/shen\.record-exceptions
     (V14307 V14308)
   (shen/let CurrExceptions
@@ -10221,8 +9480,6 @@
                       (shen/union V14307 CurrExceptions)
                       (shen/put V14308 'shen\.external-symbols AllExceptions
                                 (shen/value '*property-vector*)))))
-
-;;;###autoload
 (defun shen/shen\.record-internal
     (V14311 V14312)
   (shen/put V14311 'shen\.internal-symbols
@@ -10232,8 +9489,6 @@
                                    (shen/value '*property-vector*))
                          (shen/lambda E nil)))
             (shen/value '*property-vector*)))
-
-;;;###autoload
 (defun shen/shen\.internal-symbols
     (V14323 V14324)
   (shen/cond
@@ -10249,8 +9504,6 @@
      (shen/shen\.internal-symbols V14323
                                   (nthcdr 1 V14324))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.packageh
     (V14341 V14342 V14343 V14344)
   (shen/cond
@@ -10286,8 +9539,6 @@
                  (shen/shen\.prefix\? V14344 ExplodeX)))))
     (shen/concat V14341 V14343))
    (shen/true V14343)))
-
-;;;###autoload
 (defun shen/shen\.<defprolog>
     (V13538)
   (shen/let Parse_shen\.<predicate*>
@@ -10316,8 +9567,6 @@
                             (shen/shen\.hdtl Parse_shen\.<clauses*>)))))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.prolog-error
     (V13547 V13548)
   (shen/cond
@@ -10341,8 +9590,6 @@
     (shen/simple-error
      (shen/cn "prolog syntax error in "
               (shen/shen\.app V13547 "\n" 'shen\.a))))))
-
-;;;###autoload
 (defun shen/shen\.next-50
     (V13555 V13556)
   (shen/cond
@@ -10359,8 +9606,6 @@
       (nthcdr 1 V13556))))
    (shen/true
     (shen/shen\.f_error 'shen\.next-50))))
-
-;;;###autoload
 (defun shen/shen\.decons-string
     (V13558)
   (shen/cond
@@ -10382,8 +9627,6 @@
      " " 'shen\.s))
    (shen/true
     (shen/shen\.app V13558 " " 'shen\.r))))
-
-;;;###autoload
 (defun shen/shen\.insert-predicate
     (V13561 V13562)
   (shen/cond
@@ -10403,8 +9646,6 @@
      (nthcdr 1 V13562)))
    (shen/true
     (shen/shen\.f_error 'shen\.insert-predicate))))
-
-;;;###autoload
 (defun shen/shen\.<predicate*>
     (V13564)
   (shen/if
@@ -10421,8 +9662,6 @@
                 (shen/shen\.hdtl V13564)))
               Parse_X))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.<clauses*>
     (V13566)
   (shen/let YaccParse
@@ -10463,8 +9702,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<clause*>
     (V13568)
   (shen/let Parse_shen\.<head*>
@@ -10508,8 +9745,6 @@
                          (shen/fail)))
               (shen/fail))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<head*>
     (V13570)
   (shen/let YaccParse
@@ -10550,8 +9785,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<term*>
     (V13572)
   (shen/if
@@ -10574,8 +9807,6 @@
                (shen/shen\.eval-cons Parse_X))
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/shen\.legitimate-term\?
     (V13578)
   (cl-flet
@@ -10656,8 +9887,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.eval-cons
     (V13580)
   (shen/cond
@@ -10702,8 +9931,6 @@
              (nthcdr 1 V13580))))
      (nthcdr 2 V13580)))
    (shen/true V13580)))
-
-;;;###autoload
 (defun shen/shen\.<body*>
     (V13582)
   (shen/let YaccParse
@@ -10744,8 +9971,6 @@
                          nil)
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<literal*>
     (V13584)
   (shen/let YaccParse
@@ -10786,8 +10011,6 @@
                          (shen/fail)))
               (shen/fail))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.<end*>
     (V13586)
   (shen/if
@@ -10807,8 +10030,6 @@
                Parse_X)
               (shen/fail)))
    (shen/fail)))
-
-;;;###autoload
 (defun shen/cut
     (V13590 V13591 V13592)
   (shen/let Result
@@ -10816,8 +10037,6 @@
             (shen/if
              (shen/= Result 'false)
              V13590 Result)))
-
-;;;###autoload
 (defun shen/shen\.insert_modes
     (V13594)
   (shen/cond
@@ -10847,16 +10066,12 @@
       (nthcdr 1 V13594))
      '-))
    (shen/true V13594)))
-
-;;;###autoload
 (defun shen/shen\.s-prolog
     (V13596)
   (shen/map
    (shen/lambda X
                 (shen/eval X))
    (shen/shen\.prolog->shen V13596)))
-
-;;;###autoload
 (defun shen/shen\.prolog->shen
     (V13598)
   (shen/map
@@ -10870,8 +10085,6 @@
       (shen/lambda X
                    (shen/shen\.head_abstraction X))
       V13598)))))
-
-;;;###autoload
 (defun shen/shen\.s-prolog_clause
     (V13600)
   (shen/cond
@@ -10899,8 +10112,6 @@
        (nthcdr 2 V13600)))))
    (shen/true
     (shen/shen\.f_error 'shen\.s-prolog_clause))))
-
-;;;###autoload
 (defun shen/shen\.head_abstraction
     (V13602)
   (shen/cond
@@ -10971,8 +10182,6 @@
                                             (list Clause))))))
    (shen/true
     (shen/shen\.f_error 'shen\.head_abstraction))))
-
-;;;###autoload
 (defun shen/shen\.complexity_head
     (V13608)
   (shen/cond
@@ -10984,8 +10193,6 @@
       (nthcdr 1 V13608))))
    (shen/true
     (shen/shen\.f_error 'shen\.complexity_head))))
-
-;;;###autoload
 (defun shen/shen\.complexity
     (V13617)
   (cl-flet
@@ -11173,8 +10380,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.product
     (V13619)
   (shen/cond
@@ -11187,8 +10392,6 @@
       (nthcdr 1 V13619))))
    (shen/true
     (shen/shen\.f_error 'shen\.product))))
-
-;;;###autoload
 (defun shen/shen\.s-prolog_literal
     (V13621)
   (shen/cond
@@ -11262,8 +10465,6 @@
     V13621)
    (shen/true
     (shen/shen\.f_error 'shen\.s-prolog_literal))))
-
-;;;###autoload
 (defun shen/shen\.insert_deref
     (V13623)
   (shen/cond
@@ -11277,8 +10478,6 @@
      (shen/shen\.insert_deref
       (nthcdr 1 V13623))))
    (shen/true V13623)))
-
-;;;###autoload
 (defun shen/shen\.insert_lazyderef
     (V13625)
   (shen/cond
@@ -11292,8 +10491,6 @@
      (shen/shen\.insert_lazyderef
       (nthcdr 1 V13625))))
    (shen/true V13625)))
-
-;;;###autoload
 (defun shen/shen\.group_clauses
     (V13627)
   (shen/cond
@@ -11314,8 +10511,6 @@
                          (shen/shen\.group_clauses Rest)))))
    (shen/true
     (shen/shen\.f_error 'shen\.group_clauses))))
-
-;;;###autoload
 (defun shen/shen\.collect
     (V13632 V13633)
   (cl-flet
@@ -11348,8 +10543,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.same_predicate\?
     (V13652 V13653)
   (shen/cond
@@ -11369,8 +10562,6 @@
       (shen/hd V13653))))
    (shen/true
     (shen/shen\.f_error 'shen\.same_predicate\?))))
-
-;;;###autoload
 (defun shen/shen\.compile_prolog_procedure
     (V13655)
   (shen/let F
@@ -11378,8 +10569,6 @@
             (shen/let Shen
                       (shen/shen\.clauses-to-shen F V13655)
                       Shen)))
-
-;;;###autoload
 (defun shen/shen\.procedure_name
     (V13669)
   (shen/cond
@@ -11396,8 +10585,6 @@
       (shen/hd V13669))))
    (shen/true
     (shen/shen\.f_error 'shen\.procedure_name))))
-
-;;;###autoload
 (defun shen/shen\.clauses-to-shen
     (V13672 V13673)
   (shen/let Linear
@@ -11433,8 +10620,6 @@
                                                                              (list 'ProcessN 'Continuation)
                                                                              (list '-> Code))))
                                                               ShenDef)))))))
-
-;;;###autoload
 (defun shen/shen\.catch-cut
     (V13675)
   (shen/cond
@@ -11445,22 +10630,16 @@
     (list 'let 'Throwcontrol
           (list 'shen\.catchpoint)
           (list 'shen\.cutpoint 'Throwcontrol V13675)))))
-
-;;;###autoload
 (defun shen/shen\.catchpoint nil
   (shen/set 'shen\.*catch*
             (1+
              (shen/value 'shen\.*catch*))))
-
-;;;###autoload
 (defun shen/shen\.cutpoint
     (V13683 V13684)
   (shen/cond
    ((shen/= V13684 V13683)
     'false)
    (shen/true V13684)))
-
-;;;###autoload
 (defun shen/shen\.nest-disjunct
     (V13686)
   (shen/cond
@@ -11476,16 +10655,12 @@
       (nthcdr 1 V13686))))
    (shen/true
     (shen/shen\.f_error 'shen\.nest-disjunct))))
-
-;;;###autoload
 (defun shen/shen\.lisp-or
     (V13689 V13690)
   (list 'let 'Case V13689
         (list 'if
               (list '= 'Case 'false)
               V13690 'Case)))
-
-;;;###autoload
 (defun shen/shen\.prolog-aritycheck
     (V13695 V13696)
   (cl-flet
@@ -11530,8 +10705,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.linearise-clause
     (V13698)
   (shen/cond
@@ -11558,8 +10731,6 @@
               (shen/shen\.clause_form Linear)))
    (shen/true
     (shen/shen\.f_error 'shen\.linearise-clause))))
-
-;;;###autoload
 (defun shen/shen\.clause_form
     (V13700)
   (shen/cond
@@ -11579,8 +10750,6 @@
        (nthcdr 1 V13700)))))
    (shen/true
     (shen/shen\.f_error 'shen\.clause_form))))
-
-;;;###autoload
 (defun shen/shen\.explicit_modes
     (V13702)
   (shen/cond
@@ -11594,8 +10763,6 @@
       (nthcdr 1 V13702))))
    (shen/true
     (shen/shen\.f_error 'shen\.explicit_modes))))
-
-;;;###autoload
 (defun shen/shen\.em_help
     (V13704)
   (shen/cond
@@ -11615,8 +10782,6 @@
     V13704)
    (shen/true
     (list 'mode V13704 '+))))
-
-;;;###autoload
 (defun shen/shen\.cf_help
     (V13706)
   (shen/cond
@@ -11671,8 +10836,6 @@
       (shen/hd
        (nthcdr 2 V13706)))))
    (shen/true V13706)))
-
-;;;###autoload
 (defun shen/occurs-check
     (V13712)
   (shen/cond
@@ -11682,8 +10845,6 @@
     (shen/set 'shen\.*occurs* 'false))
    (shen/true
     (shen/simple-error "occurs-check expects + or -\n"))))
-
-;;;###autoload
 (defun shen/shen\.aum
     (V13715 V13716)
   (shen/cond
@@ -11718,8 +10879,6 @@
               (shen/shen\.mu_reduction MuApplication '+)))
    (shen/true
     (shen/shen\.f_error 'shen\.aum))))
-
-;;;###autoload
 (defun shen/shen\.continuation_call
     (V13719 V13720)
   (shen/let VTerms
@@ -11732,13 +10891,9 @@
                                 (shen/remove 'Throwcontrol
                                              (shen/difference VBody VTerms))
                                 (shen/shen\.cc_help Free V13720)))))
-
-;;;###autoload
 (defun shen/remove
     (V13723 V13724)
   (shen/shen\.remove-h V13723 V13724 nil))
-
-;;;###autoload
 (defun shen/shen\.remove-h
     (V13731 V13732 V13733)
   (cl-flet
@@ -11776,8 +10931,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.cc_help
     (V13736 V13737)
   (shen/cond
@@ -11793,8 +10946,6 @@
    (shen/true
     (list 'shen\.rename 'shen\.the 'shen\.variables 'in V13736 'and 'shen\.then
           (list 'call 'shen\.the 'shen\.continuation V13737)))))
-
-;;;###autoload
 (defun shen/shen\.make_mu_application
     (V13740 V13741)
   (shen/cond
@@ -11854,8 +11005,6 @@
      (shen/hd V13741)))
    (shen/true
     (shen/shen\.f_error 'shen\.make_mu_application))))
-
-;;;###autoload
 (defun shen/shen\.mu_reduction
     (V13750 V13751)
   (cl-flet
@@ -12337,8 +11486,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.rcons_form
     (V13753)
   (shen/cond
@@ -12349,8 +11496,6 @@
           (shen/shen\.rcons_form
            (nthcdr 1 V13753))))
    (shen/true V13753)))
-
-;;;###autoload
 (defun shen/shen\.remove_modes
     (V13755)
   (cl-flet
@@ -12416,23 +11561,17 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.ephemeral_variable\?
     (V13758 V13759)
   (shen/and
    (shen/variable\? V13758)
    (shen/variable\? V13759)))
-
-;;;###autoload
 (defun shen/shen\.prolog_constant\?
     (V13769)
   (shen/cond
    ((shen/cons\? V13769)
     'false)
    (shen/true 'true)))
-
-;;;###autoload
 (defun shen/shen\.aum_to_shen
     (V13771)
   (cl-flet
@@ -12936,8 +12075,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.chwild
     (V13773)
   (shen/cond
@@ -12949,8 +12086,6 @@
                   (shen/shen\.chwild Z))
      V13773))
    (shen/true V13773)))
-
-;;;###autoload
 (defun shen/shen\.newpv
     (V13775)
   (shen/let Count+1
@@ -12973,8 +12108,6 @@
                                            (shen/shen\.resizeprocessvector V13775 Count+1)
                                            'shen\.skip)
                                           (shen/shen\.mk-pvar Count+1))))))
-
-;;;###autoload
 (defun shen/shen\.resizeprocessvector
     (V13778 V13779)
   (shen/let Vector
@@ -12988,8 +12121,6 @@
                       (shen/address->
                        (shen/value 'shen\.*prologvectors*)
                        V13778 BigVector))))
-
-;;;###autoload
 (defun shen/shen\.resize-vector
     (Vector NewSize Fill)
   (let*
@@ -13004,8 +12135,6 @@
       (setq Current-Index
             (1+ Current-Index)))
     Vector))
-
-;;;###autoload
 (defun shen/shen\.copy-vector
     (V13791 V13792 V13793 V13794 V13795)
   (shen/shen\.copy-vector-stage-2
@@ -13014,8 +12143,6 @@
    V13795
    (shen/shen\.copy-vector-stage-1 1 V13791 V13792
                                    (1+ V13793))))
-
-;;;###autoload
 (defun shen/shen\.copy-vector-stage-1
     (V13803 V13804 V13805 V13806)
   (cl-flet
@@ -13041,8 +12168,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.copy-vector-stage-2
     (V13814 V13815 V13816 V13817)
   (cl-flet
@@ -13066,8 +12191,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.mk-pvar
     (V13819)
   (shen/address->
@@ -13075,8 +12198,6 @@
     (shen/absvector 2)
     0 'shen\.pvar)
    1 V13819))
-
-;;;###autoload
 (defun shen/shen\.pvar\?
     (V13821)
   (shen/trap-error
@@ -13086,8 +12207,6 @@
      (shen/<-address V13821 0)
      'shen\.pvar))
    (shen/lambda E 'false)))
-
-;;;###autoload
 (defun shen/shen\.bindv
     (V13825 V13826 V13827)
   (shen/let Vector
@@ -13097,8 +12216,6 @@
             (shen/address-> Vector
                             (shen/<-address V13825 1)
                             V13826)))
-
-;;;###autoload
 (defun shen/shen\.unbindv
     (V13830 V13831)
   (shen/let Vector
@@ -13108,14 +12225,10 @@
             (shen/address-> Vector
                             (shen/<-address V13830 1)
                             'shen\.-null-)))
-
-;;;###autoload
 (defun shen/shen\.incinfs nil
   (shen/set 'shen\.*infs*
             (1+
              (shen/value 'shen\.*infs*))))
-
-;;;###autoload
 (defun shen/shen\.call_the_continuation
     (V13835 V13836 V13837)
   (shen/cond
@@ -13152,8 +12265,6 @@
                 (list V13836 NewContinuation)))))
    (shen/true
     (shen/shen\.f_error 'shen\.call_the_continuation))))
-
-;;;###autoload
 (defun shen/shen\.newcontinuation
     (V13841 V13842 V13843)
   (shen/cond
@@ -13177,13 +12288,9 @@
                    V13842 V13843))))))
    (shen/true
     (shen/shen\.f_error 'shen\.newcontinuation))))
-
-;;;###autoload
 (defun shen/return
     (V13851 V13852 V13853)
   (shen/shen\.deref V13851 V13852))
-
-;;;###autoload
 (defun shen/shen\.measure&return
     (V13861 V13862 V13863)
   (shen/do
@@ -13193,16 +12300,12 @@
      " inferences\n" 'shen\.a)
     (shen/stoutput))
    (shen/shen\.deref V13861 V13862)))
-
-;;;###autoload
 (defun shen/unify
     (V13868 V13869 V13870 V13871)
   (shen/shen\.lzy=
    (shen/shen\.lazyderef V13868 V13870)
    (shen/shen\.lazyderef V13869 V13870)
    V13870 V13871))
-
-;;;###autoload
 (defun shen/shen\.lzy=
     (V13893 V13894 V13895 V13896)
   (cl-flet
@@ -13246,8 +12349,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.deref
     (V13899 V13900)
   (cl-flet
@@ -13283,8 +12384,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.lazyderef
     (X ProcessN)
   (let
@@ -13301,8 +12400,6 @@
                   (setq Current Value)))
        (setq KeepLooking nil)))
     Current))
-
-;;;###autoload
 (defun shen/shen\.valvector
     (V13907 V13908)
   (shen/<-address
@@ -13310,16 +12407,12 @@
     (shen/value 'shen\.*prologvectors*)
     V13908)
    (shen/<-address V13907 1)))
-
-;;;###autoload
 (defun shen/unify!
     (V13913 V13914 V13915 V13916)
   (shen/shen\.lzy=!
    (shen/shen\.lazyderef V13913 V13915)
    (shen/shen\.lazyderef V13914 V13915)
    V13915 V13916))
-
-;;;###autoload
 (defun shen/shen\.lzy=!
     (V13938 V13939 V13940 V13941)
   (cl-flet
@@ -13371,8 +12464,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.occurs\?
     (V13953 V13954)
   (shen/cond
@@ -13385,16 +12476,12 @@
      (shen/shen\.occurs\? V13953
                           (nthcdr 1 V13954))))
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/identical
     (V13959 V13960 V13961 V13962)
   (shen/shen\.lzy==
    (shen/shen\.lazyderef V13959 V13961)
    (shen/shen\.lazyderef V13960 V13961)
    V13961 V13962))
-
-;;;###autoload
 (defun shen/shen\.lzy==
     (V13984 V13985 V13986 V13987)
   (cl-flet
@@ -13430,16 +12517,12 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.pvar
     (V13989)
   (shen/cn "Var"
            (shen/shen\.app
             (shen/<-address V13989 1)
             "" 'shen\.a)))
-
-;;;###autoload
 (defun shen/bind
     (V13994 V13995 V13996 V13997)
   (shen/do
@@ -13449,8 +12532,6 @@
              (shen/do
               (shen/shen\.unbindv V13994 V13996)
               Result))))
-
-;;;###autoload
 (defun shen/fwhen
     (V14015 V14016 V14017)
   (shen/cond
@@ -13462,8 +12543,6 @@
     (shen/simple-error
      (shen/cn "fwhen expects a boolean: not "
               (shen/shen\.app V14015 "%" 'shen\.s))))))
-
-;;;###autoload
 (defun shen/call
     (V14033 V14034 V14035)
   (shen/cond
@@ -13476,8 +12555,6 @@
      (nthcdr 1 V14033)
      V14034 V14035))
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/shen\.call-help
     (V14040 V14041 V14042 V14043)
   (cl-flet
@@ -13506,8 +12583,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.intprolog
     (V14045)
   (shen/cond
@@ -13529,8 +12604,6 @@
                ProcessN)))
    (shen/true
     (shen/shen\.f_error 'shen\.intprolog))))
-
-;;;###autoload
 (defun shen/shen\.intprolog-help
     (V14049 V14050 V14051)
   (shen/cond
@@ -13548,8 +12621,6 @@
                                     V14051))
    (shen/true
     (shen/shen\.f_error 'shen\.intprolog-help))))
-
-;;;###autoload
 (defun shen/shen\.intprolog-help-help
     (V14056 V14057 V14058 V14059)
   (cl-flet
@@ -13580,8 +12651,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.call-rest
     (V14064 V14065)
   (cl-flet
@@ -13642,23 +12711,17 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.start-new-prolog-process nil
   (shen/let IncrementProcessCounter
             (shen/set 'shen\.*process-counter*
                       (1+
                        (shen/value 'shen\.*process-counter*)))
             (shen/shen\.initialise-prolog IncrementProcessCounter)))
-
-;;;###autoload
 (defun shen/shen\.insert-prolog-variables
     (V14068 V14069)
   (shen/shen\.insert-prolog-variables-help V14068
                                            (shen/shen\.flatten V14068)
                                            V14069))
-
-;;;###autoload
 (defun shen/shen\.insert-prolog-variables-help
     (V14077 V14078 V14079)
   (cl-flet
@@ -13699,8 +12762,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.initialise-prolog
     (V14081)
   (shen/let Vector
@@ -13715,8 +12776,6 @@
                        (shen/value 'shen\.*varcounter*)
                        V14081 1)
                       V14081)))
-
-;;;###autoload
 (defun shen/shen\.f_error
     (V15701)
   (shen/do
@@ -13736,21 +12795,15 @@
       (shen/ps V15701))
      'shen\.ok)
     (shen/simple-error "aborted"))))
-
-;;;###autoload
 (defun shen/shen\.tracked\?
     (V15703)
   (shen/element\? V15703
                   (shen/value 'shen\.*tracking*)))
-
-;;;###autoload
 (defun shen/track
     (V15705)
   (shen/let Source
             (shen/ps V15705)
             (shen/shen\.track-function Source)))
-
-;;;###autoload
 (defun shen/shen\.track-function
     (V15707)
   (shen/cond
@@ -13793,8 +12846,6 @@
                                   Ob))))
    (shen/true
     (shen/shen\.f_error 'shen\.track-function))))
-
-;;;###autoload
 (defun shen/shen\.insert-tracking-code
     (V15711 V15712 V15713)
   (list 'do
@@ -13822,11 +12873,7 @@
                                       (list 'do
                                             (list 'shen\.terpri-or-read-char)
                                             'Result))))))))
-
-;;;###autoload
 (shen/set 'shen\.*step* 'false)
-
-;;;###autoload
 (defun shen/step
     (V15719)
   (shen/cond
@@ -13836,8 +12883,6 @@
     (shen/set 'shen\.*step* 'false))
    (shen/true
     (shen/simple-error "step expects a + or a -.\n"))))
-
-;;;###autoload
 (defun shen/spy
     (V15725)
   (shen/cond
@@ -13847,8 +12892,6 @@
     (shen/set 'shen\.*spy* 'false))
    (shen/true
     (shen/simple-error "spy expects a + or a -.\n"))))
-
-;;;###autoload
 (defun shen/shen\.terpri-or-read-char nil
   (shen/if
    (shen/value 'shen\.*step*)
@@ -13856,8 +12899,6 @@
     (shen/read-byte
      (shen/value '*stinput*)))
    (shen/nl 1)))
-
-;;;###autoload
 (defun shen/shen\.check-byte
     (V15731)
   (shen/cond
@@ -13865,8 +12906,6 @@
             (shen/shen\.hat))
     (shen/simple-error "aborted"))
    (shen/true 'true)))
-
-;;;###autoload
 (defun shen/shen\.input-track
     (V15735 V15736 V15737)
   (shen/do
@@ -13887,8 +12926,6 @@
               'shen\.a))
     (shen/stoutput))
    (shen/shen\.recursively-print V15737)))
-
-;;;###autoload
 (defun shen/shen\.recursively-print
     (V15739)
   (cl-flet
@@ -13919,8 +12956,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.spaces
     (V15741)
   (shen/cond
@@ -13930,8 +12965,6 @@
     (shen/cn " "
              (shen/shen\.spaces
               (shen/- V15741 1))))))
-
-;;;###autoload
 (defun shen/shen\.output-track
     (V15745 V15746 V15747)
   (shen/shen\.prhush
@@ -13952,8 +12985,6 @@
                                       'shen\.a))
              'shen\.a))
    (shen/stoutput)))
-
-;;;###autoload
 (defun shen/untrack
     (F)
   (progn
@@ -13962,14 +12993,10 @@
                                     (shen/value 'shen\.*tracking*)))
     (shen/eval
      (shen/ps F))))
-
-;;;###autoload
 (defun shen/profile
     (V15751)
   (shen/shen\.profile-help
    (shen/ps V15751)))
-
-;;;###autoload
 (defun shen/shen\.profile-help
     (V15757)
   (shen/cond
@@ -14023,13 +13050,9 @@
                                                        (nthcdr 1 V15757))))))))
    (shen/true
     (shen/simple-error "Cannot profile.\n"))))
-
-;;;###autoload
 (defun shen/unprofile
     (V15759)
   (shen/untrack V15759))
-
-;;;###autoload
 (defun shen/shen\.profile-func
     (V15763 V15764 V15765)
   (list 'let 'Start
@@ -14045,8 +13068,6 @@
                                       (list 'shen\.get-profile V15763)
                                       'Finish))
                           'Result)))))
-
-;;;###autoload
 (defun shen/profile-results
     (V15767)
   (shen/let Results
@@ -14054,22 +13075,16 @@
             (shen/let Initialise
                       (shen/shen\.put-profile V15767 0)
                       (shen/@p V15767 Results))))
-
-;;;###autoload
 (defun shen/shen\.get-profile
     (V15769)
   (shen/trap-error
    (shen/get V15769 'profile
              (shen/value '*property-vector*))
    (shen/lambda E 0)))
-
-;;;###autoload
 (defun shen/shen\.put-profile
     (V15772 V15773)
   (shen/put V15772 'profile V15773
             (shen/value '*property-vector*)))
-
-;;;###autoload
 (defun shen/load
     (V13402)
   (shen/let Load
@@ -14102,8 +13117,6 @@
                         (shen/stoutput))
                        'shen\.skip)
                       'loaded)))
-
-;;;###autoload
 (defun shen/shen\.load-help
     (V13409 V13410)
   (shen/cond
@@ -14139,8 +13152,6 @@
                                     RemoveSynonyms)
                                    (shen/lambda E
                                                 (shen/shen\.unwind-types E Table)))))))))
-
-;;;###autoload
 (defun shen/shen\.remove-synonyms
     (V13412)
   (shen/cond
@@ -14153,16 +13164,12 @@
      nil))
    (shen/true
     (list V13412))))
-
-;;;###autoload
 (defun shen/shen\.typecheck-and-load
     (V13414)
   (shen/do
    (shen/nl 1)
    (shen/shen\.typecheck-and-evaluate V13414
                                       (shen/gensym 'A))))
-
-;;;###autoload
 (defun shen/shen\.typetable
     (V13420)
   (shen/cond
@@ -14191,8 +13198,6 @@
                   (nthcdr 1 V13420)))
                 Sig))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.assumetype
     (V13422)
   (shen/cond
@@ -14202,8 +13207,6 @@
      (nthcdr 1 V13422)))
    (shen/true
     (shen/shen\.f_error 'shen\.assumetype))))
-
-;;;###autoload
 (defun shen/shen\.unwind-types
     (V13429 V13430)
   (cl-flet
@@ -14235,15 +13238,11 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.remtype
     (V13432)
   (shen/set 'shen\.*signedfuncs*
             (shen/shen\.removetype V13432
                                    (shen/value 'shen\.*signedfuncs*))))
-
-;;;###autoload
 (defun shen/shen\.removetype
     (V13440 V13441)
   (cl-flet
@@ -14283,8 +13282,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.<sig+rest>
     (V13443)
   (shen/let Parse_shen\.<signature>
@@ -14306,8 +13303,6 @@
                          (shen/shen\.hdtl Parse_shen\.<signature>))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/write-to-file
     (V13446 V13447)
   (shen/let Stream
@@ -14322,15 +13317,11 @@
                                 (shen/let Close
                                           (shen/close Stream)
                                           V13447)))))
-
-;;;###autoload
 (defun shen/pr
     (V15800 V15801)
   (shen/trap-error
    (shen/shen\.prh V15800 V15801 0)
    (shen/lambda E V15800)))
-
-;;;###autoload
 (defun shen/shen\.prh
     (V15805 V15806 V15807)
   (cl-flet
@@ -14348,8 +13339,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.write-char-and-inc
     (V15811 V15812 V15813)
   (shen/do
@@ -14358,8 +13347,6 @@
      (shen/pos V15811 V15813))
     V15812)
    (1+ V15813)))
-
-;;;###autoload
 (defun shen/print
     (V15815)
   (shen/let String
@@ -14368,16 +13355,12 @@
                       (shen/shen\.prhush String
                                          (shen/stoutput))
                       V15815)))
-
-;;;###autoload
 (defun shen/shen\.prhush
     (V15818 V15819)
   (shen/if
    (shen/value '*hush*)
    V15818
    (shen/pr V15818 V15819)))
-
-;;;###autoload
 (defun shen/shen\.mkstr
     (V15822 V15823)
   (shen/cond
@@ -14389,8 +13372,6 @@
     (shen/shen\.mkstr-r
      (list 'shen\.proc-nl V15822)
      V15823))))
-
-;;;###autoload
 (defun shen/shen\.mkstr-l
     (V15826 V15827)
   (cl-flet
@@ -14417,8 +13398,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.insert-l
     (V15832 V15833)
   (shen/cond
@@ -14523,8 +13502,6 @@
      (nthcdr 3 V15833)))
    (shen/true
     (shen/shen\.f_error 'shen\.insert-l))))
-
-;;;###autoload
 (defun shen/shen\.factor-cn
     (V15835)
   (shen/cond
@@ -14588,8 +13565,6 @@
              (shen/hd
               (nthcdr 2 V15835)))))
    (shen/true V15835)))
-
-;;;###autoload
 (defun shen/shen\.proc-nl
     (V15837)
   (shen/cond
@@ -14619,8 +13594,6 @@
       (shen/tlstr V15837))))
    (shen/true
     (shen/shen\.f_error 'shen\.proc-nl))))
-
-;;;###autoload
 (defun shen/shen\.mkstr-r
     (V15840 V15841)
   (cl-flet
@@ -14647,13 +13620,9 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.insert
     (V15844 V15845)
   (shen/shen\.insert-h V15844 V15845 ""))
-
-;;;###autoload
 (defun shen/shen\.insert-h
     (V15851 V15852 V15853)
   (cl-flet
@@ -14730,15 +13699,11 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.app
     (V15857 V15858 V15859)
   (shen/cn
    (shen/shen\.arg->str V15857 V15859)
    V15858))
-
-;;;###autoload
 (defun shen/shen\.arg->str
     (V15867 V15868)
   (shen/cond
@@ -14753,8 +13718,6 @@
     (shen/shen\.vector->str V15867 V15868))
    (shen/true
     (shen/shen\.atom->str V15867))))
-
-;;;###autoload
 (defun shen/shen\.list->str
     (V15871 V15872)
   (shen/cond
@@ -14770,12 +13733,8 @@
              (shen/shen\.iter-list V15871 V15872
                                    (shen/shen\.maxseq)))
      "]"))))
-
-;;;###autoload
 (defun shen/shen\.maxseq nil
   (shen/value '*maximum-print-sequence-size*))
-
-;;;###autoload
 (defun shen/shen\.iter-list
     (V15886 V15887 V15888)
   (shen/cond
@@ -14805,8 +13764,6 @@
     (concat
      (concat "|" " ")
      (shen/shen\.arg->str V15886 V15887)))))
-
-;;;###autoload
 (defun shen/shen\.str->str
     (V15895 V15896)
   (shen/cond
@@ -14818,8 +13775,6 @@
       (shen/n->string 34)
       V15895)
      (shen/n->string 34)))))
-
-;;;###autoload
 (defun shen/shen\.vector->str
     (V15899 V15900)
   (shen/if
@@ -14840,8 +13795,6 @@
              (shen/shen\.iter-vector V15899 0 V15900
                                      (shen/shen\.maxseq)))
      ">>"))))
-
-;;;###autoload
 (defun shen/shen\.print-vector\?
     (V15902)
   (shen/let Zero
@@ -14857,8 +13810,6 @@
                 (shen/number\? Zero))
                (shen/shen\.fbound\? Zero)
                'false)))))
-
-;;;###autoload
 (defun shen/shen\.fbound\?
     (V15904)
   (shen/trap-error
@@ -14866,8 +13817,6 @@
     (shen/ps V15904)
     'true)
    (shen/lambda E 'false)))
-
-;;;###autoload
 (defun shen/shen\.tuple
     (V15906)
   (shen/cn "(@p "
@@ -14878,8 +13827,6 @@
                       (shen/<-address V15906 2)
                       ")" 'shen\.s))
             'shen\.s)))
-
-;;;###autoload
 (defun shen/shen\.iter-vector
     (V15917 V15918 V15919 V15920)
   (shen/cond
@@ -14909,16 +13856,12 @@
                                                    (1+ V15918)
                                                    V15919
                                                    (shen/- V15920 1))))))))))
-
-;;;###autoload
 (defun shen/shen\.atom->str
     (V15922)
   (shen/trap-error
    (shen/str V15922)
    (shen/lambda E
                 (shen/shen\.funexstring))))
-
-;;;###autoload
 (defun shen/shen\.funexstring nil
   (concat
    (concat "" "f" "u" "n" "e"
@@ -14927,15 +13870,11 @@
              (shen/intern "x"))
             'shen\.a))
    ""))
-
-;;;###autoload
 (defun shen/shen\.list\?
     (V15924)
   (shen/or
    (shen/empty\? V15924)
    (shen/cons\? V15924)))
-
-;;;###autoload
 (defun shen/macroexpand
     (V13449)
   (shen/let Y
@@ -14949,8 +13888,6 @@
               (shen/lambda Z
                            (shen/macroexpand Z))
               Y))))
-
-;;;###autoload
 (defun shen/shen\.error-macro
     (V13451)
   (shen/cond
@@ -14967,8 +13904,6 @@
             (nthcdr 1 V13451))
            (nthcdr 2 V13451))))
    (shen/true V13451)))
-
-;;;###autoload
 (defun shen/shen\.output-macro
     (V13453)
   (shen/cond
@@ -15000,8 +13935,6 @@
            (nthcdr 1 V13453))
           (list 'stoutput)))
    (shen/true V13453)))
-
-;;;###autoload
 (defun shen/shen\.make-string-macro
     (V13455)
   (shen/cond
@@ -15017,8 +13950,6 @@
       (nthcdr 1 V13455))
      (nthcdr 2 V13455)))
    (shen/true V13455)))
-
-;;;###autoload
 (defun shen/shen\.input-macro
     (V13457)
   (shen/cond
@@ -15073,8 +14004,6 @@
     (list 'read-byte
           (list 'stinput)))
    (shen/true V13457)))
-
-;;;###autoload
 (defun shen/shen\.compose
     (V13460 V13461)
   (cl-flet
@@ -15101,8 +14030,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.compile-macro
     (V13463)
   (shen/cond
@@ -15130,8 +14057,6 @@
                       (list 'error "parse error here: ~S~%" 'E)
                       (list 'error "parse error~%")))))
    (shen/true V13463)))
-
-;;;###autoload
 (defun shen/shen\.prolog-macro
     (V13465)
   (shen/cond
@@ -15164,8 +14089,6 @@
                                                            (list 'freeze 'true))))
                                             Query)))))
    (shen/true V13465)))
-
-;;;###autoload
 (defun shen/shen\.receive-terms
     (V13471)
   (cl-flet
@@ -15212,8 +14135,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.pass-literals
     (V13475)
   (cl-flet
@@ -15258,8 +14179,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.defprolog-macro
     (V13477)
   (shen/cond
@@ -15280,8 +14199,6 @@
                     (nthcdr 1 V13477))
                    Y))))
    (shen/true V13477)))
-
-;;;###autoload
 (defun shen/shen\.datatype-macro
     (V13479)
   (shen/cond
@@ -15303,15 +14220,11 @@
                  (nthcdr 2 V13479))
                 (list 'function 'shen\.datatype-error))))
    (shen/true V13479)))
-
-;;;###autoload
 (defun shen/shen\.intern-type
     (V13481)
   (shen/intern
    (shen/cn "type#"
             (shen/str V13481))))
-
-;;;###autoload
 (defun shen/shen\.@s-macro
     (V13483)
   (cl-flet
@@ -15380,8 +14293,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.synonyms-macro
     (V13485)
   (shen/cond
@@ -15394,16 +14305,12 @@
            (shen/shen\.curry-synonyms
             (nthcdr 1 V13485)))))
    (shen/true V13485)))
-
-;;;###autoload
 (defun shen/shen\.curry-synonyms
     (V13487)
   (shen/map
    (shen/lambda X
                 (shen/shen\.curry-type X))
    V13487))
-
-;;;###autoload
 (defun shen/shen\.nl-macro
     (V13489)
   (shen/cond
@@ -15416,8 +14323,6 @@
               (nthcdr 1 V13489))))
     (list 'nl 1))
    (shen/true V13489)))
-
-;;;###autoload
 (defun shen/shen\.assoc-macro
     (V13491)
   (shen/cond
@@ -15445,8 +14350,6 @@
         (shen/hd V13491))
        (nthcdr 2 V13491)))))
    (shen/true V13491)))
-
-;;;###autoload
 (defun shen/shen\.let-macro
     (V13493)
   (shen/cond
@@ -15476,8 +14379,6 @@
             (list 'let)
             (nthcdr 3 V13493)))))
    (shen/true V13493)))
-
-;;;###autoload
 (defun shen/shen\.abs-macro
     (V13495)
   (shen/cond
@@ -15518,8 +14419,6 @@
      (list 'lambda)
      (nthcdr 1 V13495)))
    (shen/true V13495)))
-
-;;;###autoload
 (defun shen/shen\.cases-macro
     (V13499)
   (shen/cond
@@ -15589,8 +14488,6 @@
                (nthcdr 2 V13499)))))
     (shen/simple-error "error: odd number of case elements\n"))
    (shen/true V13499)))
-
-;;;###autoload
 (defun shen/shen\.timer-macro
     (V13501)
   (shen/cond
@@ -15623,8 +14520,6 @@
                  (list 'stoutput))
            'Result)))
    (shen/true V13501)))
-
-;;;###autoload
 (defun shen/shen\.tuple-up
     (V13503)
   (shen/cond
@@ -15634,8 +14529,6 @@
           (shen/shen\.tuple-up
            (nthcdr 1 V13503))))
    (shen/true V13503)))
-
-;;;###autoload
 (defun shen/shen\.put/get-macro
     (V13505)
   (shen/cond
@@ -15702,8 +14595,6 @@
            (nthcdr 2 V13505))
           (list 'value '*property-vector*)))
    (shen/true V13505)))
-
-;;;###autoload
 (defun shen/shen\.function-macro
     (V13507)
   (shen/cond
@@ -15724,8 +14615,6 @@
       (shen/hd
        (nthcdr 1 V13507)))))
    (shen/true V13507)))
-
-;;;###autoload
 (defun shen/shen\.function-abstraction
     (V13510 V13511)
   (shen/cond
@@ -15736,8 +14625,6 @@
     (list 'function V13510))
    (shen/true
     (shen/shen\.function-abstraction-help V13510 V13511 nil))))
-
-;;;###autoload
 (defun shen/shen\.function-abstraction-help
     (V13515 V13516 V13517)
   (shen/cond
@@ -15753,8 +14640,6 @@
                                                           (shen/- V13516 1)
                                                           (shen/append V13517
                                                                        (list X))))))))
-
-;;;###autoload
 (defun shen/undefmacro
     (V13519)
   (shen/let MacroReg
@@ -15769,8 +14654,6 @@
                                                     (shen/shen\.remove-nth Pos
                                                                            (shen/value '*macros*)))
                                           V13519)))))
-
-;;;###autoload
 (defun shen/shen\.findpos
     (V13529 V13530)
   (shen/cond
@@ -15789,8 +14672,6 @@
                          (nthcdr 1 V13530))))
    (shen/true
     (shen/shen\.f_error 'shen\.findpos))))
-
-;;;###autoload
 (defun shen/shen\.remove-nth
     (V13535 V13536)
   (shen/cond
@@ -15807,36 +14688,18 @@
       (nthcdr 1 V13536))))
    (shen/true
     (shen/shen\.f_error 'shen\.remove-nth))))
-
-;;;###autoload
 (shen/set 'shen\.*installing-kl* 'false)
-
-;;;###autoload
 (shen/set 'shen\.*history* nil)
-
-;;;###autoload
 (shen/set 'shen\.*tc* 'false)
-
-;;;###autoload
 (shen/set '*property-vector*
           (make-hash-table :size 1000 :test 'equal))
-
-;;;###autoload
 (shen/set 'shen\.*process-counter* 0)
-
-;;;###autoload
 (shen/set 'shen\.*varcounter*
           (shen/vector 1000))
-
-;;;###autoload
 (shen/set 'shen\.*prologvectors*
           (shen/vector 1000))
-
-;;;###autoload
 (shen/set 'shen\.*macroreg*
           (list 'shen\.timer-macro 'shen\.cases-macro 'shen\.abs-macro 'shen\.put/get-macro 'shen\.compile-macro 'shen\.datatype-macro 'shen\.let-macro 'shen\.assoc-macro 'shen\.make-string-macro 'shen\.output-macro 'shen\.input-macro 'shen\.error-macro 'shen\.prolog-macro 'shen\.synonyms-macro 'shen\.nl-macro 'shen\.@s-macro 'shen\.defprolog-macro 'shen\.function-macro))
-
-;;;###autoload
 (shen/set '*macros*
           (list
            (shen/lambda X
@@ -15875,83 +14738,33 @@
                         (shen/shen\.defprolog-macro X))
            (shen/lambda X
                         (shen/shen\.function-macro X))))
-
-;;;###autoload
 (shen/set '*home-directory* nil)
-
-;;;###autoload
 (shen/set 'shen\.*gensym* 0)
-
-;;;###autoload
 (shen/set 'shen\.*tracking* nil)
-
-;;;###autoload
 (shen/set '*home-directory* "")
-
-;;;###autoload
 (shen/set 'shen\.*alphabet*
           (list 'A 'B 'C 'D 'E 'F 'G 'H 'I 'J 'K 'L 'M 'N 'O 'P 'Q 'R 'S 'T 'U 'V 'W 'X 'Y 'Z))
-
-;;;###autoload
 (shen/set 'shen\.*special*
           (list '@p '@s '@v 'cons 'lambda 'let 'where 'set 'open))
-
-;;;###autoload
 (shen/set 'shen\.*extraspecial*
           (list 'define 'shen\.process-datatype 'input+ 'defcc 'shen\.read+ 'defmacro))
-
-;;;###autoload
 (shen/set 'shen\.*spy* 'false)
-
-;;;###autoload
 (shen/set 'shen\.*datatypes* nil)
-
-;;;###autoload
 (shen/set 'shen\.*alldatatypes* nil)
-
-;;;###autoload
 (shen/set 'shen\.*shen-type-theory-enabled\?* 'true)
-
-;;;###autoload
 (shen/set 'shen\.*synonyms* nil)
-
-;;;###autoload
 (shen/set 'shen\.*system* nil)
-
-;;;###autoload
 (shen/set 'shen\.*signedfuncs* nil)
-
-;;;###autoload
 (shen/set 'shen\.*maxcomplexity* 128)
-
-;;;###autoload
 (shen/set 'shen\.*occurs* 'true)
-
-;;;###autoload
 (shen/set 'shen\.*maxinferences* 1000000)
-
-;;;###autoload
 (shen/set '*maximum-print-sequence-size* 20)
-
-;;;###autoload
 (shen/set 'shen\.*catch* 0)
-
-;;;###autoload
 (shen/set 'shen\.*call* 0)
-
-;;;###autoload
 (shen/set 'shen\.*infs* 0)
-
-;;;###autoload
 (shen/set '*hush* 'false)
-
-;;;###autoload
 (shen/set 'shen\.*optimise* 'false)
-
-;;;###autoload
 (shen/set '*version* "Shen 19.2")
-
-;;;###autoload
 (defun shen/shen\.initialise_arity_table
     (V13378)
   (cl-flet
@@ -15985,20 +14798,14 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/arity
     (V13380)
   (shen/trap-error
    (shen/get V13380 'arity
              (shen/value '*property-vector*))
    (shen/lambda E -1)))
-
-;;;###autoload
 (shen/shen\.initialise_arity_table
  (list 'abort 0 'absvector\? 1 'absvector 1 'adjoin 2 'and 2 'append 2 'arity 1 'assoc 2 'boolean\? 1 'cd 1 'compile 3 'concat 2 'cons 2 'cons\? 1 'cn 2 'declare 2 'destroy 1 'difference 2 'do 2 'element\? 2 'empty\? 1 'enable-type-theory 1 'shen\.interror 2 'eval 1 'eval-kl 1 'explode 1 'external 1 'fail-if 2 'fail 0 'fix 2 'findall 5 'freeze 1 'fst 1 'gensym 1 'get 3 'get-time 1 'address-> 3 '<-address 2 '<-vector 2 '> 2 '>= 2 '= 2 'hd 1 'hdv 1 'hdstr 1 'head 1 'if 3 'integer\? 1 'intern 1 'identical 4 'inferences 0 'input 1 'input+ 2 'implementation 0 'intersection 2 'internal 1 'it 0 'kill 0 'language 0 'length 1 'lineread 1 'load 1 '< 2 '<= 2 'vector 1 'macroexpand 1 'map 2 'mapcan 2 'maxinferences 1 'not 1 'nth 2 'n->string 1 'number\? 1 'occurs-check 1 'occurrences 2 'occurs-check 1 'optimise 1 'or 2 'os 0 'package 3 'package\? 1 'port 0 'porters 0 'pos 2 'print 1 'profile 1 'profile-results 1 'pr 2 'ps 1 'preclude 1 'preclude-all-but 1 'protect 1 'address-> 3 'put 4 'shen\.reassemble 2 'read-file-as-string 1 'read-file 1 'read 1 'read-byte 1 'read-from-string 1 'receive 1 'release 0 'remove 2 'require 3 'reverse 1 'set 2 'simple-error 1 'snd 1 'specialise 1 'spy 1 'step 1 'stinput 0 'stoutput 0 'string->n 1 'string->symbol 1 'string\? 1 'subst 3 'sum 1 'symbol\? 1 'systemf 1 'tail 1 'tl 1 'tc 1 'tc\? 0 'thaw 1 'tlstr 1 'track 1 'trap-error 2 'tuple\? 1 'type 2 'return 3 'undefmacro 1 'unput 3 'unprofile 1 'unify 4 'unify! 4 'union 2 'untrack 1 'unspecialise 1 'undefmacro 1 'vector 1 'vector-> 3 'value 1 'variable\? 1 'version 0 'write-byte 2 'write-to-file 2 'y-or-n\? 1 '+ 2 '* 2 '/ 2 '- 2 '== 2 '<e> 1 '@p 2 '@v 2 '@s 2 'preclude 1 'include 1 'preclude-all-but 1 'include-all-but 1))
-
-;;;###autoload
 (defun shen/systemf
     (V13382)
   (shen/let Shen
@@ -16011,8 +14818,6 @@
                                           (shen/adjoin V13382 External)
                                           (shen/value '*property-vector*))
                                 V13382))))
-
-;;;###autoload
 (defun shen/adjoin
     (V13385 V13386)
   (shen/if
@@ -16021,8 +14826,6 @@
    (append
     (list V13385)
     V13386)))
-
-;;;###autoload
 (shen/put
  (shen/intern "shen")
  'shen\.external-symbols
@@ -16030,8 +14833,6 @@
        (shen/vector 0)
        'y-or-n\? 'write-to-file 'write-byte 'where 'when 'warn 'version 'verified 'variable\? 'value 'vector-> '<-vector 'vector 'vector\? 'unspecialise 'untrack 'unit 'shen\.unix 'union 'unify 'unify! 'unput 'unprofile 'undefmacro 'return 'type 'tuple\? 'true 'trap-error 'track 'time 'thaw 'tc\? 'tc 'tl 'tlstr 'tlv 'tail 'systemf 'synonyms 'symbol 'symbol\? 'string->symbol 'sum 'subst 'string\? 'string->n 'stream 'string 'stinput 'stoutput 'step 'spy 'specialise 'snd 'simple-error 'set 'save 'str 'run 'reverse 'remove 'release 'read 'receive 'read-file 'read-file-as-bytelist 'read-file-as-string 'read-byte 'read-from-string 'package\? 'put 'preclude 'preclude-all-but 'ps 'prolog\? 'protect 'profile-results 'profile 'print 'pr 'pos 'porters 'port 'package 'output 'out 'os 'or 'optimise 'open 'occurrences 'occurs-check 'n->string 'number\? 'number 'null 'nth 'not 'nl 'mode 'macroexpand 'maxinferences 'mapcan 'map 'make-string 'load 'loaded 'list 'lineread 'limit 'length 'let 'lazy 'lambda 'language 'kill 'is 'intersection 'inferences 'intern 'integer\? 'input 'input+ 'include 'include-all-but 'it 'in 'internal 'implementation 'if 'identical 'head 'hd 'hdv 'hdstr 'hash 'get 'get-time 'gensym 'function 'fst 'freeze 'fix 'file 'fail 'fail-if 'fwhen 'findall 'false 'enable-type-theory 'explode 'external 'exception 'eval-kl 'eval 'error-to-string 'error 'empty\? 'element\? 'do 'difference 'destroy 'defun 'define 'defmacro 'defcc 'defprolog 'declare 'datatype 'cut 'cn 'cons\? 'cons 'cond 'concat 'compile 'cd 'cases 'call 'close 'bind 'bound\? 'boolean\? 'boolean 'bar! 'assoc 'arity 'append 'and 'adjoin '<-address 'address-> 'absvector\? 'absvector 'abort)
  (shen/value '*property-vector*))
-
-;;;###autoload
 (defun shen/shen\.symbol-table-entry
     (V13388)
   (shen/let ArityF
@@ -16047,8 +14848,6 @@
                 (list V13388)
                 (shen/eval-kl
                  (shen/shen\.lambda-form V13388 ArityF))))))))
-
-;;;###autoload
 (defun shen/shen\.lambda-form
     (V13391 V13392)
   (shen/cond
@@ -16061,8 +14860,6 @@
                     (shen/shen\.lambda-form
                      (shen/shen\.add-end V13391 X)
                      (shen/- V13392 1)))))))
-
-;;;###autoload
 (defun shen/shen\.add-end
     (V13395 V13396)
   (shen/cond
@@ -16071,8 +14868,6 @@
                  (list V13396)))
    (shen/true
     (list V13395 V13396))))
-
-;;;###autoload
 (shen/set 'shen\.*symbol-table*
           (append
            (list
@@ -16093,8 +14888,6 @@
                          (shen/shen\.symbol-table-entry X))
             (shen/external
              (shen/intern "shen")))))
-
-;;;###autoload
 (defun shen/specialise
     (V13398)
   (shen/do
@@ -16103,8 +14896,6 @@
               (list V13398)
               (shen/value 'shen\.*special*)))
    V13398))
-
-;;;###autoload
 (defun shen/unspecialise
     (V13400)
   (shen/do
@@ -16112,8 +14903,6 @@
              (shen/remove V13400
                           (shen/value 'shen\.*special*)))
    V13400))
-
-;;;###autoload
 (defun shen/declare
     (V15776 V15777)
   (shen/let Record
@@ -16155,8 +14944,6 @@
                                                                                             (shen/let Eval
                                                                                                       (shen/shen\.eval-without-macros ShenDef)
                                                                                                       V15776)))))))))))
-
-;;;###autoload
 (defun shen/shen\.demodulate
     (V15779)
   (cl-flet
@@ -16183,8 +14970,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.variancy-test
     (V15782 V15783)
   (shen/let TypeF
@@ -16201,8 +14986,6 @@
                                   (shen/shen\.app V15782 " may create errors\n" 'shen\.a))
                          (shen/stoutput))))
                       'shen\.skip)))
-
-;;;###autoload
 (defun shen/shen\.variant\?
     (V15796 V15797)
   (cl-flet
@@ -16266,31 +15049,21 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (shen/declare 'absvector\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'adjoin
               (list 'A '-->
                     (list
                      (list 'list 'A)
                      '-->
                      (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'and
               (list 'boolean '-->
                     (list 'boolean '--> 'boolean)))
-
-;;;###autoload
 (shen/declare 'shen\.app
               (list 'A '-->
                     (list 'string '-->
                           (list 'symbol '--> 'string))))
-
-;;;###autoload
 (shen/declare 'append
               (list
                (list 'list 'A)
@@ -16299,12 +15072,8 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'arity
               (list 'A '--> 'number))
-
-;;;###autoload
 (shen/declare 'assoc
               (list 'A '-->
                     (list
@@ -16312,32 +15081,20 @@
                            (list 'list 'A))
                      '-->
                      (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'boolean\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'bound\?
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'cd
               (list 'string '--> 'string))
-
-;;;###autoload
 (shen/declare 'close
               (list
                (list 'stream 'A)
                '-->
                (list 'list 'B)))
-
-;;;###autoload
 (shen/declare 'cn
               (list 'string '-->
                     (list 'string '--> 'string)))
-
-;;;###autoload
 (shen/declare 'compile
               (list
                (list 'A 'shen\.==> 'B)
@@ -16346,18 +15103,12 @@
                      (list
                       (list 'A '--> 'B)
                       '--> 'B))))
-
-;;;###autoload
 (shen/declare 'cons\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'destroy
               (list
                (list 'A '--> 'B)
                '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'difference
               (list
                (list 'list 'A)
@@ -16366,103 +15117,67 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'do
               (list 'A '-->
                     (list 'B '--> 'B)))
-
-;;;###autoload
 (shen/declare '<e>
               (list
                (list 'list 'A)
                'shen\.==>
                (list 'list 'B)))
-
-;;;###autoload
 (shen/declare 'shen\.<!>
               (list
                (list 'list 'A)
                'shen\.==>
                (list 'list 'A)))
-
-;;;###autoload
 (shen/declare 'element\?
               (list 'A '-->
                     (list
                      (list 'list 'A)
                      '--> 'boolean)))
-
-;;;###autoload
 (shen/declare 'empty\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'enable-type-theory
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'external
               (list 'symbol '-->
                     (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'error-to-string
               (list 'exception '--> 'string))
-
-;;;###autoload
 (shen/declare 'explode
               (list 'A '-->
                     (list 'list 'string)))
-
-;;;###autoload
 (shen/declare 'fail
               (list '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'fail-if
               (list
                (list 'symbol '--> 'boolean)
                '-->
                (list 'symbol '--> 'symbol)))
-
-;;;###autoload
 (shen/declare 'fix
               (list
                (list 'A '--> 'A)
                '-->
                (list 'A '--> 'A)))
-
-;;;###autoload
 (shen/declare 'freeze
               (list 'A '-->
                     (list 'lazy 'A)))
-
-;;;###autoload
 (shen/declare 'fst
               (list
                (list 'A '* 'B)
                '--> 'A))
-
-;;;###autoload
 (shen/declare 'function
               (list
                (list 'A '--> 'B)
                '-->
                (list 'A '--> 'B)))
-
-;;;###autoload
 (shen/declare 'gensym
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare '<-vector
               (list
                (list 'vector 'A)
                '-->
                (list 'number '--> 'A)))
-
-;;;###autoload
 (shen/declare 'vector->
               (list
                (list 'vector 'A)
@@ -16470,84 +15185,52 @@
                (list 'number '-->
                      (list 'A '-->
                            (list 'vector 'A)))))
-
-;;;###autoload
 (shen/declare 'vector
               (list 'number '-->
                     (list 'vector 'A)))
-
-;;;###autoload
 (shen/declare 'get-time
               (list 'symbol '--> 'number))
-
-;;;###autoload
 (shen/declare 'hash
               (list 'A '-->
                     (list 'number '--> 'number)))
-
-;;;###autoload
 (shen/declare 'head
               (list
                (list 'list 'A)
                '--> 'A))
-
-;;;###autoload
 (shen/declare 'hdv
               (list
                (list 'vector 'A)
                '--> 'A))
-
-;;;###autoload
 (shen/declare 'hdstr
               (list 'string '--> 'string))
-
-;;;###autoload
 (shen/declare 'if
               (list 'boolean '-->
                     (list 'A '-->
                           (list 'A '--> 'A))))
-
-;;;###autoload
 (shen/declare 'it
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'implementation
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'include
               (list
                (list 'list 'symbol)
                '-->
                (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'include-all-but
               (list
                (list 'list 'symbol)
                '-->
                (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'inferences
               (list '--> 'number))
-
-;;;###autoload
 (shen/declare 'shen\.insert
               (list 'A '-->
                     (list 'string '--> 'string)))
-
-;;;###autoload
 (shen/declare 'integer\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'internal
               (list 'symbol '-->
                     (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'intersection
               (list
                (list 'list 'A)
@@ -16556,32 +15239,20 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'kill
               (list '--> 'A))
-
-;;;###autoload
 (shen/declare 'language
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'length
               (list
                (list 'list 'A)
                '--> 'number))
-
-;;;###autoload
 (shen/declare 'limit
               (list
                (list 'vector 'A)
                '--> 'number))
-
-;;;###autoload
 (shen/declare 'load
               (list 'string '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'map
               (list
                (list 'A '--> 'B)
@@ -16590,8 +15261,6 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'B))))
-
-;;;###autoload
 (shen/declare 'mapcan
               (list
                (list 'A '-->
@@ -16601,103 +15270,61 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'B))))
-
-;;;###autoload
 (shen/declare 'maxinferences
               (list 'number '--> 'number))
-
-;;;###autoload
 (shen/declare 'n->string
               (list 'number '--> 'string))
-
-;;;###autoload
 (shen/declare 'nl
               (list 'number '--> 'number))
-
-;;;###autoload
 (shen/declare 'not
               (list 'boolean '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'nth
               (list 'number '-->
                     (list
                      (list 'list 'A)
                      '--> 'A)))
-
-;;;###autoload
 (shen/declare 'number\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'occurrences
               (list 'A '-->
                     (list 'B '--> 'number)))
-
-;;;###autoload
 (shen/declare 'occurs-check
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'optimise
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'or
               (list 'boolean '-->
                     (list 'boolean '--> 'boolean)))
-
-;;;###autoload
 (shen/declare 'os
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'package\?
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'port
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'porters
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'pos
               (list 'string '-->
                     (list 'number '--> 'string)))
-
-;;;###autoload
 (shen/declare 'pr
               (list 'string '-->
                     (list
                      (list 'stream 'out)
                      '--> 'string)))
-
-;;;###autoload
 (shen/declare 'print
               (list 'A '--> 'A))
-
-;;;###autoload
 (shen/declare 'profile
               (list
                (list 'A '--> 'B)
                '-->
                (list 'A '--> 'B)))
-
-;;;###autoload
 (shen/declare 'preclude
               (list
                (list 'list 'symbol)
                '-->
                (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'shen\.proc-nl
               (list 'string '--> 'string))
-
-;;;###autoload
 (shen/declare 'profile-results
               (list
                (list 'A '--> 'B)
@@ -16705,194 +15332,118 @@
                (list
                 (list 'A '--> 'B)
                 '* 'number)))
-
-;;;###autoload
 (shen/declare 'protect
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'preclude-all-but
               (list
                (list 'list 'symbol)
                '-->
                (list 'list 'symbol)))
-
-;;;###autoload
 (shen/declare 'shen\.prhush
               (list 'string '-->
                     (list
                      (list 'stream 'out)
                      '--> 'string)))
-
-;;;###autoload
 (shen/declare 'ps
               (list 'symbol '-->
                     (list 'list 'unit)))
-
-;;;###autoload
 (shen/declare 'read
               (list
                (list 'stream 'in)
                '--> 'unit))
-
-;;;###autoload
 (shen/declare 'read-byte
               (list
                (list 'stream 'in)
                '--> 'number))
-
-;;;###autoload
 (shen/declare 'read-file-as-bytelist
               (list 'string '-->
                     (list 'list 'number)))
-
-;;;###autoload
 (shen/declare 'read-file-as-string
               (list 'string '--> 'string))
-
-;;;###autoload
 (shen/declare 'read-file
               (list 'string '-->
                     (list 'list 'unit)))
-
-;;;###autoload
 (shen/declare 'read-from-string
               (list 'string '-->
                     (list 'list 'unit)))
-
-;;;###autoload
 (shen/declare 'release
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'remove
               (list 'A '-->
                     (list
                      (list 'list 'A)
                      '-->
                      (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'reverse
               (list
                (list 'list 'A)
                '-->
                (list 'list 'A)))
-
-;;;###autoload
 (shen/declare 'simple-error
               (list 'string '--> 'A))
-
-;;;###autoload
 (shen/declare 'snd
               (list
                (list 'A '* 'B)
                '--> 'B))
-
-;;;###autoload
 (shen/declare 'specialise
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'spy
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'step
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'stinput
               (list '-->
                     (list 'stream 'in)))
-
-;;;###autoload
 (shen/declare 'stoutput
               (list '-->
                     (list 'stream 'out)))
-
-;;;###autoload
 (shen/declare 'string\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'str
               (list 'A '--> 'string))
-
-;;;###autoload
 (shen/declare 'string->n
               (list 'string '--> 'number))
-
-;;;###autoload
 (shen/declare 'string->symbol
               (list 'string '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'sum
               (list
                (list 'list 'number)
                '--> 'number))
-
-;;;###autoload
 (shen/declare 'symbol\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'systemf
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'tail
               (list
                (list 'list 'A)
                '-->
                (list 'list 'A)))
-
-;;;###autoload
 (shen/declare 'tlstr
               (list 'string '--> 'string))
-
-;;;###autoload
 (shen/declare 'tlv
               (list
                (list 'vector 'A)
                '-->
                (list 'vector 'A)))
-
-;;;###autoload
 (shen/declare 'tc
               (list 'symbol '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'tc\?
               (list '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'thaw
               (list
                (list 'lazy 'A)
                '--> 'A))
-
-;;;###autoload
 (shen/declare 'track
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'trap-error
               (list 'A '-->
                     (list
                      (list 'exception '--> 'A)
                      '--> 'A)))
-
-;;;###autoload
 (shen/declare 'tuple\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'undefmacro
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'union
               (list
                (list 'list 'A)
@@ -16901,101 +15452,61 @@
                 (list 'list 'A)
                 '-->
                 (list 'list 'A))))
-
-;;;###autoload
 (shen/declare 'unprofile
               (list
                (list 'A '--> 'B)
                '-->
                (list 'A '--> 'B)))
-
-;;;###autoload
 (shen/declare 'untrack
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'unspecialise
               (list 'symbol '--> 'symbol))
-
-;;;###autoload
 (shen/declare 'variable\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'vector\?
               (list 'A '--> 'boolean))
-
-;;;###autoload
 (shen/declare 'version
               (list '--> 'string))
-
-;;;###autoload
 (shen/declare 'write-to-file
               (list 'string '-->
                     (list 'A '--> 'A)))
-
-;;;###autoload
 (shen/declare 'write-byte
               (list 'number '-->
                     (list
                      (list 'stream 'out)
                      '--> 'number)))
-
-;;;###autoload
 (shen/declare 'y-or-n\?
               (list 'string '--> 'boolean))
-
-;;;###autoload
 (shen/declare '>
               (list 'number '-->
                     (list 'number '--> 'boolean)))
-
-;;;###autoload
 (shen/declare '<
               (list 'number '-->
                     (list 'number '--> 'boolean)))
-
-;;;###autoload
 (shen/declare '>=
               (list 'number '-->
                     (list 'number '--> 'boolean)))
-
-;;;###autoload
 (shen/declare '<=
               (list 'number '-->
                     (list 'number '--> 'boolean)))
-
-;;;###autoload
 (shen/declare '=
               (list 'A '-->
                     (list 'A '--> 'boolean)))
-
-;;;###autoload
 (shen/declare '+
               (list 'number '-->
                     (list 'number '--> 'number)))
-
-;;;###autoload
 (shen/declare '/
               (list 'number '-->
                     (list 'number '--> 'number)))
-
-;;;###autoload
 (shen/declare '-
               (list 'number '-->
                     (list 'number '--> 'number)))
-
-;;;###autoload
 (shen/declare '*
               (list 'number '-->
                     (list 'number '--> 'number)))
-
-;;;###autoload
 (shen/declare '==
               (list 'A '-->
                     (list 'B '--> 'boolean)))
-
-;;;###autoload
 (defun shen/shen\.typecheck
     (V15299 V15300)
   (shen/let Curry
@@ -17013,8 +15524,6 @@
                                           (shen/shen\.t*
                                            (list Curry ': Type)
                                            nil ProcessN Continuation))))))
-
-;;;###autoload
 (defun shen/shen\.curry
     (V15302)
   (cl-flet
@@ -17098,20 +15607,14 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.special\?
     (V15304)
   (shen/element\? V15304
                   (shen/value 'shen\.*special*)))
-
-;;;###autoload
 (defun shen/shen\.extraspecial\?
     (V15306)
   (shen/element\? V15306
                   (shen/value 'shen\.*extraspecial*)))
-
-;;;###autoload
 (defun shen/shen\.t*
     (V15311 V15312 V15313 V15314)
   (shen/let Throwcontrol
@@ -17207,12 +15710,8 @@
                                                                   Case))
                                                        Case))
                                             Case)))))
-
-;;;###autoload
 (defun shen/shen\.type-theory-enabled\? nil
   (shen/value 'shen\.*shen-type-theory-enabled\?*))
-
-;;;###autoload
 (defun shen/enable-type-theory
     (V15320)
   (shen/cond
@@ -17222,23 +15721,15 @@
     (shen/set 'shen\.*shen-type-theory-enabled\?* 'false))
    (shen/true
     (shen/simple-error "enable-type-theory expects a + or a -\n"))))
-
-;;;###autoload
 (defun shen/shen\.prolog-failure
     (V15331 V15332)
   'false)
-
-;;;###autoload
 (defun shen/shen\.maxinfexceeded\? nil
   (shen/>
    (shen/inferences)
    (shen/value 'shen\.*maxinferences*)))
-
-;;;###autoload
 (defun shen/shen\.errormaxinfs nil
   (shen/simple-error "maximum inferences exceeded~%"))
-
-;;;###autoload
 (defun shen/shen\.udefs*
     (V15338 V15339 V15340 V15341 V15342)
   (cl-flet
@@ -17280,8 +15771,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.th*
     (V15348 V15349 V15350 V15351 V15352)
   (shen/let Throwcontrol
@@ -19053,8 +17542,6 @@
                                                                   Case))
                                                        Case))
                                             Case)))))
-
-;;;###autoload
 (defun shen/shen\.t*-hyps
     (V15357 V15358 V15359 V15360)
   (shen/let Case
@@ -20934,8 +19421,6 @@
                                    Case))
                         Case))
              Case)))
-
-;;;###autoload
 (defun shen/shen\.show
     (V15377 V15378 V15379 V15380)
   (shen/cond
@@ -20961,8 +19446,6 @@
            (shen/thaw V15380)))))))))
    (shen/true
     (shen/thaw V15380))))
-
-;;;###autoload
 (defun shen/shen\.line nil
   (shen/let Infs
             (shen/inferences)
@@ -20977,8 +19460,6 @@
                                                 " \n?- " 'shen\.a))
                                       'shen\.a))
              (shen/stoutput))))
-
-;;;###autoload
 (defun shen/shen\.show-p
     (V15382)
   (shen/cond
@@ -21010,8 +19491,6 @@
     (shen/shen\.prhush
      (shen/shen\.app V15382 "" 'shen\.r)
      (shen/stoutput)))))
-
-;;;###autoload
 (defun shen/shen\.show-assumptions
     (V15387 V15388)
   (cl-flet
@@ -21045,8 +19524,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.pause-for-user nil
   (shen/let Byte
             (shen/read-byte
@@ -21055,24 +19532,16 @@
              (shen/= Byte 94)
              (shen/simple-error "input aborted\n")
              (shen/nl 1))))
-
-;;;###autoload
 (defun shen/shen\.typedf\?
     (V15390)
   (shen/cons\?
    (shen/assoc V15390
                (shen/value 'shen\.*signedfuncs*))))
-
-;;;###autoload
 (defun shen/shen\.sigf
     (V15392)
   (shen/concat 'shen\.type-signature-of- V15392))
-
-;;;###autoload
 (defun shen/shen\.placeholder nil
   (shen/gensym '&&))
-
-;;;###autoload
 (defun shen/shen\.base
     (V15397 V15398 V15399 V15400)
   (shen/let Case
@@ -21333,8 +19802,6 @@
                                    Case))
                         Case))
              Case)))
-
-;;;###autoload
 (defun shen/shen\.by_hypothesis
     (V15406 V15407 V15408 V15409 V15410)
   (cl-flet
@@ -21413,8 +19880,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.t*-def
     (V15416 V15417 V15418 V15419 V15420)
   (shen/let V15066
@@ -21459,8 +19924,6 @@
                                    'false))
                         'false))
              'false)))
-
-;;;###autoload
 (defun shen/shen\.t*-defh
     (V15427 V15428 V15429 V15430 V15431 V15432)
   (shen/let V15062
@@ -21477,8 +19940,6 @@
                                                        (shen/shen\.ue-sig Sig)
                                                        V15428 V15429 V15430 Rules V15431 V15432))))
              'false)))
-
-;;;###autoload
 (defun shen/shen\.t*-defhh
     (V15441 V15442 V15443 V15444 V15445 V15446 V15447 V15448)
   (shen/do
@@ -21491,8 +19952,6 @@
                         V15447
                         (shen/freeze
                          (shen/shen\.memo V15443 V15441 V15444 V15447 V15448)))))
-
-;;;###autoload
 (defun shen/shen\.memo
     (V15454 V15455 V15456 V15457 V15458)
   (shen/let Jnk
@@ -21506,8 +19965,6 @@
                                        (shen/shen\.lazyderef V15454 V15457)
                                        (shen/shen\.lazyderef V15456 V15457))
                                       V15457 V15458))))))
-
-;;;###autoload
 (defun shen/shen\.<sig+rules>
     (V15460)
   (shen/let Parse_shen\.<signature>
@@ -21532,8 +19989,6 @@
                           (shen/shen\.hdtl Parse_shen\.<non-ll-rules>)))
                         (shen/fail)))
              (shen/fail))))
-
-;;;###autoload
 (defun shen/shen\.<non-ll-rules>
     (V15462)
   (shen/let YaccParse
@@ -21575,8 +20030,6 @@
                           (shen/shen\.hdtl Parse_shen\.<rule>)))
                         (shen/fail)))
              YaccParse)))
-
-;;;###autoload
 (defun shen/shen\.ue
     (V15464)
   (shen/cond
@@ -21600,8 +20053,6 @@
    ((shen/variable\? V15464)
     (shen/concat '&& V15464))
    (shen/true V15464)))
-
-;;;###autoload
 (defun shen/shen\.ue-sig
     (V15466)
   (shen/cond
@@ -21613,8 +20064,6 @@
    ((shen/variable\? V15466)
     (shen/concat '&&& V15466))
    (shen/true V15466)))
-
-;;;###autoload
 (defun shen/shen\.ues
     (V15472)
   (shen/cond
@@ -21627,16 +20076,12 @@
      (shen/shen\.ues
       (nthcdr 1 V15472))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.ue\?
     (V15474)
   (shen/and
    (shen/symbol\? V15474)
    (shen/shen\.ue-h\?
     (shen/str V15474))))
-
-;;;###autoload
 (defun shen/shen\.ue-h\?
     (V15482)
   (shen/cond
@@ -21654,8 +20099,6 @@
                 0)))))
     'true)
    (shen/true 'false)))
-
-;;;###autoload
 (defun shen/shen\.t*-rules
     (V15490 V15491 V15492 V15493 V15494 V15495 V15496)
   (shen/let Throwcontrol
@@ -21712,8 +20155,6 @@
                                                                              V15495 V15496)))
                                                        Case))
                                             Case)))))
-
-;;;###autoload
 (defun shen/shen\.t*-rule
     (V15502 V15503 V15504 V15505 V15506)
   (shen/let Throwcontrol
@@ -21760,8 +20201,6 @@
                                                                                       'false)))
                                                                  'false)))
                                             'false)))))
-
-;;;###autoload
 (defun shen/shen\.placeholders
     (V15512)
   (shen/cond
@@ -21774,8 +20213,6 @@
      (shen/shen\.placeholders
       (nthcdr 1 V15512))))
    (shen/true nil)))
-
-;;;###autoload
 (defun shen/shen\.newhyps
     (V15518 V15519 V15520 V15521 V15522)
   (shen/let Case
@@ -22013,8 +20450,6 @@
                                                         'false)))))
                         'false))
              Case)))
-
-;;;###autoload
 (defun shen/shen\.patthyps
     (V15528 V15529 V15530)
   (shen/cond
@@ -22048,8 +20483,6 @@
       V15530)))
    (shen/true
     (shen/shen\.f_error 'shen\.patthyps))))
-
-;;;###autoload
 (defun shen/shen\.result-type
     (V15537 V15538)
   (cl-flet
@@ -22104,8 +20537,6 @@
               (apply #'tail-trampoline
                      (aref result 0))))
       result)))
-
-;;;###autoload
 (defun shen/shen\.t*-patterns
     (V15544 V15545 V15546 V15547 V15548)
   (shen/let Case
@@ -22173,8 +20604,6 @@
                                                        'false))))
                         'false))
              Case)))
-
-;;;###autoload
 (defun shen/shen\.t*-action
     (V15554 V15555 V15556 V15557 V15558)
   (shen/let Throwcontrol
@@ -22379,8 +20808,6 @@
                                                                   Case))
                                                        Case))
                                             Case)))))
-
-;;;###autoload
 (defun shen/findall
     (V15564 V15565 V15566 V15567 V15568)
   (shen/let B
@@ -22400,8 +20827,6 @@
                                               V15567
                                               (shen/freeze
                                                (shen/shen\.findallhelp V15564 V15565 V15566 A V15567 V15568)))))))))
-
-;;;###autoload
 (defun shen/shen\.findallhelp
     (V15575 V15576 V15577 V15578 V15579 V15580)
   (shen/let Case
@@ -22421,8 +20846,6 @@
                           (shen/shen\.lazyderef V15578 V15579))
                          V15579 V15580))
              Case)))
-
-;;;###autoload
 (defun shen/shen\.remember
     (V15585 V15586 V15587 V15588)
   (shen/let B
@@ -22438,4 +20861,4 @@
                           (shen/value
                            (shen/shen\.deref V15585 V15587))))
                         V15587 V15588))))
-(provide 'shen-shen)
+(provide 'shen)

@@ -1,5 +1,5 @@
 ;; [[file:shen-elisp.org::*Collecting%20KLambda%20files][Collecting\ KLambda\ files:1]]
-(require 'shen-primitives)
+(require 'shen-primitives "shen-primitives.el")
 (setq *klambda-directory-name* "KLambda")
 (setq *klambda-directory* (file-name-as-directory (concat (file-name-directory load-file-name) *klambda-directory-name*)))
 (setq *klambda-files*
@@ -34,6 +34,18 @@
                 (setq current-sexp-end (scan-lists current-sexp-end 1 0)))))
           groups)))))
 ;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:1 ends here
+
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:2]]
+(setq shen/*illegal-character->spelling*
+      '((59 "_sneomlioccoilmoens")  ;; semicolon
+        (?, "_caommmmoac")
+        (35 "_hhassshh")            ;; hash
+        (?' "_tkiccikt")
+        (?` "_beatcokuqqukoctaeb")))
+
+(setq shen/*spelling->illegal-character*
+      (mapcar #'reverse shen/*illegal-character->spelling*))
+;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:2 ends here
 
 ;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:3]]
 (defun shen/remove-reserved-elisp-characters (klambda-sexp-string)
@@ -144,19 +156,24 @@
 ;; [[file:shen-elisp.org::*Iterating%20over%20KLambda%20Files][Iterating\ over\ KLambda\ Files:1]]
 (setq *temp-shen-buffer*
       (find-file-noselect
-          (concat (file-name-as-directory default-directory)
-              (file-relative-name "shen.el"))))
+       (concat (file-name-as-directory default-directory)
+               (file-relative-name "shen.el"))))
 (defun eval-klambda-files (klambda-files)
   (with-current-buffer *temp-shen-buffer*
     (progn
       (erase-buffer)
       (insert (format "%s\n" ";; -*- lexical-binding: t -*- "))
-      (insert (format "%s\n" "(require 'shen-primitives)"))
+      (insert (format "%s\n" ";; Local Variables:"))
+      (insert (format "%s\n" ";; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)"))
+      (insert (format "%s\n" ";; End:"))
+      (insert (format "%s\n" "(require 'shen-primitives \"shen-primitives.el\")"))
+      (insert (format "%s\n" "(setq max-lisp-eval-depth 60000)"))
+      (insert (format "%s\n" "(setq max-specpdl-size 13000)"))
       (goto-char (point-max))
       (dolist (klambda-file klambda-files nil)
         (eval-klambda-file klambda-file))
       (goto-char (point-max))
-      (insert (format "%s\n" "(provide 'shen-shen)"))
+      (insert (format "%s\n" "(provide 'shen)"))
       (save-buffer))))
 (defun eval-klambda-file (klambda-file)
   (dolist (klambda-sexp-string (shen/get-klambda-sexp-strings klambda-file) nil)
@@ -170,25 +187,23 @@
 ;; Iterating\ over\ KLambda\ Files:1 ends here
 
 ;; [[file:shen-elisp.org::*The%20Runner][The\ Runner:1]]
-(defun load-klambda () (eval-klambda-files *klambda-files*))
-(defun load-only ()
-  (progn
-    (load "/home/deech/Lisp/shen-elisp/primitives.el")
-    (load "/home/deech/Lisp/shen-elisp/install.el")))
 (defun compile-and-load (F)
   (byte-compile-file
    (concat (file-name-as-directory default-directory)
            (file-relative-name F))
    't))
+(defun load-klambda () (eval-klambda-files *klambda-files*))
+(defun load-only ()
+  (progn
+    (compile-and-load "shen-primitives.el")
+    (compile-and-load "install.el")))
 (defun runner ()
   (progn
-    (setq max-lisp-eval-depth 60000)
-    (setq max-specpdl-size 13000)
-    (compile-and-load "primitives.el")
+    (compile-and-load "shen-primitives.el")
     (compile-and-load "install.el")
     (eval-klambda-files *klambda-files*)
     (compile-and-load "shen.el")
-    (compile-and-load "post-process-klambda.el")
-    (compile-and-load "repl.el")
+    (compile-and-load "shen-repl.el")
+    (add-to-load-path default-directory)
     (shen/repl)))
 ;; The\ Runner:1 ends here

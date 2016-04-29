@@ -1,3 +1,0 @@
-An implementation of the Shen programming language (http://shenlanguage.org) in Elisp.
-
-Install using Melpa and do `M-x shen/repl` to start the Shen REPL.

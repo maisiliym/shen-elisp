@@ -608,7 +608,7 @@
     `(shen/apply-function-expression ,f (list ,@args)))
    (t
     (if (fboundp 'shen/arity)
-        (let ((arity (shen/check-partial-application f (length args))))
+        (let ((arity (shen/check-partial-application f (length args)))) ;; (ref:known arity)
           (if (= arity -1)
               `(,f ,@args)
           `(shen/apply-partially (function ,f) (list ,@args))))
@@ -926,107 +926,6 @@
               (shen/nset-element-at path current-context value)))))))
 ;; \(Unused\)\ Isolating\ and\ Filling:1 ends here
 
-;; [[file:shen-elisp.org::*Overrides][Overrides:1]]
-(setq shen/*overrides*
-      (let ((table (make-hash-table :test 'equal)))
-        ;; (ref:performance)
-        (puthash 'map
-                 `(defun shen/map (F Xs)
-                    (mapcar (lambda (X)
-                              (shen/apply-higher-order-function F (list X)))
-                            Xs))
-                 table)
-        (puthash 'shen.lazyderef
-                 `(defun shen/shen\.lazyderef
-                      (X ProcessN)
-                    (let ((Current X)
-                          (KeepLooking 't))
-                      (while KeepLooking
-                        (shen/if
-                         (shen/shen.pvar? Current)
-                         (shen/let Value (shen/shen.valvector Current ProcessN)
-                                   (shen/if (shen/= Value 'shen.-null-)
-                                            (setq KeepLooking nil)
-                                            (setq Current Value)))
-                         (setq KeepLooking nil)))
-                      Current))
-                 table)
-        (puthash 'append
-                 `(defun shen/append (Xs Ys) (append Xs Ys))
-                 table)
-        (puthash 'shen.string->bytes
-                 `(defun defun shen/shen.string->bytes (S)
-                    (string-to-list S))
-                 table)
-        (puthash 'shen.sum
-                 `(defun defun shen/shen.sum (Xs) (apply #'+ Xs))
-                 table)
-        (puthash 'shen.mod
-                 `(defun defun shen/shen.mod (N Div) (mod N Div))
-                 table)
-
-        ;; (ref:hash-tables)
-        (puthash 'shen/hash
-                 `(defun shen/hash
-                      (String Limit)
-                    (let ((Hash (shen/mod (shen/sum (shen/shen.string->bytes String)) Limit)))
-                      (if (= 0 Hash) 1 Hash)))
-                 table)
-        (puthash '(set *property-vector* (vector 20000))
-                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
-                 table)
-        (puthash 'get
-                 `(defun shen/get
-                      (Pointer Key Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (if (not Subtable)
-                          (shen/simple-error
-                           (format "pointer not found: %s\n" Pointer))
-                        (let ((Value (gethash Key Subtable)))
-                          (if (not Value)
-                              (shen/simple-error
-                               (format "value not found: %s\n" (list Pointer Key))))
-                          Value))))
-                 table)
-        (puthash 'put
-                 `(defun shen/put
-                      (Pointer Key Value Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (if (not Subtable)
-                          (let ((Subtable (make-hash-table :test 'equal)))
-                            (progn
-                              (puthash Pointer Subtable Table)
-                              (puthash Key Value Subtable)))
-                        (puthash Key Value Subtable))))
-                 table)
-        (puthash 'unput
-                 `(defun shen/unput
-                      (Pointer Key Table)
-                    (let ((Subtable (gethash Pointer Table)))
-                      (and Subtable
-                           (remhash Key Subtable))
-                      Pointer))
-                 table)
-        (puthash 'shen.resize-vector
-                 `(defun shen/shen.resize-vector (Vector NewSize Fill)
-                    (let* ((VectorLimit (shen/<-address Vector 0))
-                           (Current-Index (1+ VectorLimit)))
-                      (puthash 0 NewSize Vector)
-                      (while (<= Current-Index NewSize)
-                        (puthash Current-Index Fill Vector)
-                        (setq Current-Index (+ Current-Index 1)))
-                      Vector))
-                 table)
-        ;; (ref:namespacing)
-        (puthash 'function
-                 `(defun shen/function (S)
-                    (shen/shen\.lookup-func
-                     (shen/unprefix-symbol S)
-                     (shen/value 'shen\.*symbol-table*)))
-                 table)
-        table))
-;; Overrides:1 ends here
-
 ;; [[file:shen-elisp.org::*Consolidate%20Call%20Chains][Consolidate\ Call\ Chains:1]]
 (defun shen/consolidate (ast matcher-fn collector-fn tx-fn)
   (let* ((current-ast ast)
@@ -1262,6 +1161,7 @@
                      (shen/unprefix-symbol S)
                      (shen/value 'shen\.*symbol-table*)))
                  table)
+        ;; (ref:klambda bugs)
         (puthash 'untrack
                  `(defun shen/untrack (F)
                     (progn
@@ -1287,7 +1187,6 @@
   (with-current-buffer B
     (save-excursion
       (goto-char (point-max))
-      (insert  "\n;;;###autoload\n")
       (insert (pp-to-string
                (shen/nil-to-null
                 (shen/add-1+
@@ -1300,15 +1199,3 @@
 ;; [[file:shen-elisp.org::*Providing%20The%20Primitives][Providing\ The\ Primitives:1]]
 (provide 'shen-primitives)
 ;; Providing\ The\ Primitives:1 ends here
-
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:2]]
-(setq shen/*illegal-character->spelling*
-      '((59 "_sneomlioccoilmoens")  ;; semicolon
-        (?, "_caommmmoac")
-        (35 "_hhassshh")            ;; hash
-        (?' "_tkiccikt")
-        (?` "_beatcokuqqukoctaeb")))
-
-(setq shen/*spelling->illegal-character*
-      (mapcar #'reverse shen/*illegal-character->spelling*))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:2 ends here
