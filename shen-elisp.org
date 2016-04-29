@@ -7,9 +7,9 @@
 #+BEGIN_SRC elisp :tangle shen-elisp-pkg.el
   (define-package
     "shen-elisp"
-    "19.2.0.0.0.1alpha"
+    "19.2-0.0.1"
     "Shen implementation in Elisp"
-    '()
+    '((emacs "24.3"))
     :url "http://github.com/deech/shen-elisp"
     :keywords '("shen" "elisp"))
 #+END_SRC
@@ -669,7 +669,6 @@ A function that deletes the first occurrences of X
             (nreverse copy))
         Xs)))
 #+END_SRC
-
 
 * Rewriting The AST
 ** Prefixing Utilities
