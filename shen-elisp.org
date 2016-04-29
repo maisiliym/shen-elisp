@@ -654,6 +654,23 @@ element for which ~pred~ holds:
       found))
 #+END_SRC
 
+A function that deletes the first occurrences of X
+#+BEGIN_SRC elisp :tangle primitives.el
+  (defun shen/delete-first-eq (needle Xs)
+    (let ((index (shen/index-of (lambda (X) (eq X needle)) Xs)))
+      (if index
+          (let ((current-index 0)
+                (copy))
+            (while (< current-index (length Xs))
+              (progn
+                (if (not (= current-index index))
+                    (push (nth current-index Xs) copy))
+                (setq current-index (1+ current-index))))
+            (nreverse copy))
+        Xs)))
+#+END_SRC
+
+
 * Rewriting The AST
 ** Prefixing Utilities
 Elisp does not have namespaces so to insulate the rest of the user's Emacs image
@@ -1653,6 +1670,12 @@ There are three types of overrides, those which:
                        (shen/unprefix-symbol S)
                        (shen/value 'shen\.*symbol-table*)))
                    table)
+          (puthash 'untrack
+                   `(defun shen/untrack (F)
+                      (progn
+                        (shen/set 'shen.*tracking* (shen/delete-first-eq F (shen/value 'shen.*tracking*)))
+                        (shen/eval (shen/ps F))))
+                   table)
           table))
 #+END_SRC
 
@@ -1800,7 +1823,7 @@ And finally we provide this file:
   (defun shen/repl-eval (input-string)
     (let ((active-process (shen/repl-process))
           (shen/repl-temp-buffer))
-      (unwind-protect
+      (condition-case ex
           (progn
             (shen/set '*stoutput* (ielm-standard-output-impl active-process))
             (set-buffer (get-buffer *shen-repl*))
@@ -1812,15 +1835,17 @@ And finally we provide this file:
                    (NewLineread (shen/shen.retrieve-from-history-if-needed
                                  (shen/@p Lineread input-string)
                                  History))
-                                 (NewHistory (shen/shen.update_history NewLineread History))
+                   (NewHistory (shen/shen.update_history NewLineread History))
                    (Parsed (shen/fst NewLineread)))
               (shen/shen.toplevel Parsed)
               (funcall (shen/value '*stoutput*) t)
               (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))
-        (when 't
-          (progn
-            (funcall (shen/value '*stoutput*) t)
-            (shen/set '*stoutput* standard-output))))))
+        ('shen/error
+         (progn
+           (funcall (shen/value '*stoutput*) t)
+           (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
+           (funcall (shen/value '*stoutput*) t)
+           (shen/set '*stoutput* standard-output))))))
 
   (defvar shen/repl-map
     (let ((map (make-sparse-keymap)))

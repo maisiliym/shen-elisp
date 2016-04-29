@@ -13955,9 +13955,13 @@
 
 ;;;###autoload
 (defun shen/untrack
-    (V15749)
-  (shen/eval
-   (shen/ps V15749)))
+    (F)
+  (progn
+    (shen/set 'shen\.*tracking*
+              (shen/delete-first-eq F
+                                    (shen/value 'shen\.*tracking*)))
+    (shen/eval
+     (shen/ps F))))
 
 ;;;###autoload
 (defun shen/profile

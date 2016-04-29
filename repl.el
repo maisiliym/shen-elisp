@@ -49,7 +49,7 @@
 (defun shen/repl-eval (input-string)
   (let ((active-process (shen/repl-process))
         (shen/repl-temp-buffer))
-    (unwind-protect
+    (condition-case ex
         (progn
           (shen/set '*stoutput* (ielm-standard-output-impl active-process))
           (set-buffer (get-buffer *shen-repl*))
@@ -61,15 +61,17 @@
                  (NewLineread (shen/shen.retrieve-from-history-if-needed
                                (shen/@p Lineread input-string)
                                History))
-                               (NewHistory (shen/shen.update_history NewLineread History))
+                 (NewHistory (shen/shen.update_history NewLineread History))
                  (Parsed (shen/fst NewLineread)))
             (shen/shen.toplevel Parsed)
             (funcall (shen/value '*stoutput*) t)
             (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))
-      (when 't
-        (progn
-          (funcall (shen/value '*stoutput*) t)
-          (shen/set '*stoutput* standard-output))))))
+      ('shen/error
+       (progn
+         (funcall (shen/value '*stoutput*) t)
+         (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
+         (funcall (shen/value '*stoutput*) t)
+         (shen/set '*stoutput* standard-output))))))
 
 (defvar shen/repl-map
   (let ((map (make-sparse-keymap)))

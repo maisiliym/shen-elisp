@@ -457,6 +457,21 @@
     found))
 ;; List\ Filtering:3 ends here
 
+;; [[file:shen-elisp.org::*List%20Filtering][List\ Filtering:4]]
+(defun shen/delete-first-eq (needle Xs)
+  (let ((index (shen/index-of (lambda (X) (eq X needle)) Xs)))
+    (if index
+        (let ((current-index 0)
+              (copy))
+          (while (< current-index (length Xs))
+            (progn
+              (if (not (= current-index index))
+                  (push (nth current-index Xs) copy))
+              (setq current-index (1+ current-index))))
+          (nreverse copy))
+      Xs)))
+;; List\ Filtering:4 ends here
+
 ;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:1]]
 (defun shen/prefix-symbol (X)
   (if (shen/symbol-p X)
@@ -1246,6 +1261,12 @@
                     (shen/shen\.lookup-func
                      (shen/unprefix-symbol S)
                      (shen/value 'shen\.*symbol-table*)))
+                 table)
+        (puthash 'untrack
+                 `(defun shen/untrack (F)
+                    (progn
+                      (shen/set 'shen.*tracking* (shen/delete-first-eq F (shen/value 'shen.*tracking*)))
+                      (shen/eval (shen/ps F))))
                  table)
         table))
 ;; Overrides:1 ends here
