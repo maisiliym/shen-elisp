@@ -1685,7 +1685,39 @@ and make them:
 
 #+END_SRC
 
-** Evaluating User Input
+** EvaluaTing User Input
+The following is a cut-and-paste of ~ielm-standard-output-impl~ which apparently
+does not exist in older versions of Emacs (a user reported a bug on 24.4.1).
+
+It periodically writes to the REPL.
+#+BEGIN_SRC elisp :tangle shen-repl.el
+  (defun shen/repl-standard-output-impl (process)
+    (let* ((output-buffer nil)
+           (flush-timer nil)
+           (flush-buffer
+            (lambda ()
+              (comint-output-filter
+               process
+               (apply #'string (nreverse output-buffer)))
+              (redisplay)
+              (setf output-buffer nil)
+              (when flush-timer
+                (cancel-timer flush-timer)
+                (setf flush-timer nil)))))
+      (lambda (char)
+        (let (flush-now)
+          (cond ((and (eq char t) output-buffer)
+                 (push ?\n output-buffer)
+                 (setf flush-now t))
+                ((characterp char)
+                 (push char output-buffer)))
+          (if flush-now
+              (funcall flush-buffer)
+            (unless flush-timer
+              (setf flush-timer (run-with-timer 0.1 nil flush-buffer))))))))
+
+#+END_SRC
+
 #+BEGIN_SRC elisp :tangle shen-repl.el
   (defun shen/repl-process nil
     ;; Return the current buffer's process.
@@ -1696,7 +1728,7 @@ and make them:
           (shen/repl-temp-buffer))
       (condition-case ex
           (progn
-            (shen/set '*stoutput* (ielm-standard-output-impl active-process))
+            (shen/set '*stoutput* (shen/repl-standard-output-impl active-process))
             (set-buffer (get-buffer *shen-repl*))
             (let* ((Lineread
                     (shen/compile #'shen/shen.<st_input> input-string

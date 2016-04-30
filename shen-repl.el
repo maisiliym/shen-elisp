@@ -64,7 +64,34 @@
       (goto-char (point-max)))))
 ;; Input\ Events:1 ends here
 
-;; [[file:shen-elisp.org::*Evaluating%20User%20Input][Evaluating\ User\ Input:1]]
+;; [[file:shen-elisp.org::*EvaluaTing%20User%20Input][EvaluaTing\ User\ Input:1]]
+(defun shen/repl-standard-output-impl (process)
+  (let* ((output-buffer nil)
+         (flush-timer nil)
+         (flush-buffer
+          (lambda ()
+            (comint-output-filter
+             process
+             (apply #'string (nreverse output-buffer)))
+            (redisplay)
+            (setf output-buffer nil)
+            (when flush-timer
+              (cancel-timer flush-timer)
+              (setf flush-timer nil)))))
+    (lambda (char)
+      (let (flush-now)
+        (cond ((and (eq char t) output-buffer)
+               (push ?\n output-buffer)
+               (setf flush-now t))
+              ((characterp char)
+               (push char output-buffer)))
+        (if flush-now
+            (funcall flush-buffer)
+          (unless flush-timer
+            (setf flush-timer (run-with-timer 0.1 nil flush-buffer))))))))
+;; EvaluaTing\ User\ Input:1 ends here
+
+;; [[file:shen-elisp.org::*EvaluaTing%20User%20Input][EvaluaTing\ User\ Input:2]]
 (defun shen/repl-process nil
   ;; Return the current buffer's process.
   (get-buffer-process (current-buffer)))
@@ -74,7 +101,7 @@
         (shen/repl-temp-buffer))
     (condition-case ex
         (progn
-          (shen/set '*stoutput* (ielm-standard-output-impl active-process))
+          (shen/set '*stoutput* (shen/repl-standard-output-impl active-process))
           (set-buffer (get-buffer *shen-repl*))
           (let* ((Lineread
                   (shen/compile #'shen/shen.<st_input> input-string
@@ -95,7 +122,7 @@
          (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
          (funcall (shen/value '*stoutput*) t)
          (shen/set '*stoutput* standard-output))))))
-;; Evaluating\ User\ Input:1 ends here
+;; EvaluaTing\ User\ Input:2 ends here
 
 ;; [[file:shen-elisp.org::*The%20REPL%20Mode][The\ REPL\ Mode:1]]
 (defconst shen/syntax-table

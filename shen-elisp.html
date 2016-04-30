@@ -220,7 +220,7 @@ for the JavaScript code in this tag.
 <li><a href="#orgheadline54">8.1. Credits</a></li>
 <li><a href="#orgheadline55">8.2. Prompt</a></li>
 <li><a href="#orgheadline56">8.3. Input Events</a></li>
-<li><a href="#orgheadline57">8.4. Evaluating User Input</a></li>
+<li><a href="#orgheadline57">8.4. EvaluaTing User Input</a></li>
 <li><a href="#orgheadline58">8.5. The REPL Mode</a></li>
 <li><a href="#orgheadline61">8.6. Overlays</a>
 <ul>
@@ -2527,8 +2527,45 @@ and make them:
 </div>
 
 <div id="outline-container-orgheadline57" class="outline-3">
-<h3 id="orgheadline57"><span class="section-number-3">8.4</span> Evaluating User Input</h3>
+<h3 id="orgheadline57"><span class="section-number-3">8.4</span> EvaluaTing User Input</h3>
 <div class="outline-text-3" id="text-8-4">
+<p>
+The following is a cut-and-paste of <code>ielm-standard-output-impl</code> which apparently
+does not exist in older versions of Emacs (a user reported a bug on 24.4.1).
+</p>
+
+<p>
+It periodically writes to the REPL.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/repl-standard-output-impl</span> <span style="color: #7388d6;">(</span>process<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>output-buffer nil<span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>flush-timer nil<span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>flush-buffer
+          <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #6276ba;">()</span>
+            <span style="color: #6276ba;">(</span>comint-output-filter
+             process
+             <span style="color: #858580;">(</span>apply #'string <span style="color: #80a880;">(</span>nreverse output-buffer<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+            <span style="color: #6276ba;">(</span>redisplay<span style="color: #6276ba;">)</span>
+            <span style="color: #6276ba;">(</span>setf output-buffer nil<span style="color: #6276ba;">)</span>
+            <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">when</span> flush-timer
+              <span style="color: #858580;">(</span>cancel-timer flush-timer<span style="color: #858580;">)</span>
+              <span style="color: #858580;">(</span>setf flush-timer nil<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>char<span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span>flush-now<span style="color: #907373;">)</span>
+        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">cond</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>and <span style="color: #80a880;">(</span>eq char t<span style="color: #80a880;">)</span> output-buffer<span style="color: #858580;">)</span>
+               <span style="color: #858580;">(</span>push ?\n output-buffer<span style="color: #858580;">)</span>
+               <span style="color: #858580;">(</span>setf flush-now t<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+              <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>characterp char<span style="color: #858580;">)</span>
+               <span style="color: #858580;">(</span>push char output-buffer<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">if</span> flush-now
+            <span style="color: #6276ba;">(</span>funcall flush-buffer<span style="color: #6276ba;">)</span>
+          <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">unless</span> flush-timer
+            <span style="color: #858580;">(</span>setf flush-timer <span style="color: #80a880;">(</span>run-with-timer <span style="color: #333333; font-weight: bold;">0.1</span> nil flush-buffer<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/repl-process</span> nil
@@ -2540,7 +2577,7 @@ and make them:
         <span style="color: #709870;">(</span>shen/repl-temp-buffer<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex
         <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-          <span style="color: #907373;">(</span>shen/set '*stoutput* <span style="color: #6276ba;">(</span>ielm-standard-output-impl active-process<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+          <span style="color: #907373;">(</span>shen/set '*stoutput* <span style="color: #6276ba;">(</span>shen/repl-standard-output-impl active-process<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
           <span style="color: #907373;">(</span>set-buffer <span style="color: #6276ba;">(</span>get-buffer *shen-repl*<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
           <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>Lineread
                   <span style="color: #80a880;">(</span>shen/compile #'shen/shen.&lt;st_input&gt; input-string
