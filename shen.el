@@ -2,7 +2,7 @@
 ;; Local Variables:
 ;; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)
 ;; End:
-(require 'shen-primitives "shen-primitives.el")
+(require 'shen-primitives)
 (setq max-lisp-eval-depth 60000)
 (setq max-specpdl-size 13000)
 (defun shen/shen\.shen nil

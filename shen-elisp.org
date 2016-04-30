@@ -1613,8 +1613,8 @@ incoming code with overrides before parsing the AST:
 
 #+BEGIN_SRC elisp :tangle shen-repl.el
   (require 'comint)
-  (require 'shen-primitives "shen-primitives.el")
-  (require 'shen "shen.el")
+  (require 'shen-primitives)
+  (require 'shen)
 #+END_SRC
 ** Credits
 The credits that appear at the top of each REPL session.
@@ -1860,7 +1860,7 @@ In order to bootstrap the environment we specify the location of all the KLambda
 that need to be read in and compiled. They are located in the ~KLambda~ directory of this
 package.
 #+BEGIN_SRC elisp :tangle install.el
-  (require 'shen-primitives "shen-primitives.el")
+  (require 'shen-primitives)
   (setq *klambda-directory-name* "KLambda")
   (setq *klambda-directory* (file-name-as-directory (concat (file-name-directory load-file-name) *klambda-directory-name*)))
   (setq *klambda-files*
@@ -2056,7 +2056,7 @@ KLambda code into Elisp.
         (insert (format "%s\n" ";; Local Variables:"))
         (insert (format "%s\n" ";; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)"))
         (insert (format "%s\n" ";; End:"))
-        (insert (format "%s\n" "(require 'shen-primitives \"shen-primitives.el\")"))
+        (insert (format "%s\n" "(require 'shen-primitives)"))
         (insert (format "%s\n" "(setq max-lisp-eval-depth 60000)"))
         (insert (format "%s\n" "(setq max-specpdl-size 13000)"))
         (goto-char (point-max))

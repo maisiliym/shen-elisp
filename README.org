@@ -19,7 +19,7 @@ invoking the `quelpa` tool with a MELPA recipe:
      '(shen-elisp
         :repo "deech/shen-elisp"
         :fetcher github
-        :files ("*.el" "KLambda/*.kl" "*.org"))
+        :files ("shen*.el"))
      :upgrade 't)
 #+END_EXAMPLE
 

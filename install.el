@@ -1,5 +1,5 @@
 ;; [[file:shen-elisp.org::*Collecting%20KLambda%20files][Collecting\ KLambda\ files:1]]
-(require 'shen-primitives "shen-primitives.el")
+(require 'shen-primitives)
 (setq *klambda-directory-name* "KLambda")
 (setq *klambda-directory* (file-name-as-directory (concat (file-name-directory load-file-name) *klambda-directory-name*)))
 (setq *klambda-files*
@@ -166,7 +166,7 @@
       (insert (format "%s\n" ";; Local Variables:"))
       (insert (format "%s\n" ";; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)"))
       (insert (format "%s\n" ";; End:"))
-      (insert (format "%s\n" "(require 'shen-primitives \"shen-primitives.el\")"))
+      (insert (format "%s\n" "(require 'shen-primitives)"))
       (insert (format "%s\n" "(setq max-lisp-eval-depth 60000)"))
       (insert (format "%s\n" "(setq max-specpdl-size 13000)"))
       (goto-char (point-max))

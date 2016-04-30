@@ -2,8 +2,8 @@
 
 ;; [[file:shen-elisp.org::*Shen%20REPL][Shen\ REPL:2]]
 (require 'comint)
-(require 'shen-primitives "shen-primitives.el")
-(require 'shen "shen.el")
+(require 'shen-primitives)
+(require 'shen)
 ;; Shen\ REPL:2 ends here
 
 ;; [[file:shen-elisp.org::*Credits][Credits:1]]
