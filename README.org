@@ -12,8 +12,12 @@ This is an implemenatation of the [[http://shenlanguage.org][Shen programming la
 This port is completely self-contained. However since it leans heavily on the
 relatively new ~lexical-binding~ feature Emacs 24.3 or above is required.
 
-Currently the easiest way to install the package directly from Github by
-invoking the `quelpa` tool with a MELPA recipe:
+Also note the installation will emit a large number of byte-compiler warnings.
+Nothing to worry about but they are annoying and my attempts to silence them
+have thus far failed.
+
+** Quelpa
+To install the package directly from Github using `quelpa` tool:
 #+BEGIN_EXAMPLE
   (quelpa
      '(shen-elisp
@@ -24,10 +28,28 @@ invoking the `quelpa` tool with a MELPA recipe:
 #+END_EXAMPLE
 
 Since this is alpha software the ~:upgrade 't~ at the end always pulls the latest version.
+** Spacemacs Private Layer
+If you are a [[https://github.com/syl20bnr/spacemacs][Spacemacs]] user you need to create a private configuration layer since any packages not
+installed this way will be deleted on startup.
 
-Also note the installation will emit a large number of byte-compiler warnings.
-Nothing to worry about but they are annoying and my attempts to silence them
-have thus far failed.
+1. ~SPC : configuration-layer/create-layer~
+2. Choose the default private layers directory, it's usually ~$HOME/.emacs.d/private/~
+3. Enter ~shen-elisp~ when asked for ~Configuration Layer Name:~. Spacemacs will generate a file called ~packages.el~ for you.
+4. Replace the contents of ~packages.el~ with:
+   #+BEGIN_EXAMPLE
+   (defun shen-elisp/init-shen-elisp ()
+     (use-package shen-elisp))
+
+   (defconst shen-elisp-packages
+     '((shen-elisp :location (recipe
+                              :repo "deech/shen-elisp"
+                              :fetcher github
+                              :files ("shen*.el")))))
+   ;;; packages.el ends here
+   #+END_EXAMPLE
+5. ~SPC : spacemacs/emacs-reload~
+6. Invoke ~shen/repl~ after installation has completed.
+
 * Running
 Once the package is installed the Shen REPL should start with:
 #+BEGIN_EXAMPLE
