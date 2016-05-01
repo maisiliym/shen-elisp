@@ -1,7 +1,6 @@
 ;; [[file:shen-elisp.org::*Implementation%20Constants][Implementation\ Constants:1]]
 ;; -*- lexical-binding: t -*-
 (defconst shen/prefix "shen/")
-(defstruct fake-standard-input buffer)
 ;; Implementation\ Constants:1 ends here
 
 ;; [[file:shen-elisp.org::*Symbols][Symbols:1]]
@@ -32,7 +31,7 @@
 ;; [[file:shen-elisp.org::*KLambda%20Constants][KLambda\ Constants:1]]
 (shen/set '*home-directory* "")
 (shen/set '*stoutput* standard-output)
-(shen/set '*stinput* (make-fake-standard-input :buffer '()))
+(shen/set '*stinput* [()])
 (shen/set '*language* "Elisp")
 (shen/set '*implementation* "Elisp")
 (shen/set '*porters* "Aditya Siram")
@@ -293,9 +292,9 @@
                 (forward-char)
                 current-byte))))
       (error (format "Buffer %s was not opened by Shen." S))))
-   ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
-                                  -1
-                                (pop (fake-standard-input-buffer S))))
+   ((vectorp S) (if (not (aref S 0))
+                    -1
+                  (pop (aref S 0))))
    (t (error (format "Unrecognized stream format %s" S)))))
 ;; Streams\ and\ I/O:3 ends here
 

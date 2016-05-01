@@ -19,7 +19,6 @@
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   ;; -*- lexical-binding: t -*-
   (defconst shen/prefix "shen/")
-  (defstruct fake-standard-input buffer)
 #+END_SRC
 ** Symbols
 Symbols in KLambda (and Shen) are very much like symbols in Elisp :
@@ -87,7 +86,7 @@ Once [[Assignments][the assigning mechanism]] is in place the spec requires some
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (shen/set '*home-directory* "")
   (shen/set '*stoutput* standard-output)
-  (shen/set '*stinput* (make-fake-standard-input :buffer '()))
+  (shen/set '*stinput* [()])
   (shen/set '*language* "Elisp")
   (shen/set '*implementation* "Elisp")
   (shen/set '*porters* "Aditya Siram")
@@ -457,9 +456,9 @@ when writing out to the [[Shen REPL]] requires calling a function with the chara
                   (forward-char)
                   current-byte))))
         (error (format "Buffer %s was not opened by Shen." S))))
-     ((fake-standard-input-p S) (if (not (fake-standard-input-buffer S))
-                                    -1
-                                  (pop (fake-standard-input-buffer S))))
+     ((vectorp S) (if (not (aref S 0))
+                      -1
+                    (pop (aref S 0))))
      (t (error (format "Unrecognized stream format %s" S)))))
 #+END_SRC
 * Utilities

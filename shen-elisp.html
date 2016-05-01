@@ -270,7 +270,6 @@ for the JavaScript code in this tag.
 
 <pre class="src src-elisp"><span style="color: #d9d9d9;">;; </span><span style="color: #7f7f7f;">-*- lexical-binding: t -*-</span>
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defconst</span> <span style="color: #333333;">shen/prefix</span> <span style="color: #666666;">"shen/"</span><span style="color: #707183;">)</span>
-<span style="color: #707183;">(</span>defstruct fake-standard-input buffer<span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -384,7 +383,7 @@ Once <a href="#orgheadline5">the assigning mechanism</a> is in place the spec re
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span>shen/set '*home-directory* <span style="color: #666666;">""</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span>shen/set '*stoutput* standard-output<span style="color: #707183;">)</span>
-<span style="color: #707183;">(</span>shen/set '*stinput* <span style="color: #7388d6;">(</span>make-fake-standard-input <span style="color: #333333; font-weight: bold;">:buffer</span> '<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>shen/set '*stinput* <span style="color: #7388d6;">[</span><span style="color: #909183;">()</span><span style="color: #7388d6;">]</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span>shen/set '*language* <span style="color: #666666;">"Elisp"</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span>shen/set '*implementation* <span style="color: #666666;">"Elisp"</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span>shen/set '*porters* <span style="color: #666666;">"Aditya Siram"</span><span style="color: #707183;">)</span>
@@ -932,9 +931,9 @@ when writing out to the <a href="#orgheadline20">8</a> requires calling a functi
                 <span style="color: #887070;">(</span>forward-char<span style="color: #887070;">)</span>
                 current-byte<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
       <span style="color: #907373;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #6276ba;">(</span>format <span style="color: #666666;">"Buffer %s was not opened by Shen."</span> S<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-   <span style="color: #909183;">(</span><span style="color: #709870;">(</span>fake-standard-input-p S<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>fake-standard-input-buffer S<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-                                  <span style="color: #333333; font-weight: bold;">-1</span>
-                                <span style="color: #907373;">(</span>pop <span style="color: #6276ba;">(</span>fake-standard-input-buffer S<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+   <span style="color: #909183;">(</span><span style="color: #709870;">(</span>vectorp S<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>aref S <span style="color: #333333; font-weight: bold;">0</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+                    <span style="color: #333333; font-weight: bold;">-1</span>
+                  <span style="color: #907373;">(</span>pop <span style="color: #6276ba;">(</span>aref S <span style="color: #333333; font-weight: bold;">0</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
    <span style="color: #909183;">(</span>t <span style="color: #709870;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #907373;">(</span>format <span style="color: #666666;">"Unrecognized stream format %s"</span> S<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
