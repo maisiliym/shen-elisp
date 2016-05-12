@@ -446,9 +446,9 @@
           nil)
          ((shen/and
            (shen/cons\? V15644)
-           (shen/apply-higher-order-function V15643
-                                             (list
-                                              (shen/hd V15644))))
+           (shen/internal/apply-higher-order-function V15643
+                                                      (list
+                                                       (shen/hd V15644))))
           (append
            (list
             (shen/hd V15644))
@@ -509,9 +509,9 @@
          ((shen/and
            (shen/cons\? V15672)
            (shen/not
-            (shen/apply-higher-order-function V15671
-                                              (list
-                                               (shen/hd V15672)))))
+            (shen/internal/apply-higher-order-function V15671
+                                                       (list
+                                                        (shen/hd V15672)))))
           (vector
            (list V15671
                  (nthcdr 1 V15672)
@@ -1191,8 +1191,8 @@
 (defun shen/shen\.fail_if
     (V13132 V13133)
   (shen/if
-   (shen/apply-higher-order-function V13132
-                                     (list V13133))
+   (shen/internal/apply-higher-order-function V13132
+                                              (list V13133))
    (shen/fail)
    V13133))
 (defun shen/shen\.succeeds\?
@@ -3630,8 +3630,8 @@
             (shen/shen\.app V13376 ": unexpected argument\n" 'shen\.a))))
 (defun shen/thaw
     (V14536)
-  (shen/apply-higher-order-function V14536
-                                    (list)))
+  (shen/internal/apply-higher-order-function V14536
+                                             (list)))
 (defun shen/eval
     (V14538)
   (shen/let Macroexpand
@@ -3852,21 +3852,21 @@
     (V14565 V14566)
   (shen/cond
    ((shen/cons\? V14566)
-    (shen/apply-higher-order-function V14565
-                                      (list
-                                       (shen/map
-                                        (shen/lambda Z
-                                                     (shen/shen\.walk V14565 Z))
-                                        V14566))))
+    (shen/internal/apply-higher-order-function V14565
+                                               (list
+                                                (shen/map
+                                                 (shen/lambda Z
+                                                              (shen/shen\.walk V14565 Z))
+                                                 V14566))))
    (shen/true
-    (shen/apply-higher-order-function V14565
-                                      (list V14566)))))
+    (shen/internal/apply-higher-order-function V14565
+                                               (list V14566)))))
 (defun shen/compile
     (V14570 V14571 V14572)
   (shen/let O
-            (shen/apply-higher-order-function V14570
-                                              (list
-                                               (list V14571 nil)))
+            (shen/internal/apply-higher-order-function V14570
+                                                       (list
+                                                        (list V14571 nil)))
             (shen/if
              (shen/or
               (shen/=
@@ -3875,14 +3875,14 @@
               (shen/not
                (shen/empty\?
                 (shen/hd O))))
-             (shen/apply-higher-order-function V14572
-                                               (list O))
+             (shen/internal/apply-higher-order-function V14572
+                                                        (list O))
              (shen/shen\.hdtl O))))
 (defun shen/fail-if
     (V14575 V14576)
   (shen/if
-   (shen/apply-higher-order-function V14575
-                                     (list V14576))
+   (shen/internal/apply-higher-order-function V14575
+                                              (list V14576))
    (shen/fail)
    V14576))
 (defun shen/@s
@@ -4334,8 +4334,8 @@
 (defun shen/fix
     (V14736 V14737)
   (shen/shen\.fix-help V14736 V14737
-                       (shen/apply-higher-order-function V14736
-                                                         (list V14737))))
+                       (shen/internal/apply-higher-order-function V14736
+                                                                  (list V14737))))
 (defun shen/shen\.fix-help
     (V14748 V14749 V14750)
   (cl-flet
@@ -4347,8 +4347,8 @@
          (shen/true
           (vector
            (list V14748 V14750
-                 (shen/apply-higher-order-function V14748
-                                                   (list V14750))))))))
+                 (shen/internal/apply-higher-order-function V14748
+                                                            (list V14750))))))))
     (let
         ((result
           (funcall #'tail-trampoline V14748 V14749 V14750)))
@@ -4792,8 +4792,8 @@
   (mapcar
    (lambda
      (X)
-     (shen/apply-higher-order-function F
-                                       (list X)))
+     (shen/internal/apply-higher-order-function F
+                                                (list X)))
    Xs))
 (defun shen/shen\.map-h
     (V14881 V14882 V14883)
@@ -4809,9 +4809,9 @@
                  (nthcdr 1 V14882)
                  (append
                   (list
-                   (shen/apply-higher-order-function V14881
-                                                     (list
-                                                      (shen/hd V14882))))
+                   (shen/internal/apply-higher-order-function V14881
+                                                              (list
+                                                               (shen/hd V14882))))
                   V14883))))
          (shen/true
           (shen/shen\.f_error 'shen\.map-h)))))
@@ -4928,9 +4928,9 @@
     nil)
    ((shen/cons\? V14933)
     (shen/append
-     (shen/apply-higher-order-function V14932
-                                       (list
-                                        (shen/hd V14933)))
+     (shen/internal/apply-higher-order-function V14932
+                                                (list
+                                                 (shen/hd V14933)))
      (shen/mapcan V14932
                   (nthcdr 1 V14933))))
    (shen/true
@@ -5010,7 +5010,7 @@
 (defun shen/function
     (S)
   (shen/shen\.lookup-func
-   (shen/unprefix-symbol S)
+   (shen/internal/unprefix-symbol S)
    (shen/value 'shen\.*symbol-table*)))
 (defun shen/shen\.lookup-func
     (V14976 V14977)
@@ -10521,9 +10521,9 @@
           nil)
          ((shen/cons\? V13633)
           (shen/if
-           (shen/apply-higher-order-function V13632
-                                             (list
-                                              (shen/hd V13633)))
+           (shen/internal/apply-higher-order-function V13632
+                                                      (list
+                                                       (shen/hd V13633)))
            (append
             (list
              (shen/hd V13633))
@@ -12562,14 +12562,14 @@
         (V14040 V14041 V14042 V14043)
         (shen/cond
          ((shen/= nil V14041)
-          (shen/apply-higher-order-function V14040
-                                            (list V14042 V14043)))
+          (shen/internal/apply-higher-order-function V14040
+                                                     (list V14042 V14043)))
          ((shen/cons\? V14041)
           (vector
            (list
-            (shen/apply-higher-order-function V14040
-                                              (list
-                                               (shen/hd V14041)))
+            (shen/internal/apply-higher-order-function V14040
+                                                       (list
+                                                        (shen/hd V14041)))
             (nthcdr 1 V14041)
             V14042 V14043)))
          (shen/true
@@ -12628,16 +12628,16 @@
         (V14056 V14057 V14058 V14059)
         (shen/cond
          ((shen/= nil V14057)
-          (shen/apply-higher-order-function V14056
-                                            (list V14059
-                                                  (shen/freeze
-                                                   (shen/shen\.call-rest V14058 V14059)))))
+          (shen/internal/apply-higher-order-function V14056
+                                                     (list V14059
+                                                           (shen/freeze
+                                                            (shen/shen\.call-rest V14058 V14059)))))
          ((shen/cons\? V14057)
           (vector
            (list
-            (shen/apply-higher-order-function V14056
-                                              (list
-                                               (shen/hd V14057)))
+            (shen/internal/apply-higher-order-function V14056
+                                                       (list
+                                                        (shen/hd V14057)))
             (nthcdr 1 V14057)
             V14058 V14059)))
          (shen/true
@@ -12673,7 +12673,7 @@
              (list
               (append
                (list
-                (shen/apply-function-expression
+                (shen/internal/apply-function-expression
                  (shen/hd
                   (shen/hd V14064))
                  (list
@@ -12692,7 +12692,7 @@
             (shen/= nil
                     (nthcdr 1
                             (shen/hd V14064)))))
-          (shen/apply-function-expression
+          (shen/internal/apply-function-expression
            (shen/hd
             (shen/hd V14064))
            (list V14065
@@ -12989,8 +12989,8 @@
     (F)
   (progn
     (shen/set 'shen\.*tracking*
-              (shen/delete-first-eq F
-                                    (shen/value 'shen\.*tracking*)))
+              (shen/internal/delete-first-eq F
+                                             (shen/value 'shen\.*tracking*)))
     (shen/eval
      (shen/ps F))))
 (defun shen/profile
@@ -13779,7 +13779,7 @@
     (V15899 V15900)
   (shen/if
    (shen/shen\.print-vector\? V15899)
-   (shen/apply-function-expression
+   (shen/internal/apply-function-expression
     (shen/function
      (shen/<-address V15899 0))
     (list V15899))
@@ -14016,7 +14016,7 @@
           (vector
            (list
             (nthcdr 1 V13460)
-            (shen/apply-function-expression
+            (shen/internal/apply-function-expression
              (shen/hd V13460)
              (list V13461)))))
          (shen/true

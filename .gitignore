@@ -2,3 +2,7 @@
 /primitives.elisp
 /primitives2.el
 /*.tex
+/install.elc
+/shen-primitives.elc
+/shen-repl.elc
+/shen.elc

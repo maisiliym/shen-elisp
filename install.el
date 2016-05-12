@@ -86,10 +86,10 @@
 ;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:4]]
 (defun shen/put-reserved-elisp-chars-back (sexp)
   (let ((symbols (shen/find-symbols sexp)))
-    (shen/modify-ast sexp
+    (shen/internal/modify-ast sexp
                      symbols
                      (lambda (path ast)
-                       (shen/change-back (shen/get-element-at path ast))))))
+                       (shen/change-back (shen/internal/get-element-at path ast))))))
 ;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:4 ends here
 
 ;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:5]]
@@ -105,7 +105,7 @@
          (spellings (hash-table-keys spelling->character))
          (get-character-and-remaining
           (lambda (S)
-            (let ((found-at-index (shen/index-of (lambda (spelling) (string-prefix-p spelling S)) spellings)))
+            (let ((found-at-index (shen/internal/index-of (lambda (spelling) (string-prefix-p spelling S)) spellings)))
               (if found-at-index
                   (let ((spelling (nth found-at-index spellings)))
                     (list (string (gethash spelling spelling->character))
@@ -136,7 +136,7 @@
         (progn
           (setq current-path (car inner-lists))
           (setq inner-lists (cdr inner-lists))
-          (setq current-list (shen/get-element-at current-path sexp))
+          (setq current-list (shen/internal/get-element-at current-path sexp))
           (setq current-index 0)
           (setq current-list-length (length current-list))))
        ((< current-index current-list-length)
