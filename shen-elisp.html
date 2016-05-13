@@ -948,7 +948,7 @@ when writing out to the <a href="#orgheadline20">8</a> requires calling a functi
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/lookup-with-default</span> <span style="color: #7388d6;">(</span>KEY ALIST DEFAULT<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/lookup-with-default</span> <span style="color: #7388d6;">(</span>KEY ALIST DEFAULT<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span>car <span style="color: #909183;">(</span>or <span style="color: #709870;">(</span>assoc-default KEY ALIST<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>list DEFAULT<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -988,7 +988,7 @@ ast)))</code>.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/get-element-at</span> <span style="color: #7388d6;">(</span>path ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/get-element-at</span> <span style="color: #7388d6;">(</span>path ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>res ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #709870;">(</span>current-index <span style="color: #907373;">(</span>reverse path<span style="color: #907373;">)</span> res<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span>setq res <span style="color: #907373;">(</span>nth current-index res<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
@@ -1005,7 +1005,7 @@ before handing it off to <code>setf</code>.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/nset-element-at</span> <span style="color: #7388d6;">(</span>path ast new-element<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/nset-element-at</span> <span style="color: #7388d6;">(</span>path ast new-element<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>= <span style="color: #333333; font-weight: bold;">0</span> <span style="color: #709870;">(</span>length path<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span>setf ast new-element<span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>place-fn<span style="color: #907373;">)</span>
@@ -1034,7 +1034,7 @@ Search the tree and return paths to all the elements that are <code>equal</code>
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/find-all</span> <span style="color: #7388d6;">(</span>X ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/find-all</span> <span style="color: #7388d6;">(</span>X ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>not <span style="color: #709870;">(</span>consp ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       'shen/not-found
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>lists-left-to-search `<span style="color: #6276ba;">(</span><span style="color: #858580;">(</span><span style="color: #80a880;">()</span> ,ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -1069,7 +1069,7 @@ not a path to the element itself.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/list-containing-first-occurrence-of</span> <span style="color: #7388d6;">(</span>list-pred ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/list-containing-first-occurrence-of</span> <span style="color: #7388d6;">(</span>list-pred ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>not <span style="color: #709870;">(</span>consp ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       'shen/not-found
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>lists-left-to-search `<span style="color: #6276ba;">(</span><span style="color: #858580;">(</span><span style="color: #80a880;">()</span> ,ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -1103,20 +1103,20 @@ not a path to the element itself.
 <div class="outline-text-4" id="text-3-3-3">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/get-path-relative-to</span> <span style="color: #7388d6;">(</span>parent-path path<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>and <span style="color: #909183;">(</span>shen/starts-with-path parent-path path<span style="color: #909183;">)</span>
-       <span style="color: #909183;">(</span>shen/path-slice path <span style="color: #333333; font-weight: bold;">0</span> <span style="color: #709870;">(</span>- <span style="color: #907373;">(</span>length path<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>length parent-path<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/get-path-relative-to</span> <span style="color: #7388d6;">(</span>parent-path path<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>and <span style="color: #909183;">(</span>shen/internal/starts-with-path parent-path path<span style="color: #909183;">)</span>
+       <span style="color: #909183;">(</span>shen/internal/path-slice path <span style="color: #333333; font-weight: bold;">0</span> <span style="color: #709870;">(</span>- <span style="color: #907373;">(</span>length path<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>length parent-path<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/starts-with-path</span> <span style="color: #7388d6;">(</span>parent-path path<span style="color: #7388d6;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/starts-with-path</span> <span style="color: #7388d6;">(</span>parent-path path<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span>and <span style="color: #909183;">(</span>&lt;= <span style="color: #709870;">(</span>length parent-path<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>length path<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
        <span style="color: #909183;">(</span>equal parent-path
-              <span style="color: #709870;">(</span>shen/path-slice path
+              <span style="color: #709870;">(</span>shen/internal/path-slice path
                                <span style="color: #907373;">(</span>- <span style="color: #6276ba;">(</span>length path<span style="color: #6276ba;">)</span>
                                   <span style="color: #6276ba;">(</span>length parent-path<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/get-path-parent</span> <span style="color: #7388d6;">(</span>path<span style="color: #7388d6;">)</span> <span style="color: #7388d6;">(</span>cdr path<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/get-path-parent</span> <span style="color: #7388d6;">(</span>path<span style="color: #7388d6;">)</span> <span style="color: #7388d6;">(</span>cdr path<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/path-slice</span> <span style="color: #7388d6;">(</span>path start <span style="color: #333333; font-style: italic;">&amp;optional</span> end<span style="color: #7388d6;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/path-slice</span> <span style="color: #7388d6;">(</span>path start <span style="color: #333333; font-style: italic;">&amp;optional</span> end<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>start-to-end <span style="color: #907373;">(</span>nthcdr start path<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>res<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> end
@@ -1142,12 +1142,12 @@ up the code tree.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/modify-ast</span> <span style="color: #7388d6;">(</span>ast paths tx-fn<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/modify-ast</span> <span style="color: #7388d6;">(</span>ast paths tx-fn<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>deepest-first <span style="color: #907373;">(</span>sort paths <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>A B<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>&gt; <span style="color: #80a880;">(</span>length A<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>length B<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>current-ast ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #709870;">(</span>path deepest-first current-ast<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span>setq current-ast
-            <span style="color: #907373;">(</span>shen/nset-element-at path ast <span style="color: #6276ba;">(</span>funcall tx-fn path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+            <span style="color: #907373;">(</span>shen/internal/nset-element-at path ast <span style="color: #6276ba;">(</span>funcall tx-fn path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -1163,7 +1163,7 @@ those that fail:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/partition</span> <span style="color: #7388d6;">(</span>pred Xs<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/partition</span> <span style="color: #7388d6;">(</span>pred Xs<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>a<span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>b<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">dotimes</span> <span style="color: #709870;">(</span>i <span style="color: #907373;">(</span>length Xs<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>list a b<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
@@ -1178,7 +1178,7 @@ A filter function that returns the elements of <code>Xs</code> for which
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/filter-internal</span> <span style="color: #7388d6;">(</span>pred Xs <span style="color: #333333; font-style: italic;">&amp;optional</span> include-index<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/filter</span> <span style="color: #7388d6;">(</span>pred Xs <span style="color: #333333; font-style: italic;">&amp;optional</span> include-index<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>accum<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">dotimes</span> <span style="color: #709870;">(</span>i <span style="color: #907373;">(</span>length Xs<span style="color: #907373;">)</span> accum<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>funcall pred <span style="color: #6276ba;">(</span>nth i Xs<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -1195,7 +1195,7 @@ element for which <code>pred</code> holds:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/index-of</span> <span style="color: #7388d6;">(</span>pred Xs<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/index-of</span> <span style="color: #7388d6;">(</span>pred Xs<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>found<span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>index <span style="color: #333333; font-weight: bold;">0</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>not found<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>&lt; index <span style="color: #6276ba;">(</span>length Xs<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
@@ -1212,8 +1212,8 @@ A function that deletes the first occurrences of X
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/delete-first-eq</span> <span style="color: #7388d6;">(</span>needle Xs<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>index <span style="color: #907373;">(</span>shen/index-of <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>X<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>eq X needle<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> Xs<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/delete-first-eq</span> <span style="color: #7388d6;">(</span>needle Xs<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>index <span style="color: #907373;">(</span>shen/internal/index-of <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>X<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>eq X needle<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> Xs<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> index
         <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>current-index <span style="color: #333333; font-weight: bold;">0</span><span style="color: #6276ba;">)</span>
               <span style="color: #6276ba;">(</span>copy<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -1248,7 +1248,7 @@ symbol with <code>shen/</code>:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/prefix-symbol</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/prefix-symbol</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>shen/symbol-p X<span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span>intern <span style="color: #709870;">(</span>concat shen/prefix <span style="color: #907373;">(</span>format <span style="color: #666666;">"%s"</span> X<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     X<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
@@ -1260,7 +1260,7 @@ symbol with <code>shen/</code>:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/symbol-prefixed-p</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/symbol-prefixed-p</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span>and <span style="color: #909183;">(</span>shen/symbol-p X<span style="color: #909183;">)</span> <span style="color: #909183;">(</span>string-prefix-p shen/prefix <span style="color: #709870;">(</span>symbol-name X<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -1270,8 +1270,8 @@ symbol with <code>shen/</code>:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/unprefix-symbol</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>shen/symbol-prefixed-p X<span style="color: #909183;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/unprefix-symbol</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>shen/internal/symbol-prefixed-p X<span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span>intern <span style="color: #709870;">(</span>substring <span style="color: #907373;">(</span>symbol-name X<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>length shen/prefix<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     X<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
@@ -1341,7 +1341,7 @@ and not part of <code>cond</code>, they are also possible function calls.</li>
 </ul>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/get-function-symbol-and-funcall-paths</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/get-function-symbol-and-funcall-paths</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
 <span id="coderef-namespace-only" class="coderef-off">  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>namespace-only<span style="color: #709870;">)</span>        <span style="color: #d9d9d9;">;;</span> (namespace-only)</span>
 <span id="coderef-quote-only" class="coderef-off">        <span style="color: #709870;">(</span>quote-only<span style="color: #709870;">)</span>            <span style="color: #d9d9d9;">;;</span> (quote-only)</span>
 <span id="coderef-possibly-apply-function" class="coderef-off">        <span style="color: #709870;">(</span>possibly-apply-function<span style="color: #709870;">)</span><span style="color: #909183;">)</span> <span style="color: #d9d9d9;">;;</span> (possibly-apply-function)</span>
@@ -1367,7 +1367,7 @@ and not part of <code>cond</code>, they are also possible function calls.</li>
               <span style="color: #887070;">(</span>setq cond-predicate-action-p <span style="color: #707183;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> <span style="color: #7388d6;">(</span>car inner-lists<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span>
               <span style="color: #887070;">(</span>setq inner-lists-in-cond-form nil<span style="color: #887070;">)</span>
               <span style="color: #887070;">(</span>setq inner-lists <span style="color: #707183;">(</span>cdr inner-lists<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
-              <span style="color: #887070;">(</span>setq current-list <span style="color: #707183;">(</span>shen/get-element-at current-path ast<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+              <span style="color: #887070;">(</span>setq current-list <span style="color: #707183;">(</span>shen/internal/get-element-at current-path ast<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
               <span style="color: #887070;">(</span>setq current-index <span style="color: #333333; font-weight: bold;">0</span><span style="color: #887070;">)</span>
               <span style="color: #887070;">(</span>setq current-list-length <span style="color: #707183;">(</span>length current-list<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
 <span id="coderef-not a list" class="coderef-off">           <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>and <span style="color: #887070;">(</span>&lt; current-index current-list-length<span style="color: #887070;">)</span>              <span style="color: #d9d9d9;">;;</span> (not a list)</span>
@@ -1505,42 +1505,42 @@ instead of:
 
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/apply-function</span> <span style="color: #7388d6;">(</span>f args locally-scoped<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/apply-function</span> <span style="color: #7388d6;">(</span>f args locally-scoped<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
 <span id="coderef-higher-order function" class="coderef-off">   <span style="color: #909183;">(</span>locally-scoped       <span style="color: #d9d9d9;">;;</span> (higher-order function)</span>
-    `<span style="color: #709870;">(</span>shen/apply-higher-order-function ,f <span style="color: #907373;">(</span>list ,@args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    `<span style="color: #709870;">(</span>shen/internal/apply-higher-order-function ,f <span style="color: #907373;">(</span>list ,@args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
 <span id="coderef-a list" class="coderef-off">   <span style="color: #909183;">(</span><span style="color: #709870;">(</span>consp f<span style="color: #709870;">)</span>            <span style="color: #d9d9d9;">;;</span> (a list)</span>
-    `<span style="color: #709870;">(</span>shen/apply-function-expression ,f <span style="color: #907373;">(</span>list ,@args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    `<span style="color: #709870;">(</span>shen/internal/apply-function-expression ,f <span style="color: #907373;">(</span>list ,@args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
    <span style="color: #909183;">(</span>t
     <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>fboundp 'shen/arity<span style="color: #907373;">)</span>
-<span id="coderef-known arity" class="coderef-off">        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>arity <span style="color: #80a880;">(</span>shen/check-partial-application f <span style="color: #887070;">(</span>length args<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> <span style="color: #d9d9d9;">;;</span> (known arity)</span>
+<span id="coderef-known arity" class="coderef-off">        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>arity <span style="color: #80a880;">(</span>shen/internal/check-partial-application f <span style="color: #887070;">(</span>length args<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> <span style="color: #d9d9d9;">;;</span> (known arity)</span>
           <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>= arity <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #858580;">)</span>
               `<span style="color: #858580;">(</span>,f ,@args<span style="color: #858580;">)</span>
-          `<span style="color: #858580;">(</span>shen/apply-partially <span style="color: #80a880;">(</span>function ,f<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>list ,@args<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+          `<span style="color: #858580;">(</span>shen/internal/apply-partially <span style="color: #80a880;">(</span>function ,f<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>list ,@args<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
       `<span style="color: #907373;">(</span>,f ,@args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/apply-higher-order-function</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/apply-higher-order-function</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> apply-ex <span style="color: #909183;">(</span>apply f args<span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>'wrong-number-of-arguments
      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex
-         <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>arity <span style="color: #80a880;">(</span>shen/check-partial-application f <span style="color: #887070;">(</span>length args<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+         <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>arity <span style="color: #80a880;">(</span>shen/internal/check-partial-application f <span style="color: #887070;">(</span>length args<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
           <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>= arity <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #858580;">)</span>
               <span style="color: #858580;">(</span><span style="color: #ff0000; font-weight: bold;">signal</span> <span style="color: #80a880;">(</span>car apply-ex<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>cdr apply-ex<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-            <span style="color: #858580;">(</span>apply <span style="color: #80a880;">(</span>eval <span style="color: #887070;">(</span>shen/make-lambda-expression f arity <span style="color: #707183;">(</span>length args<span style="color: #707183;">)</span><span style="color: #887070;">)</span> 't<span style="color: #80a880;">)</span> args<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+            <span style="color: #858580;">(</span>apply <span style="color: #80a880;">(</span>eval <span style="color: #887070;">(</span>shen/internal/make-lambda-expression f arity <span style="color: #707183;">(</span>length args<span style="color: #707183;">)</span><span style="color: #887070;">)</span> 't<span style="color: #80a880;">)</span> args<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
        <span style="color: #907373;">(</span>'wrong-number-of-arguments
-        <span style="color: #6276ba;">(</span>shen/apply-incrementally f args<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+        <span style="color: #6276ba;">(</span>shen/internal/apply-incrementally f args<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/apply-function-expression</span> <span style="color: #7388d6;">(</span>exp args<span style="color: #7388d6;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/apply-function-expression</span> <span style="color: #7388d6;">(</span>exp args<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex <span style="color: #909183;">(</span>apply exp args<span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>'wrong-number-of-arguments <span style="color: #709870;">(</span>shen/apply-incrementally exp args<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+    <span style="color: #909183;">(</span>'wrong-number-of-arguments <span style="color: #709870;">(</span>shen/internal/apply-incrementally exp args<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/apply-partially</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>arity <span style="color: #907373;">(</span>shen/check-partial-application f <span style="color: #6276ba;">(</span>length args<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/apply-partially</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>arity <span style="color: #907373;">(</span>shen/internal/check-partial-application f <span style="color: #6276ba;">(</span>length args<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>= arity <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>apply f args<span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>apply <span style="color: #907373;">(</span>eval <span style="color: #6276ba;">(</span>shen/make-lambda-expression f arity <span style="color: #858580;">(</span>length args<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> 't<span style="color: #907373;">)</span> args<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+      <span style="color: #709870;">(</span>apply <span style="color: #907373;">(</span>eval <span style="color: #6276ba;">(</span>shen/internal/make-lambda-expression f arity <span style="color: #858580;">(</span>length args<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> 't<span style="color: #907373;">)</span> args<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span id="coderef-curried lambda" class="coderef-off"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/make-lambda-expression</span> <span style="color: #7388d6;">(</span>f arity num-args<span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;</span> (curried lambda)</span>
+<span id="coderef-curried lambda" class="coderef-off"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/make-lambda-expression</span> <span style="color: #7388d6;">(</span>f arity num-args<span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;</span> (curried lambda)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>all-args <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>single-apply-args<span style="color: #858580;">)</span>
                          <span style="color: #858580;">(</span>blast-apply-args<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
                      <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">dotimes</span> <span style="color: #858580;">(</span>i arity <span style="color: #80a880;">(</span>list <span style="color: #887070;">(</span>reverse blast-apply-args<span style="color: #887070;">)</span>
@@ -1558,7 +1558,7 @@ instead of:
         `<span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> ,<span style="color: #907373;">(</span>reverse blast-apply-args<span style="color: #907373;">)</span> ,expression<span style="color: #709870;">)</span>
       expression<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span id="coderef-incremental application" class="coderef-off"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/apply-incrementally</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;</span> (incremental application)</span>
+<span id="coderef-incremental application" class="coderef-off"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/apply-incrementally</span> <span style="color: #7388d6;">(</span>f args<span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;</span> (incremental application)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>result f<span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>current-args args<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">while</span> current-args
@@ -1566,8 +1566,8 @@ instead of:
       <span style="color: #709870;">(</span>setq current-args <span style="color: #907373;">(</span>cdr current-args<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     result<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/check-partial-application</span> <span style="color: #7388d6;">(</span>f num-args<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>arity <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex <span style="color: #6276ba;">(</span>shen/arity <span style="color: #858580;">(</span>shen/unprefix-symbol f<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> <span style="color: #6276ba;">(</span>'error <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/check-partial-application</span> <span style="color: #7388d6;">(</span>f num-args<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>arity <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex <span style="color: #6276ba;">(</span>shen/arity <span style="color: #858580;">(</span>shen/internal/unprefix-symbol f<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> <span style="color: #6276ba;">(</span>'error <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
      <span style="color: #709870;">(</span><span style="color: #907373;">(</span>eq <span style="color: #333333; font-weight: bold;">-1</span> arity<span style="color: #907373;">)</span> <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span><span style="color: #907373;">(</span>= arity num-args<span style="color: #907373;">)</span> <span style="color: #333333; font-weight: bold;">-1</span><span style="color: #709870;">)</span>
@@ -1622,7 +1622,7 @@ to the end of the list and continue searching.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/find-recursive-call-paths</span> <span style="color: #7388d6;">(</span>function-name args ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/find-recursive-call-paths</span> <span style="color: #7388d6;">(</span>function-name args ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>not <span style="color: #709870;">(</span>consp ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       'shen/not-found
 <span id="coderef-lists-left-to-search" class="coderef-off">    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>lists-left-to-search `<span style="color: #6276ba;">(</span><span style="color: #858580;">(</span><span style="color: #80a880;">()</span> ,ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;</span> (lists-left-to-search)</span>
@@ -1667,7 +1667,7 @@ to the end of the list and continue searching.
                        <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>predicate-action-index<span style="color: #709870;">)</span>
                          <span style="color: #709870;">(</span>list <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> predicate-action-index<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
                                <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> predicate-action-index<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-<span id="coderef-cond-filter" class="coderef-off">                       <span style="color: #909183;">(</span>shen/filter-internal  <span style="color: #d9d9d9;">;;</span> (cond-filter)</span>
+<span id="coderef-cond-filter" class="coderef-off">                       <span style="color: #909183;">(</span>shen/internal/filter  <span style="color: #d9d9d9;">;;</span> (cond-filter)</span>
                         <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>predicate-action-pair<span style="color: #907373;">)</span>
                           <span style="color: #907373;">(</span>consp <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> predicate-action-pair<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                         <span style="color: #709870;">(</span>cdr current-list<span style="color: #709870;">)</span>
@@ -1731,13 +1731,13 @@ skip it.
                            tail-call-path
                          current-from-top-path<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                  <span style="color: #858580;">(</span>setq current-from-top-path
-                       <span style="color: #80a880;">(</span>append <span style="color: #887070;">(</span>reverse <span style="color: #707183;">(</span>shen/path-slice path-left-to-tail-call <span style="color: #333333; font-weight: bold;">0</span> X<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                       <span style="color: #80a880;">(</span>append <span style="color: #887070;">(</span>reverse <span style="color: #707183;">(</span>shen/internal/path-slice path-left-to-tail-call <span style="color: #333333; font-weight: bold;">0</span> X<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
                                current-from-top-path<span style="color: #80a880;">)</span>
-                       path-left-to-tail-call <span style="color: #80a880;">(</span>shen/path-slice path-left-to-tail-call X<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                       path-left-to-tail-call <span style="color: #80a880;">(</span>shen/internal/path-slice path-left-to-tail-call X<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
 
                  <span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>equal current-from-top-path tail-call-path<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>current-list <span style="color: #80a880;">(</span>shen/get-element-at current-from-top-path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>current-list <span style="color: #80a880;">(</span>shen/internal/get-element-at current-from-top-path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                <span style="color: #858580;">(</span>current-head <span style="color: #80a880;">(</span>car current-list<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
           <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
            <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>or <span style="color: #887070;">(</span>not <span style="color: #707183;">(</span>shen/symbol-p current-head<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
@@ -1772,11 +1772,11 @@ left to do.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/get-tail-call-paths</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/get-tail-call-paths</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>function-name <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>args <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>body <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">3</span> ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-         <span style="color: #709870;">(</span>recursive-call-paths <span style="color: #907373;">(</span>shen/find-recursive-call-paths function-name args body<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+         <span style="color: #709870;">(</span>recursive-call-paths <span style="color: #907373;">(</span>shen/internal/find-recursive-call-paths function-name args body<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>eq recursive-call-paths 'shen/not-found<span style="color: #709870;">)</span>
         'shen/not-found
       <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>accum<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -1867,59 +1867,59 @@ tail call return.</li>
 </ol>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/parse-ast</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/parse-ast</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>not <span style="color: #709870;">(</span>consp ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>shen/symbol-p ast<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>list 'quote ast<span style="color: #709870;">)</span> ast<span style="color: #909183;">)</span>
-<span id="coderef-paths" class="coderef-off">   <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>function-and-symbol-paths <span style="color: #6276ba;">(</span>shen/get-function-symbol-and-funcall-paths ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;;</span> (paths)</span>
+<span id="coderef-paths" class="coderef-off">   <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>function-and-symbol-paths <span style="color: #6276ba;">(</span>shen/internal/get-function-symbol-and-funcall-paths ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;;</span> (paths)</span>
          <span style="color: #907373;">(</span>namespace-only <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> function-and-symbol-paths<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
          <span style="color: #907373;">(</span>quote-only <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> function-and-symbol-paths<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
          <span style="color: #907373;">(</span>possibly-apply-function <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> function-and-symbol-paths<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
          <span style="color: #907373;">(</span>current-ast ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
     <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-<span id="coderef-quote and namespace" class="coderef-off">      <span style="color: #907373;">(</span>shen/namespace-and-quote current-ast namespace-only quote-only<span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;;</span> (quote and namespace)</span>
-      <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>apply-function <span style="color: #80a880;">(</span>shen/filter-internal
+<span id="coderef-quote and namespace" class="coderef-off">      <span style="color: #907373;">(</span>shen/internal/namespace-and-quote current-ast namespace-only quote-only<span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;;</span> (quote and namespace)</span>
+      <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>apply-function <span style="color: #80a880;">(</span>shen/internal/filter
                              <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #707183;">(</span>path-local<span style="color: #707183;">)</span>
-                               <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>token <span style="color: #709870;">(</span>shen/get-element-at <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-local<span style="color: #907373;">)</span> ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+                               <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>token <span style="color: #709870;">(</span>shen/internal/get-element-at <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-local<span style="color: #907373;">)</span> ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
                                  <span style="color: #7388d6;">(</span>not <span style="color: #909183;">(</span>memq token shen/*primitive-macros*<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span>
                              possibly-apply-function<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
 <span id="coderef-defun form" class="coderef-off">        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>eq <span style="color: #80a880;">(</span>car current-ast<span style="color: #80a880;">)</span> 'defun<span style="color: #858580;">)</span> <span style="color: #d9d9d9;">;;;</span> (defun form)</span>
-            <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #80a880;">(</span><span style="color: #887070;">(</span>tail-call-paths <span style="color: #707183;">(</span>shen/get-tail-call-paths ast<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+            <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #80a880;">(</span><span style="color: #887070;">(</span>tail-call-paths <span style="color: #707183;">(</span>shen/internal/get-tail-call-paths ast<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
               <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #887070;">(</span>not <span style="color: #707183;">(</span>eq tail-call-paths 'shen/not-found<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
                   <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #707183;">(</span><span style="color: #7388d6;">(</span>not-in-tail-call apply-function<span style="color: #7388d6;">)</span>
                         <span style="color: #7388d6;">(</span>in-tail-call<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
                     <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
                       <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #909183;">(</span>path tail-call-paths nil<span style="color: #909183;">)</span>
 <span id="coderef-inside the recursive call" class="coderef-off">                        <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>tco-non-tco-pair <span style="color: #d9d9d9;">;;;</span> (inside the recursive call)</span>
-                                <span style="color: #6276ba;">(</span>shen/partition
+                                <span style="color: #6276ba;">(</span>shen/internal/partition
                                  <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #80a880;">(</span>apply-function-path-local<span style="color: #80a880;">)</span>
-                                   <span style="color: #80a880;">(</span>shen/starts-with-path path <span style="color: #887070;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> apply-function-path-local<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                                   <span style="color: #80a880;">(</span>shen/internal/starts-with-path path <span style="color: #887070;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> apply-function-path-local<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                                  not-in-tail-call<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
                                <span style="color: #907373;">(</span>funcalled-tco
                                 <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>normalized-paths
-                                        <span style="color: #887070;">(</span>shen/filter-internal
+                                        <span style="color: #887070;">(</span>shen/internal/filter
                                          <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #7388d6;">(</span>path-local<span style="color: #7388d6;">)</span> <span style="color: #7388d6;">(</span>not <span style="color: #909183;">(</span>equal <span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-local<span style="color: #709870;">)</span> '<span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">0</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
                                          <span style="color: #707183;">(</span>mapcar
                                           <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #909183;">(</span>in-tco-path-local<span style="color: #909183;">)</span>
                                             <span style="color: #909183;">(</span>list
-                                             <span style="color: #709870;">(</span>shen/get-path-relative-to path <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> in-tco-path-local<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+                                             <span style="color: #709870;">(</span>shen/internal/get-path-relative-to path <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> in-tco-path-local<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                                              <span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> in-tco-path-local<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
                                           <span style="color: #7388d6;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> tco-non-tco-pair<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                                       <span style="color: #80a880;">(</span>tail-call <span style="color: #887070;">(</span>shen/get-element-at path current-ast<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                                       <span style="color: #80a880;">(</span>tail-call <span style="color: #887070;">(</span>shen/internal/get-element-at path current-ast<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                                   <span style="color: #858580;">(</span>list
                                    path
-<span id="coderef-package up the arguments" class="coderef-off">                                   `<span style="color: #80a880;">(</span>vector <span style="color: #887070;">(</span>list ,@<span style="color: #707183;">(</span>cdr <span style="color: #7388d6;">(</span>shen/add-funcalls tail-call normalized-paths<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span> <span style="color: #d9d9d9;">;;;</span> (package up the arguments)</span>
+<span id="coderef-package up the arguments" class="coderef-off">                                   `<span style="color: #80a880;">(</span>vector <span style="color: #887070;">(</span>list ,@<span style="color: #707183;">(</span>cdr <span style="color: #7388d6;">(</span>shen/internal/add-funcalls tail-call normalized-paths<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span> <span style="color: #d9d9d9;">;;;</span> (package up the arguments)</span>
                           <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
                             <span style="color: #907373;">(</span>setq not-in-tail-call <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> tco-non-tco-pair<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
                             <span style="color: #907373;">(</span>push funcalled-tco in-tail-call<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
 <span id="coderef-Sub in the recurs marker" class="coderef-off">                      <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #909183;">(</span>path-tail-call in-tail-call nil<span style="color: #909183;">)</span>  <span style="color: #d9d9d9;">;;;</span> (Sub in the recurs marker)</span>
-                        <span style="color: #909183;">(</span>shen/modify-ast current-ast <span style="color: #709870;">(</span>list <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-tail-call<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+                        <span style="color: #909183;">(</span>shen/internal/modify-ast current-ast <span style="color: #709870;">(</span>list <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-tail-call<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                                          <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>path current-ast<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> path-tail-call<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
-<span id="coderef-rest of the function applications" class="coderef-off">                      <span style="color: #7388d6;">(</span>setq current-ast <span style="color: #909183;">(</span>shen/add-funcalls current-ast not-in-tail-call<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;;</span> (rest of the function applications)</span>
+<span id="coderef-rest of the function applications" class="coderef-off">                      <span style="color: #7388d6;">(</span>setq current-ast <span style="color: #909183;">(</span>shen/internal/add-funcalls current-ast not-in-tail-call<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;;</span> (rest of the function applications)</span>
 <span id="coderef-write out the defun" class="coderef-off">                      <span style="color: #7388d6;">(</span>setq current-ast `<span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> ,<span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> current-ast<span style="color: #709870;">)</span> ,<span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> current-ast<span style="color: #709870;">)</span> ,<span style="color: #709870;">(</span>shen/trampoline-body current-ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span> <span style="color: #d9d9d9;">;;;</span> (write out the defun)</span>
-                <span style="color: #887070;">(</span>setq current-ast <span style="color: #707183;">(</span>shen/add-funcalls current-ast apply-function<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+                <span style="color: #887070;">(</span>setq current-ast <span style="color: #707183;">(</span>shen/internal/add-funcalls current-ast apply-function<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
               current-ast<span style="color: #858580;">)</span>
           <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-            <span style="color: #80a880;">(</span>setq current-ast <span style="color: #887070;">(</span>shen/add-funcalls current-ast apply-function<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+            <span style="color: #80a880;">(</span>setq current-ast <span style="color: #887070;">(</span>shen/internal/add-funcalls current-ast apply-function<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
             current-ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -1929,17 +1929,17 @@ To support the above transformation we need functions the namespace and quote th
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/namespace-and-quote</span> <span style="color: #7388d6;">(</span>ast namespace-only-paths quote-only-paths<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/namespace-and-quote</span> <span style="color: #7388d6;">(</span>ast namespace-only-paths quote-only-paths<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-    <span style="color: #909183;">(</span>shen/modify-ast ast namespace-only-paths
+    <span style="color: #909183;">(</span>shen/internal/modify-ast ast namespace-only-paths
                      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>path ast<span style="color: #907373;">)</span>
-                       <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>element <span style="color: #80a880;">(</span>shen/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-                         <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>not <span style="color: #80a880;">(</span>shen/symbol-prefixed-p element<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-                             <span style="color: #858580;">(</span>shen/prefix-symbol <span style="color: #80a880;">(</span>shen/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                       <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>element <span style="color: #80a880;">(</span>shen/internal/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                         <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>not <span style="color: #80a880;">(</span>shen/internal/symbol-prefixed-p element<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                             <span style="color: #858580;">(</span>shen/internal/prefix-symbol <span style="color: #80a880;">(</span>shen/internal/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                            element<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>shen/modify-ast ast quote-only-paths
+    <span style="color: #909183;">(</span>shen/internal/modify-ast ast quote-only-paths
                      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>path ast<span style="color: #907373;">)</span>
-                       <span style="color: #907373;">(</span>list 'quote <span style="color: #6276ba;">(</span>shen/get-element-at path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+                       <span style="color: #907373;">(</span>list 'quote <span style="color: #6276ba;">(</span>shen/internal/get-element-at path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     ast<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -1949,17 +1949,17 @@ To support the above transformation we need functions the namespace and quote th
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/add-funcalls</span> <span style="color: #7388d6;">(</span>ast apply-function<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/add-funcalls</span> <span style="color: #7388d6;">(</span>ast apply-function<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>paths-only <span style="color: #907373;">(</span>mapcar <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>path-local<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> path-local<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> apply-function<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>shen/modify-ast ast <span style="color: #709870;">(</span>mapcar #'shen/get-path-parent paths-only<span style="color: #709870;">)</span>
+    <span style="color: #909183;">(</span>shen/internal/modify-ast ast <span style="color: #709870;">(</span>mapcar #'shen/internal/get-path-parent paths-only<span style="color: #709870;">)</span>
                      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>path ast<span style="color: #907373;">)</span>
-                       <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>current-funcalled-list <span style="color: #80a880;">(</span>shen/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                       <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>current-funcalled-list <span style="color: #80a880;">(</span>shen/internal/get-element-at path ast<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                               <span style="color: #858580;">(</span>function-name <span style="color: #80a880;">(</span>car current-funcalled-list<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                               <span style="color: #858580;">(</span>function-arguments <span style="color: #80a880;">(</span>cdr current-funcalled-list<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-                         <span style="color: #6276ba;">(</span>shen/apply-function
+                         <span style="color: #6276ba;">(</span>shen/internal/apply-function
                           function-name
                           function-arguments
-                          <span style="color: #858580;">(</span>shen/lookup-with-default <span style="color: #80a880;">(</span>cons <span style="color: #333333; font-weight: bold;">0</span> path<span style="color: #80a880;">)</span> apply-function nil<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                          <span style="color: #858580;">(</span>shen/internal/lookup-with-default <span style="color: #80a880;">(</span>cons <span style="color: #333333; font-weight: bold;">0</span> path<span style="color: #80a880;">)</span> apply-function nil<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -1975,20 +1975,20 @@ so these functions are unused for now.
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/make-holed-context</span> <span style="color: #7388d6;">(</span>tail-call-path function-chain-path ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>function-chain <span style="color: #907373;">(</span>shen/get-element-at function-chain-path ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-         <span style="color: #709870;">(</span>tail-call <span style="color: #907373;">(</span>shen/get-element-at tail-call-path ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>function-chain <span style="color: #907373;">(</span>shen/internal/get-element-at function-chain-path ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>tail-call <span style="color: #907373;">(</span>shen/internal/get-element-at tail-call-path ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>tail-call-relative-path
-          <span style="color: #907373;">(</span>shen/path-slice tail-call-path <span style="color: #333333; font-weight: bold;">0</span>
+          <span style="color: #907373;">(</span>shen/internal/path-slice tail-call-path <span style="color: #333333; font-weight: bold;">0</span>
                   <span style="color: #6276ba;">(</span>- <span style="color: #858580;">(</span>length tail-call-path<span style="color: #858580;">)</span>
                      <span style="color: #858580;">(</span>length function-chain-path<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>shen/nset-element-at tail-call-relative-path function-chain 'shen/__hole__<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+    <span style="color: #909183;">(</span>shen/internal/nset-element-at tail-call-relative-path function-chain 'shen/__hole__<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/used-in-context</span> <span style="color: #7388d6;">(</span>context locally-scoped<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span>mapcar <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>symbol-index-pair<span style="color: #709870;">)</span>
             <span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> symbol-index-pair<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-          <span style="color: #909183;">(</span>shen/filter-internal
+          <span style="color: #909183;">(</span>shen/internal/filter
            <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>v<span style="color: #907373;">)</span>
-             <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>eq 'shen/not-found <span style="color: #858580;">(</span>shen/find-all v context<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+             <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>eq 'shen/not-found <span style="color: #858580;">(</span>shen/internal/find-all v context<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
            locally-scoped
            't<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
@@ -1997,10 +1997,10 @@ so these functions are unused for now.
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #709870;">(</span>locally-scoped-pair locally-scoped-alist current-context<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>name <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> locally-scoped-pair<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
              <span style="color: #6276ba;">(</span>value <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> locally-scoped-pair<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-             <span style="color: #6276ba;">(</span>all-matching-paths <span style="color: #858580;">(</span>shen/find-all name current-context<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+             <span style="color: #6276ba;">(</span>all-matching-paths <span style="color: #858580;">(</span>shen/internal/find-all name current-context<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #6276ba;">(</span>not <span style="color: #858580;">(</span>eq all-matching-paths 'shen/not-found<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
             <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #858580;">(</span>path all-matching-paths nil<span style="color: #858580;">)</span>
-              <span style="color: #858580;">(</span>shen/nset-element-at path current-context value<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+              <span style="color: #858580;">(</span>shen/internal/nset-element-at path current-context value<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -2025,12 +2025,12 @@ A generic function that takes <code>matcher-fn</code> which finds these chains, 
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/consolidate</span> <span style="color: #7388d6;">(</span>ast matcher-fn collector-fn tx-fn<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/consolidate</span> <span style="color: #7388d6;">(</span>ast matcher-fn collector-fn tx-fn<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>current-ast ast<span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>location-containing-chain
-          <span style="color: #907373;">(</span>shen/list-containing-first-occurrence-of matcher-fn ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+          <span style="color: #907373;">(</span>shen/internal/list-containing-first-occurrence-of matcher-fn ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #709870;">(</span>not <span style="color: #907373;">(</span>eq location-containing-chain 'shen/not-found<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>current-chain <span style="color: #858580;">(</span>shen/get-element-at location-containing-chain current-ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>current-chain <span style="color: #858580;">(</span>shen/internal/get-element-at location-containing-chain current-ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
             <span style="color: #6276ba;">(</span>accum<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
           <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #858580;">(</span>funcall matcher-fn current-chain<span style="color: #858580;">)</span>
@@ -2038,12 +2038,12 @@ A generic function that takes <code>matcher-fn</code> which finds these chains, 
               <span style="color: #80a880;">(</span>setq accum <span style="color: #887070;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> collected<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
               <span style="color: #80a880;">(</span>setq current-chain <span style="color: #887070;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> collected<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
           <span style="color: #6276ba;">(</span>setq current-ast
-                <span style="color: #858580;">(</span>shen/nset-element-at
+                <span style="color: #858580;">(</span>shen/internal/nset-element-at
                  location-containing-chain
                  current-ast
                  <span style="color: #80a880;">(</span>funcall tx-fn accum current-chain<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
           <span style="color: #6276ba;">(</span>setq location-containing-chain
-                <span style="color: #858580;">(</span>shen/list-containing-first-occurrence-of matcher-fn current-ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+                <span style="color: #858580;">(</span>shen/internal/list-containing-first-occurrence-of matcher-fn current-ast<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     current-ast<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -2057,8 +2057,8 @@ Convert <code>(cons a (cons b (blah)))</code> into <code>(append (list 'a 'b) (b
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/consolidate-cons</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/consolidate
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/consolidate-cons</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/consolidate
    ast
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>current-list<span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span>and current-list
@@ -2084,8 +2084,8 @@ Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b"
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/consolidate-@s</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/consolidate
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/consolidate-@s</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/consolidate
    ast
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>current-list<span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span>and current-list
@@ -2107,8 +2107,8 @@ Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b"
 <div class="outline-text-3" id="text-5-4">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/consolidate-tl</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/consolidate
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/consolidate-tl</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/consolidate
    ast
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>current-list<span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span>and current-list
@@ -2133,8 +2133,8 @@ Rewrite <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/add-1+</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/consolidate
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/add-1+</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/consolidate
    ast
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>current-list<span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span>and current-list
@@ -2158,8 +2158,8 @@ Rewrite <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
 <div class="outline-text-3" id="text-5-6">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/nil-to-null</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/consolidate
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/nil-to-null</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/consolidate
    ast
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>current-list<span style="color: #709870;">)</span>
      <span style="color: #709870;">(</span>and current-list
@@ -2189,12 +2189,12 @@ converting KLambda to Elisp is just a couple of function calls.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/kl-to-elisp</span> <span style="color: #7388d6;">(</span>Kl<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span>shen/nil-to-null
-   <span style="color: #909183;">(</span>shen/add-1+
-    <span style="color: #709870;">(</span>shen/consolidate-tl
-     <span style="color: #907373;">(</span>shen/consolidate-@s
-      <span style="color: #6276ba;">(</span>shen/consolidate-cons <span style="color: #858580;">(</span>shen/parse-ast Kl<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/kl-to-elisp</span> <span style="color: #7388d6;">(</span>Kl<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span>shen/internal/nil-to-null
+   <span style="color: #909183;">(</span>shen/internal/add-1+
+    <span style="color: #709870;">(</span>shen/internal/consolidate-tl
+     <span style="color: #907373;">(</span>shen/internal/consolidate-@s
+      <span style="color: #6276ba;">(</span>shen/internal/consolidate-cons <span style="color: #858580;">(</span>shen/internal/parse-ast Kl<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 
@@ -2209,9 +2209,9 @@ source for introspecting, profiling and tracking.
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/eval-kl</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>and <span style="color: #709870;">(</span>consp X<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>eq <span style="color: #907373;">(</span>car X<span style="color: #907373;">)</span> 'defun<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-        <span style="color: #709870;">(</span>byte-compile <span style="color: #907373;">(</span>eval <span style="color: #6276ba;">(</span>shen/kl-to-elisp <span style="color: #858580;">(</span>copy-tree X<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> 't<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+        <span style="color: #709870;">(</span>byte-compile <span style="color: #907373;">(</span>eval <span style="color: #6276ba;">(</span>shen/internal/kl-to-elisp <span style="color: #858580;">(</span>copy-tree X<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> 't<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
         <span style="color: #709870;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> X<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>eval <span style="color: #709870;">(</span>shen/kl-to-elisp X<span style="color: #709870;">)</span> 't<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+    <span style="color: #909183;">(</span>eval <span style="color: #709870;">(</span>shen/internal/kl-to-elisp X<span style="color: #709870;">)</span> 't<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -2250,7 +2250,7 @@ There are three types of overrides, those which:
         <span style="color: #909183;">(</span>puthash 'map
                  `<span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/map</span> <span style="color: #907373;">(</span>F Xs<span style="color: #907373;">)</span>
                     <span style="color: #907373;">(</span>mapcar <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>X<span style="color: #858580;">)</span>
-                              <span style="color: #858580;">(</span>shen/apply-higher-order-function F <span style="color: #80a880;">(</span>list X<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                              <span style="color: #858580;">(</span>shen/internal/apply-higher-order-function F <span style="color: #80a880;">(</span>list X<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
                             Xs<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                  table<span style="color: #909183;">)</span>
         <span style="color: #909183;">(</span>puthash 'shen.lazyderef
@@ -2346,14 +2346,14 @@ There are three types of overrides, those which:
         <span style="color: #909183;">(</span>puthash 'function
                  `<span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/function</span> <span style="color: #907373;">(</span>S<span style="color: #907373;">)</span>
                     <span style="color: #907373;">(</span>shen/shen\.lookup-func
-                     <span style="color: #6276ba;">(</span>shen/unprefix-symbol S<span style="color: #6276ba;">)</span>
+                     <span style="color: #6276ba;">(</span>shen/internal/unprefix-symbol S<span style="color: #6276ba;">)</span>
                      <span style="color: #6276ba;">(</span>shen/value 'shen\.*symbol-table*<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                  table<span style="color: #909183;">)</span>
 <span id="coderef-klambda bugs" class="coderef-off">        <span style="color: #d9d9d9;">;;</span> (klambda bugs)</span>
         <span style="color: #909183;">(</span>puthash 'untrack
                  `<span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/untrack</span> <span style="color: #907373;">(</span>F<span style="color: #907373;">)</span>
                     <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-                      <span style="color: #6276ba;">(</span>shen/set 'shen.*tracking* <span style="color: #858580;">(</span>shen/delete-first-eq F <span style="color: #80a880;">(</span>shen/value 'shen.*tracking*<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                      <span style="color: #6276ba;">(</span>shen/set 'shen.*tracking* <span style="color: #858580;">(</span>shen/internal/delete-first-eq F <span style="color: #80a880;">(</span>shen/value 'shen.*tracking*<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
                       <span style="color: #6276ba;">(</span>shen/eval <span style="color: #858580;">(</span>shen/ps F<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
                  table<span style="color: #909183;">)</span>
         table<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
@@ -2375,10 +2375,10 @@ incoming code with overrides before parsing the AST:
  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>eq <span style="color: #709870;">(</span>car ast<span style="color: #709870;">)</span> 'defun<span style="color: #909183;">)</span>
        <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>override <span style="color: #6276ba;">(</span>gethash <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> ast<span style="color: #858580;">)</span> shen/*overrides*<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>or override
-             <span style="color: #907373;">(</span>shen/parse-ast ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+             <span style="color: #907373;">(</span>shen/internal/parse-ast ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
      <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>patched <span style="color: #6276ba;">(</span>gethash ast shen/*overrides* <span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
        <span style="color: #709870;">(</span>or patched
-           <span style="color: #907373;">(</span>shen/parse-ast ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+           <span style="color: #907373;">(</span>shen/internal/parse-ast ast<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 
@@ -2389,11 +2389,11 @@ incoming code with overrides before parsing the AST:
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">save-excursion</span>
       <span style="color: #709870;">(</span>goto-char <span style="color: #907373;">(</span>point-max<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>pp-to-string
-               <span style="color: #6276ba;">(</span>shen/nil-to-null
-                <span style="color: #858580;">(</span>shen/add-1+
-                 <span style="color: #80a880;">(</span>shen/consolidate-tl
-                  <span style="color: #887070;">(</span>shen/consolidate-@s
-                   <span style="color: #707183;">(</span>shen/consolidate-cons
+               <span style="color: #6276ba;">(</span>shen/internal/nil-to-null
+                <span style="color: #858580;">(</span>shen/internal/add-1+
+                 <span style="color: #80a880;">(</span>shen/internal/consolidate-tl
+                  <span style="color: #887070;">(</span>shen/internal/consolidate-@s
+                   <span style="color: #707183;">(</span>shen/internal/consolidate-cons
                     <span style="color: #7388d6;">(</span>shen/patch-klambda X<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
@@ -2936,10 +2936,10 @@ original spellings:
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/put-reserved-elisp-chars-back</span> <span style="color: #7388d6;">(</span>sexp<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>symbols <span style="color: #907373;">(</span>shen/find-symbols sexp<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>shen/modify-ast sexp
+    <span style="color: #909183;">(</span>shen/internal/modify-ast sexp
                      symbols
                      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>path ast<span style="color: #907373;">)</span>
-                       <span style="color: #907373;">(</span>shen/change-back <span style="color: #6276ba;">(</span>shen/get-element-at path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                       <span style="color: #907373;">(</span>shen/change-back <span style="color: #6276ba;">(</span>shen/internal/get-element-at path ast<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 
@@ -2961,7 +2961,7 @@ spelling with the original character:
          <span style="color: #709870;">(</span>spellings <span style="color: #907373;">(</span>hash-table-keys spelling-&gt;character<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>get-character-and-remaining
           <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #6276ba;">(</span>S<span style="color: #6276ba;">)</span>
-            <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>found-at-index <span style="color: #887070;">(</span>shen/index-of <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #7388d6;">(</span>spelling<span style="color: #7388d6;">)</span> <span style="color: #7388d6;">(</span>string-prefix-p spelling S<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span> spellings<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+            <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>found-at-index <span style="color: #887070;">(</span>shen/internal/index-of <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #7388d6;">(</span>spelling<span style="color: #7388d6;">)</span> <span style="color: #7388d6;">(</span>string-prefix-p spelling S<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span> spellings<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
               <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">if</span> found-at-index
                   <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #887070;">(</span><span style="color: #707183;">(</span>spelling <span style="color: #7388d6;">(</span>nth found-at-index spellings<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span>
                     <span style="color: #887070;">(</span>list <span style="color: #707183;">(</span>string <span style="color: #7388d6;">(</span>gethash spelling spelling-&gt;character<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
@@ -2997,7 +2997,7 @@ And a function that collects paths to all symbols in an s-expression:
         <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
           <span style="color: #858580;">(</span>setq current-path <span style="color: #80a880;">(</span>car inner-lists<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
           <span style="color: #858580;">(</span>setq inner-lists <span style="color: #80a880;">(</span>cdr inner-lists<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-          <span style="color: #858580;">(</span>setq current-list <span style="color: #80a880;">(</span>shen/get-element-at current-path sexp<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+          <span style="color: #858580;">(</span>setq current-list <span style="color: #80a880;">(</span>shen/internal/get-element-at current-path sexp<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
           <span style="color: #858580;">(</span>setq current-index <span style="color: #333333; font-weight: bold;">0</span><span style="color: #858580;">)</span>
           <span style="color: #858580;">(</span>setq current-list-length <span style="color: #80a880;">(</span>length current-list<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
        <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>&lt; current-index current-list-length<span style="color: #6276ba;">)</span>
