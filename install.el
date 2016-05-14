@@ -203,6 +203,7 @@
     (compile-and-load "install.el")
     (eval-klambda-files *klambda-files*)
     (compile-and-load "shen.el")
+    (compile-and-load "shen-overlays.el")
     (compile-and-load "shen-repl.el")
     (add-to-load-path default-directory)
     (shen/repl)))

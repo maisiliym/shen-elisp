@@ -4,6 +4,7 @@
 (require 'comint)
 (require 'shen-primitives)
 (require 'shen)
+(require 'shen-overlays)
 ;; Shen\ REPL:2 ends here
 
 ;; [[file:shen-elisp.org::*Credits][Credits:1]]
@@ -64,7 +65,7 @@
       (goto-char (point-max)))))
 ;; Input\ Events:1 ends here
 
-;; [[file:shen-elisp.org::*EvaluaTing%20User%20Input][EvaluaTing\ User\ Input:1]]
+;; [[file:shen-elisp.org::*Evaluating%20User%20Input][Evaluating\ User\ Input:1]]
 (defun shen/repl-standard-output-impl (process)
   (let* ((output-buffer nil)
          (flush-timer nil)
@@ -89,9 +90,9 @@
             (funcall flush-buffer)
           (unless flush-timer
             (setf flush-timer (run-with-timer 0.1 nil flush-buffer))))))))
-;; EvaluaTing\ User\ Input:1 ends here
+;; Evaluating\ User\ Input:1 ends here
 
-;; [[file:shen-elisp.org::*EvaluaTing%20User%20Input][EvaluaTing\ User\ Input:2]]
+;; [[file:shen-elisp.org::*Evaluating%20User%20Input][Evaluating\ User\ Input:2]]
 (defun shen/repl-process nil
   ;; Return the current buffer's process.
   (get-buffer-process (current-buffer)))
@@ -122,7 +123,7 @@
          (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
          (funcall (shen/value '*stoutput*) t)
          (shen/set '*stoutput* standard-output))))))
-;; EvaluaTing\ User\ Input:2 ends here
+;; Evaluating\ User\ Input:2 ends here
 
 ;; [[file:shen-elisp.org::*The%20REPL%20Mode][The\ REPL\ Mode:1]]
 (defconst shen/syntax-table
@@ -168,54 +169,6 @@
 (defconst *shen-repl* "*shen-repl*")
 ;; The\ REPL\ Mode:1 ends here
 
-;; [[file:shen-elisp.org::*REPL%20Questions][REPL\ Questions:1]]
-(defun shen/y-or-n? (S)
-  (progn
-    (shen/shen.prhush (shen/shen.proc-nl S) (shen/stoutput))
-    (let ((Input (format "%s" (read-from-minibuffer " (y/n) " ))))
-      (cond
-       ((string-equal Input "y") 'true)
-       ((string-equal Input "n") 'false)
-       (t (progn
-            (shen/shen.prhush  "please answer y or n~%" (shen/stoutput))
-            (shen/y-or-n? S)))))))
-
-(defun shen/shen.pause-for-user nil
-  (let ((Byte (read-from-minibuffer "")))
-    (if (and (= 1 (length Byte)) (= (string-to-char Byte) ?^))
-        (shen/error "input aborted~%")
-      (shen/shen.nl))))
-;; REPL\ Questions:1 ends here
-
-;; [[file:shen-elisp.org::*The%20Symbol%20Table][The\ Symbol\ Table:1]]
-(defun shen/migrate-symbol-table ()
-  (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
-    (if (not (hash-table-p SymbolTable))
-        (let ((NewTable (make-hash-table)))
-          (dolist (Entry SymbolTable NewTable)
-            (puthash (car Entry) (cdr Entry) NewTable))
-          (shen/set 'shen.*symbol-table* NewTable))
-      SymbolTable)))
-;; The\ Symbol\ Table:1 ends here
-
-;; [[file:shen-elisp.org::*The%20Symbol%20Table][The\ Symbol\ Table:2]]
-(defun shen/shen.lookup-func
-    (Name Table)
-  (let ((Form (gethash Name Table)))
-    (if (not Form)
-        (shen/simple-error
-         (shen/app Name " has no lambda expansion\n" 'shen.a))
-      Form)))
-
-(defun shen/shen.update-symbol-table
-    (Name Arity)
-  (let ((lambda-function
-         (shen/eval-kl
-          (shen/shen.lambda-form Name Arity))))
-    (puthash Name lambda-function (shen/value 'shen.*symbol-table*))
-    (shen/value 'shen.*symbol-table*)))
-;; The\ Symbol\ Table:2 ends here
-
 ;; [[file:shen-elisp.org::*Starting%20the%20REPL][Starting\ the\ REPL:1]]
 ;;;###autoload
 (defun shen/repl nil
@@ -224,9 +177,10 @@
     (unless (get-buffer *shen-repl*)
       (with-current-buffer (get-buffer-create *shen-repl*)
         (make-local-variable 'lexical-binding)
-        (shen/migrate-symbol-table)
         (load "shen-primitives.elc")
         (load "shen.elc")
+        (load "shen-overlays.elc")
+        (shen/migrate-symbol-table)
         (setq lexical-binding 't)
         (shen/set 'shen.*history* '())
         (shen/set '*home-directory* "")

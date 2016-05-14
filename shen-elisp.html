@@ -215,31 +215,37 @@ for the JavaScript code in this tag.
 </ul>
 </li>
 <li><a href="#orgheadline53">7. Providing The Primitives</a></li>
-<li><a href="#orgheadline20">8. Shen REPL</a>
+<li><a href="#orgheadline59">8. Overlays</a>
 <ul>
-<li><a href="#orgheadline54">8.1. Credits</a></li>
-<li><a href="#orgheadline55">8.2. Prompt</a></li>
-<li><a href="#orgheadline56">8.3. Input Events</a></li>
-<li><a href="#orgheadline57">8.4. EvaluaTing User Input</a></li>
-<li><a href="#orgheadline58">8.5. The REPL Mode</a></li>
-<li><a href="#orgheadline61">8.6. Overlays</a>
+<li><a href="#orgheadline54">8.1. Symbol Table</a></li>
+<li><a href="#orgheadline57">8.2. Repl</a>
 <ul>
-<li><a href="#orgheadline59">8.6.1. REPL Questions</a></li>
-<li><a href="#orgheadline60">8.6.2. The Symbol Table</a></li>
+<li><a href="#orgheadline55">8.2.1. Questions</a></li>
+<li><a href="#orgheadline56">8.2.2. Changing Directories</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline62">8.7. Starting the REPL</a></li>
-<li><a href="#orgheadline63">8.8. Provide it</a></li>
+<li><a href="#orgheadline58">8.3. Provide it</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline67">9. Bootstrap</a>
+<li><a href="#orgheadline20">9. Shen REPL</a>
 <ul>
-<li><a href="#orgheadline64">9.1. Collecting KLambda files</a></li>
-<li><a href="#orgheadline65">9.2. Modifying The Elisp Reader For KLambda</a></li>
-<li><a href="#orgheadline66">9.3. Iterating over KLambda Files</a></li>
+<li><a href="#orgheadline60">9.1. Credits</a></li>
+<li><a href="#orgheadline61">9.2. Prompt</a></li>
+<li><a href="#orgheadline62">9.3. Input Events</a></li>
+<li><a href="#orgheadline63">9.4. Evaluating User Input</a></li>
+<li><a href="#orgheadline64">9.5. The REPL Mode</a></li>
+<li><a href="#orgheadline65">9.6. Starting the REPL</a></li>
+<li><a href="#orgheadline66">9.7. Provide it</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline68">10. The Runner</a></li>
+<li><a href="#orgheadline70">10. Bootstrap</a>
+<ul>
+<li><a href="#orgheadline67">10.1. Collecting KLambda files</a></li>
+<li><a href="#orgheadline68">10.2. Modifying The Elisp Reader For KLambda</a></li>
+<li><a href="#orgheadline69">10.3. Iterating over KLambda Files</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline71">11. The Runner</a></li>
 </ul>
 </div>
 </div>
@@ -886,7 +892,7 @@ a Shen program.</li>
 
 <p>
 A further bit of weirdness is that <code>write-byte</code> switches on a <a href="#coderef-write-byte-function"class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-write-byte-function');" onmouseout="CodeHighlightOff(this, 'coderef-write-byte-function');">function</a>. This is because
-when writing out to the <a href="#orgheadline20">8</a> requires calling a function with the character.
+when writing out to the <a href="#orgheadline20">9</a> requires calling a function with the character.
 </p>
 <div class="org-src-container">
 
@@ -2412,9 +2418,137 @@ incoming code with overrides before parsing the AST:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline20" class="outline-2">
-<h2 id="orgheadline20"><span class="section-number-2">8</span> Shen REPL</h2>
+<div id="outline-container-orgheadline59" class="outline-2">
+<h2 id="orgheadline59"><span class="section-number-2">8</span> Overlays</h2>
 <div class="outline-text-2" id="text-8">
+<p>
+Override of some of Shen's default implementations.
+</p>
+</div>
+<div id="outline-container-orgheadline54" class="outline-3">
+<h3 id="orgheadline54"><span class="section-number-3">8.1</span> Symbol Table</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+The Shen runtime maintains a ~*symbol-table* which is a mapping of all generated and
+native functions to their partially applied lambda form.
+</p>
+
+<p>
+The bootstrapped KLambda code uses simple alists which are inefficient and since
+this structure has to be consulted thousands of times (especially while
+typechecking), the KLambda provided implemenatation really slows everything
+down so we need to migrate to a hash-table.
+</p>
+
+<p>
+Additionally the bootstrap KLambda files actually fills up this structure with
+some initial content for core functions and datatypes so they need to be migrated:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/migrate-symbol-table</span> <span style="color: #7388d6;">()</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>SymbolTable <span style="color: #907373;">(</span>shen/value 'shen.*symbol-table*<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>not <span style="color: #907373;">(</span>hash-table-p SymbolTable<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+        <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>NewTable <span style="color: #858580;">(</span>make-hash-table<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+          <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #6276ba;">(</span>Entry SymbolTable NewTable<span style="color: #6276ba;">)</span>
+            <span style="color: #6276ba;">(</span>puthash <span style="color: #858580;">(</span>car Entry<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>cdr Entry<span style="color: #858580;">)</span> NewTable<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+          <span style="color: #907373;">(</span>shen/set 'shen.*symbol-table* NewTable<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      SymbolTable<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+
+<p>
+And then the routines that find and add entries to the symbol table need to be
+re-implemented:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.lookup-func</span>
+    <span style="color: #7388d6;">(</span>Name Table<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Form <span style="color: #907373;">(</span>gethash Name Table<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>not Form<span style="color: #709870;">)</span>
+        <span style="color: #709870;">(</span>shen/simple-error
+         <span style="color: #907373;">(</span>shen/app Name <span style="color: #666666;">" has no lambda expansion\n"</span> 'shen.a<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      Form<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.update-symbol-table</span>
+    <span style="color: #7388d6;">(</span>Name Arity<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>lambda-function
+         <span style="color: #907373;">(</span>shen/eval-kl
+          <span style="color: #6276ba;">(</span>shen/shen.lambda-form Name Arity<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span>puthash Name lambda-function <span style="color: #709870;">(</span>shen/value 'shen.*symbol-table*<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span>shen/value 'shen.*symbol-table*<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline57" class="outline-3">
+<h3 id="orgheadline57"><span class="section-number-3">8.2</span> Repl</h3>
+<div class="outline-text-3" id="text-8-2">
+</div><div id="outline-container-orgheadline55" class="outline-4">
+<h4 id="orgheadline55"><span class="section-number-4">8.2.1</span> Questions</h4>
+<div class="outline-text-4" id="text-8-2-1">
+<p>
+Overlay the routines that take input from the user in the REPL session to use the mini-buffer
+</p>
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/y-or-n?</span> <span style="color: #7388d6;">(</span>S<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+    <span style="color: #909183;">(</span>shen/shen.prhush <span style="color: #709870;">(</span>shen/shen.proc-nl S<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>shen/stoutput<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>Input <span style="color: #6276ba;">(</span>format <span style="color: #666666;">"%s"</span> <span style="color: #858580;">(</span>read-from-minibuffer <span style="color: #666666;">" (y/n) "</span> <span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
+       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>string-equal Input <span style="color: #666666;">"y"</span><span style="color: #6276ba;">)</span> 'true<span style="color: #907373;">)</span>
+       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>string-equal Input <span style="color: #666666;">"n"</span><span style="color: #6276ba;">)</span> 'false<span style="color: #907373;">)</span>
+       <span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+            <span style="color: #858580;">(</span>shen/shen.prhush  <span style="color: #666666;">"please answer y or n~%"</span> <span style="color: #80a880;">(</span>shen/stoutput<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+            <span style="color: #858580;">(</span>shen/y-or-n? S<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.pause-for-user</span> nil
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Byte <span style="color: #907373;">(</span>read-from-minibuffer <span style="color: #666666;">""</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>= <span style="color: #333333; font-weight: bold;">1</span> <span style="color: #6276ba;">(</span>length Byte<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #907373;">(</span>= <span style="color: #6276ba;">(</span>string-to-char Byte<span style="color: #6276ba;">)</span> ?^<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+        <span style="color: #709870;">(</span>shen/error <span style="color: #666666;">"input aborted~%"</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span>shen/shen.nl<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline56" class="outline-4">
+<h4 id="orgheadline56"><span class="section-number-4">8.2.2</span> Changing Directories</h4>
+<div class="outline-text-4" id="text-8-2-2">
+<p>
+When changing directories in the REPL, for convenience, also change Emacs' working directory.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/cd</span> <span style="color: #7388d6;">(</span>Path<span style="color: #7388d6;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>shen/shen-&gt;predicate <span style="color: #709870;">(</span>shen/= Path <span style="color: #666666;">""</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+      <span style="color: #909183;">(</span>shen/set '*home-directory* <span style="color: #666666;">""</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>PathString <span style="color: #6276ba;">(</span>concat Path <span style="color: #666666;">"/"</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+        <span style="color: #907373;">(</span>setq default-directory PathString<span style="color: #907373;">)</span>
+        <span style="color: #907373;">(</span>shen/set '*home-directory* PathString<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      PathString<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline58" class="outline-3">
+<h3 id="orgheadline58"><span class="section-number-3">8.3</span> Provide it</h3>
+<div class="outline-text-3" id="text-8-3">
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">provide</span> '<span style="color: #333333; font-weight: bold;">shen-overlays</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline20" class="outline-2">
+<h2 id="orgheadline20"><span class="section-number-2">9</span> Shen REPL</h2>
+<div class="outline-text-2" id="text-9">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #d9d9d9;">;; </span><span style="color: #7f7f7f;">-*- lexical-binding: t -*-</span>
@@ -2426,12 +2560,13 @@ incoming code with overrides before parsing the AST:
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">require</span> '<span style="color: #333333; font-weight: bold;">comint</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">require</span> '<span style="color: #333333; font-weight: bold;">shen-primitives</span><span style="color: #707183;">)</span>
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">require</span> '<span style="color: #333333; font-weight: bold;">shen</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">require</span> '<span style="color: #333333; font-weight: bold;">shen-overlays</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
-<div id="outline-container-orgheadline54" class="outline-3">
-<h3 id="orgheadline54"><span class="section-number-3">8.1</span> Credits</h3>
-<div class="outline-text-3" id="text-8-1">
+<div id="outline-container-orgheadline60" class="outline-3">
+<h3 id="orgheadline60"><span class="section-number-3">9.1</span> Credits</h3>
+<div class="outline-text-3" id="text-9-1">
 <p>
 The credits that appear at the top of each REPL session.
 </p>
@@ -2448,9 +2583,9 @@ The credits that appear at the top of each REPL session.
 </div>
 </div>
 
-<div id="outline-container-orgheadline55" class="outline-3">
-<h3 id="orgheadline55"><span class="section-number-3">8.2</span> Prompt</h3>
-<div class="outline-text-3" id="text-8-2">
+<div id="outline-container-orgheadline61" class="outline-3">
+<h3 id="orgheadline61"><span class="section-number-3">9.2</span> Prompt</h3>
+<div class="outline-text-3" id="text-9-2">
 <p>
 The Shen REPL prompt looks like <code>(0-)</code> and <code>(100+)</code> where the number is a
 counter of the number of REPL interactions so far and the <code>-</code> and <code>+</code> indicate
@@ -2488,9 +2623,9 @@ and make them:
 </div>
 </div>
 
-<div id="outline-container-orgheadline56" class="outline-3">
-<h3 id="orgheadline56"><span class="section-number-3">8.3</span> Input Events</h3>
-<div class="outline-text-3" id="text-8-3">
+<div id="outline-container-orgheadline62" class="outline-3">
+<h3 id="orgheadline62"><span class="section-number-3">9.3</span> Input Events</h3>
+<div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defvar</span> <span style="color: #333333;">shen/repl-map</span>
@@ -2525,9 +2660,9 @@ and make them:
 </div>
 </div>
 
-<div id="outline-container-orgheadline57" class="outline-3">
-<h3 id="orgheadline57"><span class="section-number-3">8.4</span> EvaluaTing User Input</h3>
-<div class="outline-text-3" id="text-8-4">
+<div id="outline-container-orgheadline63" class="outline-3">
+<h3 id="orgheadline63"><span class="section-number-3">9.4</span> Evaluating User Input</h3>
+<div class="outline-text-3" id="text-9-4">
 <p>
 The following is a cut-and-paste of <code>ielm-standard-output-impl</code> which apparently
 does not exist in older versions of Emacs (a user reported a bug on 24.4.1).
@@ -2601,9 +2736,9 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline58" class="outline-3">
-<h3 id="orgheadline58"><span class="section-number-3">8.5</span> The REPL Mode</h3>
-<div class="outline-text-3" id="text-8-5">
+<div id="outline-container-orgheadline64" class="outline-3">
+<h3 id="orgheadline64"><span class="section-number-3">9.5</span> The REPL Mode</h3>
+<div class="outline-text-3" id="text-9-5">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defconst</span> <span style="color: #333333;">shen/syntax-table</span>
@@ -2651,98 +2786,9 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline61" class="outline-3">
-<h3 id="orgheadline61"><span class="section-number-3">8.6</span> Overlays</h3>
-<div class="outline-text-3" id="text-8-6">
-</div><div id="outline-container-orgheadline59" class="outline-4">
-<h4 id="orgheadline59"><span class="section-number-4">8.6.1</span> REPL Questions</h4>
-<div class="outline-text-4" id="text-8-6-1">
-<p>
-Overlay the routines that take input from the user in the REPL session to use the mini-buffer
-</p>
-<div class="org-src-container">
-
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/y-or-n?</span> <span style="color: #7388d6;">(</span>S<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-    <span style="color: #909183;">(</span>shen/shen.prhush <span style="color: #709870;">(</span>shen/shen.proc-nl S<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>shen/stoutput<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>Input <span style="color: #6276ba;">(</span>format <span style="color: #666666;">"%s"</span> <span style="color: #858580;">(</span>read-from-minibuffer <span style="color: #666666;">" (y/n) "</span> <span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
-       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>string-equal Input <span style="color: #666666;">"y"</span><span style="color: #6276ba;">)</span> 'true<span style="color: #907373;">)</span>
-       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>string-equal Input <span style="color: #666666;">"n"</span><span style="color: #6276ba;">)</span> 'false<span style="color: #907373;">)</span>
-       <span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-            <span style="color: #858580;">(</span>shen/shen.prhush  <span style="color: #666666;">"please answer y or n~%"</span> <span style="color: #80a880;">(</span>shen/stoutput<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-            <span style="color: #858580;">(</span>shen/y-or-n? S<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.pause-for-user</span> nil
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Byte <span style="color: #907373;">(</span>read-from-minibuffer <span style="color: #666666;">""</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>= <span style="color: #333333; font-weight: bold;">1</span> <span style="color: #6276ba;">(</span>length Byte<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #907373;">(</span>= <span style="color: #6276ba;">(</span>string-to-char Byte<span style="color: #6276ba;">)</span> ?^<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span>shen/error <span style="color: #666666;">"input aborted~%"</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>shen/shen.nl<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orgheadline60" class="outline-4">
-<h4 id="orgheadline60"><span class="section-number-4">8.6.2</span> The Symbol Table</h4>
-<div class="outline-text-4" id="text-8-6-2">
-<p>
-The Shen runtime maintains a ~*symbol-table* which is a mapping of all generated and
-native functions to their partially applied lambda form.
-</p>
-
-<p>
-The bootstrapped KLambda code uses simple alists which are inefficient and since
-this structure has to be consulted thousands of times (especially while
-typechecking), the KLambda provided implemenatation really slows everything
-down so we need to migrate to a hash-table.
-</p>
-
-<p>
-Additionally the bootstrap KLambda files actually fills up this structure with
-some initial content for core functions and datatyeps so they need to be migrated:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/migrate-symbol-table</span> <span style="color: #7388d6;">()</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>SymbolTable <span style="color: #907373;">(</span>shen/value 'shen.*symbol-table*<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>not <span style="color: #907373;">(</span>hash-table-p SymbolTable<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>NewTable <span style="color: #858580;">(</span>make-hash-table<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-          <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">dolist</span> <span style="color: #6276ba;">(</span>Entry SymbolTable NewTable<span style="color: #6276ba;">)</span>
-            <span style="color: #6276ba;">(</span>puthash <span style="color: #858580;">(</span>car Entry<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>cdr Entry<span style="color: #858580;">)</span> NewTable<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-          <span style="color: #907373;">(</span>shen/set 'shen.*symbol-table* NewTable<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      SymbolTable<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-</pre>
-</div>
-
-<p>
-And then the routines that find and add entries to the symbol table need to be
-re-implemented:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.lookup-func</span>
-    <span style="color: #7388d6;">(</span>Name Table<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Form <span style="color: #907373;">(</span>gethash Name Table<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>not Form<span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span>shen/simple-error
-         <span style="color: #907373;">(</span>shen/app Name <span style="color: #666666;">" has no lambda expansion\n"</span> 'shen.a<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      Form<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-
-<span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.update-symbol-table</span>
-    <span style="color: #7388d6;">(</span>Name Arity<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>lambda-function
-         <span style="color: #907373;">(</span>shen/eval-kl
-          <span style="color: #6276ba;">(</span>shen/shen.lambda-form Name Arity<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>puthash Name lambda-function <span style="color: #709870;">(</span>shen/value 'shen.*symbol-table*<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span>shen/value 'shen.*symbol-table*<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-orgheadline62" class="outline-3">
-<h3 id="orgheadline62"><span class="section-number-3">8.7</span> Starting the REPL</h3>
-<div class="outline-text-3" id="text-8-7">
+<div id="outline-container-orgheadline65" class="outline-3">
+<h3 id="orgheadline65"><span class="section-number-3">9.6</span> Starting the REPL</h3>
+<div class="outline-text-3" id="text-9-6">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #d9d9d9;">;;;</span><span style="color: #7f7f7f;">###</span><span style="color: #ff0000; font-weight: bold;">autoload</span>
@@ -2752,9 +2798,10 @@ re-implemented:
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">unless</span> <span style="color: #709870;">(</span>get-buffer *shen-repl*<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> <span style="color: #907373;">(</span>get-buffer-create *shen-repl*<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>make-local-variable 'lexical-binding<span style="color: #907373;">)</span>
-        <span style="color: #907373;">(</span>shen/migrate-symbol-table<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>load <span style="color: #666666;">"shen-primitives.elc"</span><span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>load <span style="color: #666666;">"shen.elc"</span><span style="color: #907373;">)</span>
+        <span style="color: #907373;">(</span>load <span style="color: #666666;">"shen-overlays.elc"</span><span style="color: #907373;">)</span>
+        <span style="color: #907373;">(</span>shen/migrate-symbol-table<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>setq lexical-binding 't<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>shen/set 'shen.*history* '<span style="color: #6276ba;">()</span><span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>shen/set '*home-directory* <span style="color: #666666;">""</span><span style="color: #907373;">)</span>
@@ -2767,9 +2814,9 @@ re-implemented:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline63" class="outline-3">
-<h3 id="orgheadline63"><span class="section-number-3">8.8</span> Provide it</h3>
-<div class="outline-text-3" id="text-8-8">
+<div id="outline-container-orgheadline66" class="outline-3">
+<h3 id="orgheadline66"><span class="section-number-3">9.7</span> Provide it</h3>
+<div class="outline-text-3" id="text-9-7">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">provide</span> '<span style="color: #333333; font-weight: bold;">shen-repl</span><span style="color: #707183;">)</span>
@@ -2778,9 +2825,9 @@ re-implemented:
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline67" class="outline-2">
-<h2 id="orgheadline67"><span class="section-number-2">9</span> Bootstrap</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-orgheadline70" class="outline-2">
+<h2 id="orgheadline70"><span class="section-number-2">10</span> Bootstrap</h2>
+<div class="outline-text-2" id="text-10">
 <p>
 Bootstrapping a Shen environment involves
 </p>
@@ -2791,9 +2838,9 @@ Bootstrapping a Shen environment involves
 <li>providing a runner that kicks off the process</li>
 </ol>
 </div>
-<div id="outline-container-orgheadline64" class="outline-3">
-<h3 id="orgheadline64"><span class="section-number-3">9.1</span> Collecting KLambda files</h3>
-<div class="outline-text-3" id="text-9-1">
+<div id="outline-container-orgheadline67" class="outline-3">
+<h3 id="orgheadline67"><span class="section-number-3">10.1</span> Collecting KLambda files</h3>
+<div class="outline-text-3" id="text-10-1">
 <p>
 In order to bootstrap the environment we specify the location of all the KLambda files
 that need to be read in and compiled. They are located in the <code>KLambda</code> directory of this
@@ -2818,9 +2865,9 @@ make some adjustments due to the differences between KLambda and Elisp.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline65" class="outline-3">
-<h3 id="orgheadline65"><span class="section-number-3">9.2</span> Modifying The Elisp Reader For KLambda</h3>
-<div class="outline-text-3" id="text-9-2">
+<div id="outline-container-orgheadline68" class="outline-3">
+<h3 id="orgheadline68"><span class="section-number-3">10.2</span> Modifying The Elisp Reader For KLambda</h3>
+<div class="outline-text-3" id="text-10-2">
 <p>
 In KLambda semicolons, colons, commas, ticks and backquotes are valid symbols. Since they have
 different meanings in Elisp they will be rejected by the reader by default so we
@@ -3017,9 +3064,9 @@ And a function that collects paths to all symbols in an s-expression:
 </div>
 </div>
 
-<div id="outline-container-orgheadline66" class="outline-3">
-<h3 id="orgheadline66"><span class="section-number-3">9.3</span> Iterating over KLambda Files</h3>
-<div class="outline-text-3" id="text-9-3">
+<div id="outline-container-orgheadline69" class="outline-3">
+<h3 id="orgheadline69"><span class="section-number-3">10.3</span> Iterating over KLambda Files</h3>
+<div class="outline-text-3" id="text-10-3">
 <p>
 Now we can finally collect, and parse all the s-expressions in the
 KLambda files and then pass the result to <code>shen/eval-kl</code> to transform
@@ -3062,9 +3109,9 @@ KLambda code into Elisp.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline68" class="outline-2">
-<h2 id="orgheadline68"><span class="section-number-2">10</span> The Runner</h2>
-<div class="outline-text-2" id="text-10">
+<div id="outline-container-orgheadline71" class="outline-2">
+<h2 id="orgheadline71"><span class="section-number-2">11</span> The Runner</h2>
+<div class="outline-text-2" id="text-11">
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">compile-and-load</span> <span style="color: #7388d6;">(</span>F<span style="color: #7388d6;">)</span>
@@ -3083,6 +3130,7 @@ KLambda code into Elisp.
     <span style="color: #909183;">(</span>compile-and-load <span style="color: #666666;">"install.el"</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>eval-klambda-files *klambda-files*<span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>compile-and-load <span style="color: #666666;">"shen.el"</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span>compile-and-load <span style="color: #666666;">"shen-overlays.el"</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>compile-and-load <span style="color: #666666;">"shen-repl.el"</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>add-to-load-path default-directory<span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span>shen/repl<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
