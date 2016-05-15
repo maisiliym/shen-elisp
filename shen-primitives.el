@@ -1025,15 +1025,15 @@
      (and current-list
           (consp current-list)
           (eq 3 (length current-list))
-          (and (eq (nth 0 current-list) 'shen/+)
+          (and (eq (nth 0 current-list) 'shen/=)
                (or (eq (nth 1 current-list) 'nil)
                    (eq (nth 2 current-list) 'nil)))))
    (lambda (accum current-list)
-     (if (eq (nth 1 current-list) 1)
+     (if (eq (nth 1 current-list) 'nil)
          (list (nth 2 current-list) nil)
        (list (nth 1 current-list) nil)))
    (lambda (accum remaining-chain)
-     (list 'null accum))))
+     `(shen/predicate->shen (null ,accum)))))
 ;; Nil\ Comparisons\ To\ Null:1 ends here
 
 ;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:1]]

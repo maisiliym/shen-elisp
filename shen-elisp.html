@@ -2020,7 +2020,7 @@ so these functions are unused for now.
 <h3 id="orgheadline43"><span class="section-number-3">5.1</span> Consolidate Call Chains</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
-KLambda code is rife with two argument chains such as <code>(cons x (cons y
+KLambda code is rife with argument chains such as <code>(cons x (cons y
 nil))</code> for list building and <code>(@s "x" (@s "y" ""))</code> for string concatenation
 which can easily be rewritten to more efficient variadic Elisp functions.
 </p>
@@ -2107,10 +2107,12 @@ Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b"
 </div>
 </div>
 </div>
-
 <div id="outline-container-orgheadline45" class="outline-3">
 <h3 id="orgheadline45"><span class="section-number-3">5.4</span> Consolidate tl</h3>
 <div class="outline-text-3" id="text-5-4">
+<p>
+Convert <code>(tl (tl (tl Xs)))</code> to <code>(nthcdr 3 Xs)</code>
+</p>
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/internal/consolidate-tl</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
@@ -2130,12 +2132,11 @@ Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b"
 </div>
 </div>
 </div>
-
 <div id="outline-container-orgheadline46" class="outline-3">
 <h3 id="orgheadline46"><span class="section-number-3">5.5</span> Add 1+'s</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
-Rewrite <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
+Convert <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
 </p>
 <div class="org-src-container">
 
@@ -2171,15 +2172,15 @@ Rewrite <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
      <span style="color: #709870;">(</span>and current-list
           <span style="color: #907373;">(</span>consp current-list<span style="color: #907373;">)</span>
           <span style="color: #907373;">(</span>eq <span style="color: #333333; font-weight: bold;">3</span> <span style="color: #6276ba;">(</span>length current-list<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-          <span style="color: #907373;">(</span>and <span style="color: #6276ba;">(</span>eq <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> current-list<span style="color: #858580;">)</span> 'shen/+<span style="color: #6276ba;">)</span>
+          <span style="color: #907373;">(</span>and <span style="color: #6276ba;">(</span>eq <span style="color: #858580;">(</span>nth <span style="color: #333333; font-weight: bold;">0</span> current-list<span style="color: #858580;">)</span> 'shen/=<span style="color: #6276ba;">)</span>
                <span style="color: #6276ba;">(</span>or <span style="color: #858580;">(</span>eq <span style="color: #80a880;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> current-list<span style="color: #80a880;">)</span> 'nil<span style="color: #858580;">)</span>
                    <span style="color: #858580;">(</span>eq <span style="color: #80a880;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> current-list<span style="color: #80a880;">)</span> 'nil<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>accum current-list<span style="color: #709870;">)</span>
-     <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>eq <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> current-list<span style="color: #6276ba;">)</span> <span style="color: #333333; font-weight: bold;">1</span><span style="color: #907373;">)</span>
+     <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>eq <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> current-list<span style="color: #6276ba;">)</span> 'nil<span style="color: #907373;">)</span>
          <span style="color: #907373;">(</span>list <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">2</span> current-list<span style="color: #6276ba;">)</span> nil<span style="color: #907373;">)</span>
        <span style="color: #907373;">(</span>list <span style="color: #6276ba;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> current-list<span style="color: #6276ba;">)</span> nil<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>accum remaining-chain<span style="color: #709870;">)</span>
-     <span style="color: #709870;">(</span>list 'null accum<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+     `<span style="color: #709870;">(</span>shen/predicate-&gt;shen <span style="color: #907373;">(</span>null ,accum<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -2545,7 +2546,6 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 </div>
 </div>
 </div>
-
 <div id="outline-container-orgheadline20" class="outline-2">
 <h2 id="orgheadline20"><span class="section-number-2">9</span> Shen REPL</h2>
 <div class="outline-text-2" id="text-9">
@@ -2707,8 +2707,16 @@ It periodically writes to the REPL.
   <span style="color: #7388d6;">(</span>get-buffer-process <span style="color: #909183;">(</span>current-buffer<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/repl-eval</span> <span style="color: #7388d6;">(</span>input-string<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>active-process <span style="color: #907373;">(</span>shen/repl-process<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span>shen/repl-temp-buffer<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>active-process <span style="color: #907373;">(</span>shen/repl-process<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>shen/repl-temp-buffer<span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>clean-up <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #6276ba;">(</span>active-process <span style="color: #333333; font-style: italic;">&amp;optional</span> ex<span style="color: #6276ba;">)</span>
+                     <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                       <span style="color: #858580;">(</span>comint-output-filter active-process
+                                             <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">if</span> ex
+                                                 <span style="color: #887070;">(</span>format <span style="color: #666666;">"\n%s\n\n%s"</span> <span style="color: #707183;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> ex<span style="color: #707183;">)</span> <span style="color: #707183;">(</span>shen/make-prompt<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                                               <span style="color: #887070;">(</span>format <span style="color: #666666;">"\n%s"</span> <span style="color: #707183;">(</span>shen/make-prompt<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                       <span style="color: #858580;">(</span>funcall <span style="color: #80a880;">(</span>shen/value '*stoutput*<span style="color: #80a880;">)</span> t<span style="color: #858580;">)</span>
+                       <span style="color: #858580;">(</span>shen/set '*stoutput* standard-output<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">condition-case</span> ex
         <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
           <span style="color: #907373;">(</span>shen/set '*stoutput* <span style="color: #6276ba;">(</span>shen/repl-standard-output-impl active-process<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
@@ -2723,15 +2731,13 @@ It periodically writes to the REPL.
                                History<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                  <span style="color: #858580;">(</span>NewHistory <span style="color: #80a880;">(</span>shen/shen.update_history NewLineread History<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
                  <span style="color: #858580;">(</span>Parsed <span style="color: #80a880;">(</span>shen/fst NewLineread<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-            <span style="color: #6276ba;">(</span>shen/shen.toplevel Parsed<span style="color: #6276ba;">)</span>
-            <span style="color: #6276ba;">(</span>funcall <span style="color: #858580;">(</span>shen/value '*stoutput*<span style="color: #858580;">)</span> t<span style="color: #6276ba;">)</span>
-            <span style="color: #6276ba;">(</span>comint-output-filter active-process <span style="color: #858580;">(</span>format <span style="color: #666666;">"\n%s"</span> <span style="color: #80a880;">(</span>shen/make-prompt<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>'shen/error
-       <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-         <span style="color: #6276ba;">(</span>funcall <span style="color: #858580;">(</span>shen/value '*stoutput*<span style="color: #858580;">)</span> t<span style="color: #6276ba;">)</span>
-         <span style="color: #6276ba;">(</span>comint-output-filter active-process <span style="color: #858580;">(</span>format <span style="color: #666666;">"\n%s\n\n%s"</span> <span style="color: #80a880;">(</span>nth <span style="color: #333333; font-weight: bold;">1</span> ex<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>shen/make-prompt<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-         <span style="color: #6276ba;">(</span>funcall <span style="color: #858580;">(</span>shen/value '*stoutput*<span style="color: #858580;">)</span> t<span style="color: #6276ba;">)</span>
-         <span style="color: #6276ba;">(</span>shen/set '*stoutput* standard-output<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+            <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>not Parsed<span style="color: #858580;">)</span>
+                <span style="color: #858580;">(</span>funcall clean-up active-process<span style="color: #858580;">)</span>
+              <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                <span style="color: #80a880;">(</span>shen/shen.toplevel Parsed<span style="color: #80a880;">)</span>
+                <span style="color: #80a880;">(</span>funcall <span style="color: #887070;">(</span>shen/value '*stoutput*<span style="color: #887070;">)</span> t<span style="color: #80a880;">)</span>
+                <span style="color: #80a880;">(</span>comint-output-filter active-process <span style="color: #887070;">(</span>format <span style="color: #666666;">"\n%s"</span> <span style="color: #707183;">(</span>shen/make-prompt<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span>'shen/error <span style="color: #907373;">(</span>funcall clean-up active-process ex<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>

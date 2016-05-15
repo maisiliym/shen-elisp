@@ -98,8 +98,16 @@
   (get-buffer-process (current-buffer)))
 
 (defun shen/repl-eval (input-string)
-  (let ((active-process (shen/repl-process))
-        (shen/repl-temp-buffer))
+  (let* ((active-process (shen/repl-process))
+         (shen/repl-temp-buffer)
+         (clean-up (lambda (active-process &optional ex)
+                     (progn
+                       (comint-output-filter active-process
+                                             (if ex
+                                                 (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt))
+                                               (format "\n%s" (shen/make-prompt))))
+                       (funcall (shen/value '*stoutput*) t)
+                       (shen/set '*stoutput* standard-output)))))
     (condition-case ex
         (progn
           (shen/set '*stoutput* (shen/repl-standard-output-impl active-process))
@@ -114,15 +122,13 @@
                                History))
                  (NewHistory (shen/shen.update_history NewLineread History))
                  (Parsed (shen/fst NewLineread)))
-            (shen/shen.toplevel Parsed)
-            (funcall (shen/value '*stoutput*) t)
-            (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))
-      ('shen/error
-       (progn
-         (funcall (shen/value '*stoutput*) t)
-         (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
-         (funcall (shen/value '*stoutput*) t)
-         (shen/set '*stoutput* standard-output))))))
+            (if (not Parsed)
+                (funcall clean-up active-process)
+              (progn
+                (shen/shen.toplevel Parsed)
+                (funcall (shen/value '*stoutput*) t)
+                (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))))
+      ('shen/error (funcall clean-up active-process ex)))))
 ;; Evaluating\ User\ Input:2 ends here
 
 ;; [[file:shen-elisp.org::*The%20REPL%20Mode][The\ REPL\ Mode:1]]

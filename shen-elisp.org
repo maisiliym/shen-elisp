@@ -1297,7 +1297,7 @@ so these functions are unused for now.
 
 * Optimizations
 ** Consolidate Call Chains
-KLambda code is rife with two argument chains such as ~(cons x (cons y
+KLambda code is rife with argument chains such as ~(cons x (cons y
 nil))~ for list building and ~(@s "x" (@s "y" ""))~ for string concatenation
 which can easily be rewritten to more efficient variadic Elisp functions.
 
@@ -1361,8 +1361,8 @@ Convert ~(@s "a" (@s "b" (blah)))~ into ~(concat (concat "a" "b") (blah))~
      (lambda (accum remaining-chain)
        (list 'concat (cons 'concat (reverse accum)) remaining-chain))))
 #+END_SRC
-
 ** Consolidate tl
+Convert ~(tl (tl (tl Xs)))~ to ~(nthcdr 3 Xs)~
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defun shen/internal/consolidate-tl (ast)
     (shen/internal/consolidate
@@ -1378,9 +1378,8 @@ Convert ~(@s "a" (@s "b" (blah)))~ into ~(concat (concat "a" "b") (blah))~
      (lambda (accum remaining-chain)
        (list 'nthcdr accum remaining-chain))))
 #+END_SRC
-
 ** Add 1+'s
-Rewrite ~(+ X 1)~ or ~(+ 1 X)~ to ~(1+ X)~
+Convert ~(+ X 1)~ or ~(+ 1 X)~ to ~(1+ X)~
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defun shen/internal/add-1+ (ast)
     (shen/internal/consolidate
@@ -1408,15 +1407,15 @@ Rewrite ~(+ X 1)~ or ~(+ 1 X)~ to ~(1+ X)~
        (and current-list
             (consp current-list)
             (eq 3 (length current-list))
-            (and (eq (nth 0 current-list) 'shen/+)
+            (and (eq (nth 0 current-list) 'shen/=)
                  (or (eq (nth 1 current-list) 'nil)
                      (eq (nth 2 current-list) 'nil)))))
      (lambda (accum current-list)
-       (if (eq (nth 1 current-list) 1)
+       (if (eq (nth 1 current-list) 'nil)
            (list (nth 2 current-list) nil)
          (list (nth 1 current-list) nil)))
      (lambda (accum remaining-chain)
-       (list 'null accum))))
+       `(shen/predicate->shen (null ,accum)))))
 #+END_SRC
 
 * Evaluate KLambda
@@ -1683,9 +1682,8 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 #+END_SRC
 ** Provide it
 #+BEGIN_SRC elisp :tangle shen-overlays.el
-(provide 'shen-overlays)
+  (provide 'shen-overlays)
 #+END_SRC
-
 * Shen REPL
 #+BEGIN_SRC elisp :tangle shen-repl.el :comments no
   ;; -*- lexical-binding: t -*-
@@ -1803,8 +1801,16 @@ It periodically writes to the REPL.
     (get-buffer-process (current-buffer)))
 
   (defun shen/repl-eval (input-string)
-    (let ((active-process (shen/repl-process))
-          (shen/repl-temp-buffer))
+    (let* ((active-process (shen/repl-process))
+           (shen/repl-temp-buffer)
+           (clean-up (lambda (active-process &optional ex)
+                       (progn
+                         (comint-output-filter active-process
+                                               (if ex
+                                                   (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt))
+                                                 (format "\n%s" (shen/make-prompt))))
+                         (funcall (shen/value '*stoutput*) t)
+                         (shen/set '*stoutput* standard-output)))))
       (condition-case ex
           (progn
             (shen/set '*stoutput* (shen/repl-standard-output-impl active-process))
@@ -1819,15 +1825,13 @@ It periodically writes to the REPL.
                                  History))
                    (NewHistory (shen/shen.update_history NewLineread History))
                    (Parsed (shen/fst NewLineread)))
-              (shen/shen.toplevel Parsed)
-              (funcall (shen/value '*stoutput*) t)
-              (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))
-        ('shen/error
-         (progn
-           (funcall (shen/value '*stoutput*) t)
-           (comint-output-filter active-process (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt)))
-           (funcall (shen/value '*stoutput*) t)
-           (shen/set '*stoutput* standard-output))))))
+              (if (not Parsed)
+                  (funcall clean-up active-process)
+                (progn
+                  (shen/shen.toplevel Parsed)
+                  (funcall (shen/value '*stoutput*) t)
+                  (comint-output-filter active-process (format "\n%s" (shen/make-prompt)))))))
+        ('shen/error (funcall clean-up active-process ex)))))
 #+END_SRC
 ** The REPL Mode
 #+BEGIN_SRC elisp :tangle shen-repl.el
