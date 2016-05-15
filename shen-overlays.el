@@ -42,8 +42,8 @@
 (defun shen/shen.pause-for-user nil
   (let ((Byte (read-from-minibuffer "")))
     (if (and (= 1 (length Byte)) (= (string-to-char Byte) ?^))
-        (shen/error "input aborted~%")
-      (shen/shen.nl))))
+        (shen/simple-error "input aborted\n")
+      (shen/nl 1))))
 ;; Questions:1 ends here
 
 ;; [[file:shen-elisp.org::*Changing%20Directories][Changing\ Directories:1]]

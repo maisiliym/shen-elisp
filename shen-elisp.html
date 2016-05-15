@@ -2507,8 +2507,8 @@ Overlay the routines that take input from the user in the REPL session to use th
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/shen.pause-for-user</span> nil
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Byte <span style="color: #907373;">(</span>read-from-minibuffer <span style="color: #666666;">""</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>= <span style="color: #333333; font-weight: bold;">1</span> <span style="color: #6276ba;">(</span>length Byte<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span> <span style="color: #907373;">(</span>= <span style="color: #6276ba;">(</span>string-to-char Byte<span style="color: #6276ba;">)</span> ?^<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span>shen/error <span style="color: #666666;">"input aborted~%"</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>shen/shen.nl<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+        <span style="color: #709870;">(</span>shen/simple-error <span style="color: #666666;">"input aborted\n"</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span>shen/nl <span style="color: #333333; font-weight: bold;">1</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>

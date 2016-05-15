@@ -1666,8 +1666,8 @@ Overlay the routines that take input from the user in the REPL session to use th
   (defun shen/shen.pause-for-user nil
     (let ((Byte (read-from-minibuffer "")))
       (if (and (= 1 (length Byte)) (= (string-to-char Byte) ?^))
-          (shen/error "input aborted~%")
-        (shen/shen.nl))))
+          (shen/simple-error "input aborted\n")
+        (shen/nl 1))))
 #+END_SRC
 *** Changing Directories
 When changing directories in the REPL, for convenience, also change Emacs' working directory.
