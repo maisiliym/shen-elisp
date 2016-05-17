@@ -28,28 +28,24 @@ To install the package directly from Github using `quelpa` tool:
 #+END_EXAMPLE
 
 Since this is alpha software the ~:upgrade 't~ at the end always pulls the latest version.
-** Spacemacs Private Layer
-If you are a [[https://github.com/syl20bnr/spacemacs][Spacemacs]] user you need to create a private configuration layer since any packages not
-installed this way will be deleted on startup.
 
-1. ~SPC : configuration-layer/create-layer~
-2. Choose the default private layers directory, it's usually ~$HOME/.emacs.d/private/~
-3. Enter ~shen-elisp~ when asked for ~Configuration Layer Name:~. Spacemacs will generate a file called ~packages.el~ for you.
-4. Replace the contents of ~packages.el~ with:
-   #+BEGIN_EXAMPLE
-   (defun shen-elisp/init-shen-elisp ()
-     (use-package shen-elisp))
+If you are a [[https://github.com/syl20bnr/spacemacs][Spacemacs]] user you can do the following:
 
-   (defconst shen-elisp-packages
-     '((shen-elisp :location (recipe
-                              :repo "deech/shen-elisp"
-                              :fetcher github
-                              :files ("shen*.el")))))
-   ;;; packages.el ends here
-   #+END_EXAMPLE
-5. ~SPC : spacemacs/emacs-reload~
-6. Invoke ~shen/repl~ after installation has completed.
+1. Add the following to the ~dotspacemacs-additional-packages~ variable:
+#+BEGIN_SRC elisp
+  dotspacemacs-additional-packages '(
+                                     (shen-elisp
+                                      :location (recipe :repo "deech/shen-elisp"
+                                                        :fetcher github
+                                                        :files ("shen*.el"))
+                                      :upgrade 't)
+                                     )
+#+END_SRC
 
+2. ~SPC : spacemacs/emacs-reload~
+3. Invoke ~shen/repl~ after installation has completed.
+
+It also uses the `quelpa` tool underneath.
 * Running
 Once the package is installed the Shen REPL should start with:
 #+BEGIN_EXAMPLE
