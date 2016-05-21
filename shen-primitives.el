@@ -18,14 +18,42 @@
   (symbol-name X))
 ;; Symbols:3 ends here
 
+;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:1]]
+(defun shen/internal/prefix-symbol (X)
+  (if (shen/symbol-p X)
+      (intern (concat shen/prefix (symbol-name X)))
+    X))
+;; Prefixing\ Utilities:1 ends here
+
+;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:2]]
+(defun shen/internal/symbol-prefixed-p (X)
+  (and (shen/symbol-p X) (string-prefix-p shen/prefix (symbol-name X))))
+;; Prefixing\ Utilities:2 ends here
+
+;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:3]]
+(defun shen/internal/unprefix-symbol (X)
+  (if (shen/internal/symbol-prefixed-p X)
+      (intern (substring (symbol-name X) (length shen/prefix)))
+    X))
+;; Prefixing\ Utilities:3 ends here
+
 ;; [[file:shen-elisp.org::*Assignments][Assignments:1]]
 (defun shen/set (X Y)
-  (set (intern (concat shen/prefix (format "%s" X))) Y))
+  (set (intern (concat shen/prefix (symbol-name X)))
+       (let ((prefixed))
+         (or  (and (symbolp Y)
+                   (not (shen/internal/symbol-prefixed-p Y))
+                   (progn
+                     (setq prefixed (shen/internal/prefix-symbol Y))
+                     (or (boundp prefixed)
+                         (fboundp prefixed)))
+                   prefixed)
+              Y))))
 
 (defun shen/value (X)
   (condition-case ex
-          (symbol-value (intern (concat shen/prefix (format "%s" X))))
-        ('error (error (format "%s has not been assigned" X)))))
+      (symbol-value (intern (concat shen/prefix (symbol-name X))))
+    ('error (error (format "%s has not been assigned" X)))))
 ;; Assignments:1 ends here
 
 ;; [[file:shen-elisp.org::*KLambda%20Constants][KLambda\ Constants:1]]
@@ -41,13 +69,20 @@
 ;; KLambda\ Constants:1 ends here
 
 ;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:1]]
+(defsubst shen/shen->predicate (X)
+  (eq X 'true))
+(defsubst shen/predicate->shen (X)
+  (if X (quote true) (quote false)))
+;; Boolean\ Operations:1 ends here
+
+;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:2]]
 (defmacro shen/if (X Y Z)
   `(if (eq ,X 'true) ,Y ,Z))
 (defmacro shen/and (X Y) `(shen/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
 (defmacro shen/or (X Y) `(shen/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
-;; Boolean\ Operations:1 ends here
+;; Boolean\ Operations:2 ends here
 
-;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:2]]
+;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:3]]
 (defmacro shen/cond (&rest CASES)
   (let* ((predicates-quoted-cases
           (mapcar (lambda (predicate-result-pair)
@@ -58,7 +93,7 @@
                   CASES))
          (fallthrough-added (append predicates-quoted-cases (list '(t (error "One of the cond predicates must be true."))))))
     `(cond ,@fallthrough-added)))
-;; Boolean\ Operations:2 ends here
+;; Boolean\ Operations:3 ends here
 
 ;; [[file:shen-elisp.org::*Lambdas][Lambdas:3]]
 (defmacro shen/lambda (X Y)
@@ -106,8 +141,9 @@
 ;; [[file:shen-elisp.org::*Strings][Strings:1]]
 (defun shen/str (X)
   (cond ((null X) (error "null is not an atom in Shen; str cannot convert it to a string.~%"))
-        ((symbolp X) (symbol-name X))
-        ((or (numberp X) (stringp X) (functionp X)) (format "%s" X))
+        ((or (symbolp X) (functionp X)) (symbol-name X))
+        ((numberp X) (number-to-string X))
+        ((stringp X) X)
         ((and (bufferp X) (buffer-file-name X)) (buffer-name X))
         ((eq X standard-input) "standard-input")
         ((eq X standard-output) "standard-output")
@@ -471,25 +507,6 @@
       Xs)))
 ;; List\ Filtering:4 ends here
 
-;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:1]]
-(defun shen/internal/prefix-symbol (X)
-  (if (shen/symbol-p X)
-      (intern (concat shen/prefix (format "%s" X)))
-    X))
-;; Prefixing\ Utilities:1 ends here
-
-;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:2]]
-(defun shen/internal/symbol-prefixed-p (X)
-  (and (shen/symbol-p X) (string-prefix-p shen/prefix (symbol-name X))))
-;; Prefixing\ Utilities:2 ends here
-
-;; [[file:shen-elisp.org::*Prefixing%20Utilities][Prefixing\ Utilities:3]]
-(defun shen/internal/unprefix-symbol (X)
-  (if (shen/internal/symbol-prefixed-p X)
-      (intern (substring (symbol-name X) (length shen/prefix)))
-    X))
-;; Prefixing\ Utilities:3 ends here
-
 ;; [[file:shen-elisp.org::*Walking%20The%20AST][Walking\ The\ AST:1]]
 (defun shen/internal/get-function-symbol-and-funcall-paths (ast)
   (let ((namespace-only)        ;; (ref:namespace-only)
@@ -639,7 +656,7 @@
                          (blast-apply-args))
                      (dotimes (i arity (list (reverse blast-apply-args)
                                              (reverse single-apply-args)))
-                       (push (intern (format "A%d" i))
+                       (push (intern (concat "A" (number-to-string i)))
                              (if (and num-args (< i num-args))
                                  blast-apply-args
                                single-apply-args)))))

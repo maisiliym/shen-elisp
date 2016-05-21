@@ -62,24 +62,58 @@ Interning a Shen symbol delegates to Elisp's ~intern~:
     (intern String))
 #+END_SRC
 
-
 as does ~shen/symbol->string~:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defsubst shen/symbol->string (X)
     (symbol-name X))
 #+END_SRC
+*** Prefixing Utilities
+Elisp does not have namespaces so to insulate the rest of the user's Emacs image
+the primitive functions, user-defined functions and variables are prefixed with ~shen/~.
+Raw symbols are not touched since they can't harm existing Elisp code.
 
+When decompiling Klambda to Elisp we need functions that prefix the appropriate
+symbol with ~shen/~:
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (defun shen/internal/prefix-symbol (X)
+    (if (shen/symbol-p X)
+        (intern (concat shen/prefix (symbol-name X)))
+      X))
+#+END_SRC
+
+, detect if it has already has a prefixed:
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (defun shen/internal/symbol-prefixed-p (X)
+    (and (shen/symbol-p X) (string-prefix-p shen/prefix (symbol-name X))))
+#+END_SRC
+
+, and removes the prefix it for consumption by Shen:
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (defun shen/internal/unprefix-symbol (X)
+    (if (shen/internal/symbol-prefixed-p X)
+        (intern (substring (symbol-name X) (length shen/prefix)))
+      X))
+#+END_SRC
 ** Assignments
-- When setting and getting a variable, the name is prefixed to prevent the user from stomping over one that
-  already exists in the Emacs image.
+When setting and getting a variable, the name is prefixed to prevent the user from stomping over one that
+already exists in the Emacs image. See [[Prefixing Utilities]] for more on how this works.
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defun shen/set (X Y)
-    (set (intern (concat shen/prefix (format "%s" X))) Y))
+    (set (intern (concat shen/prefix (symbol-name X)))
+         (let ((prefixed))
+           (or  (and (symbolp Y)
+                     (not (shen/internal/symbol-prefixed-p Y))
+                     (progn
+                       (setq prefixed (shen/internal/prefix-symbol Y))
+                       (or (boundp prefixed)
+                           (fboundp prefixed)))
+                     prefixed)
+                Y))))
 
   (defun shen/value (X)
     (condition-case ex
-            (symbol-value (intern (concat shen/prefix (format "%s" X))))
-          ('error (error (format "%s has not been assigned" X)))))
+        (symbol-value (intern (concat shen/prefix (symbol-name X))))
+      ('error (error (format "%s has not been assigned" X)))))
 #+END_SRC
 ** KLambda Constants
 Once [[Assignments][the assigning mechanism]] is in place the spec requires some global variables:
@@ -96,11 +130,16 @@ Once [[Assignments][the assigning mechanism]] is in place the spec requires some
 #+END_SRC
 ** Boolean Operations
 Unlike Elisp in KLambda booleans are ~false~ and ~true~, distinct symbols which
-are not synonymous with ~nil~ and ~(not nil)~.
+are not synonymous with ~nil~ and ~(not nil)~ so wrappers are required:
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (defsubst shen/shen->predicate (X)
+    (eq X 'true))
+  (defsubst shen/predicate->shen (X)
+    (if X (quote true) (quote false)))
+#+END_SRC
 
 Since ~if~ , ~and~ and ~or~ are special forms they are defined as macros to
 preserve evaluation order.
-
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defmacro shen/if (X Y Z)
     `(if (eq ,X 'true) ,Y ,Z))
@@ -215,8 +254,9 @@ The rest of the list operations function as expected:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defun shen/str (X)
     (cond ((null X) (error "null is not an atom in Shen; str cannot convert it to a string.~%"))
-          ((symbolp X) (symbol-name X))
-          ((or (numberp X) (stringp X) (functionp X)) (format "%s" X))
+          ((or (symbolp X) (functionp X)) (symbol-name X))
+          ((numberp X) (number-to-string X))
+          ((stringp X) X)
           ((and (bufferp X) (buffer-file-name X)) (buffer-name X))
           ((eq X standard-input) "standard-input")
           ((eq X standard-output) "standard-output")
@@ -670,34 +710,6 @@ A function that deletes the first occurrences of X
 #+END_SRC
 
 * Rewriting The AST
-** Prefixing Utilities
-Elisp does not have namespaces so to insulate the rest of the user's Emacs image
-the primitive functions, user-defined functions and variables are prefixed with ~shen/~.
-Raw symbols are not touched since they can't harm existing Elisp code.
-
-When decompiling Klambda to Elisp we need functions that prefix the appropriate
-symbol with ~shen/~:
-#+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defun shen/internal/prefix-symbol (X)
-    (if (shen/symbol-p X)
-        (intern (concat shen/prefix (format "%s" X)))
-      X))
-#+END_SRC
-
-, detect if it has already has a prefixed:
-#+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defun shen/internal/symbol-prefixed-p (X)
-    (and (shen/symbol-p X) (string-prefix-p shen/prefix (symbol-name X))))
-
-#+END_SRC
-
-, and removes the prefix it for consumption by Shen:
-#+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defun shen/internal/unprefix-symbol (X)
-    (if (shen/internal/symbol-prefixed-p X)
-        (intern (substring (symbol-name X) (length shen/prefix)))
-      X))
-#+END_SRC
 ** Walking The AST
 Before evaluating we walk the tree and return locations that require:
 -  [[(namespace-only)]] : paths that need prefixing with ~shen/~,
@@ -922,7 +934,7 @@ instead of:
                            (blast-apply-args))
                        (dotimes (i arity (list (reverse blast-apply-args)
                                                (reverse single-apply-args)))
-                         (push (intern (format "A%d" i))
+                         (push (intern (concat "A" (number-to-string i)))
                                (if (and num-args (< i num-args))
                                    blast-apply-args
                                  single-apply-args)))))
@@ -1576,14 +1588,14 @@ There are three types of overrides, those which:
 When bootstrapping from the seed KLambda files we first need to [[Overrides][patch]] the
 incoming code with overrides before parsing the AST:
 #+BEGIN_SRC elisp "(ref:%s)" :tangle shen-primitives.el
-   (defun shen/patch-klambda (ast)
-    (if (eq (car ast) 'defun)
-          (let ((override (gethash (nth 1 ast) shen/*overrides*)))
-            (or override
-                (shen/internal/parse-ast ast)))
-        (let ((patched (gethash ast shen/*overrides* )))
-          (or patched
-              (shen/internal/parse-ast ast)))))
+  (defun shen/patch-klambda (ast)
+   (if (eq (car ast) 'defun)
+         (let ((override (gethash (nth 1 ast) shen/*overrides*)))
+           (or override
+               (shen/internal/parse-ast ast)))
+       (let ((patched (gethash ast shen/*overrides* )))
+         (or patched
+             (shen/internal/parse-ast ast)))))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle shen-primitives.el
