@@ -339,13 +339,6 @@
   (car (or (assoc-default KEY ALIST) (list DEFAULT))))
 ;; Lookup:1 ends here
 
-;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:1]]
-(defsubst shen/shen->predicate (X)
-  (eq X 'true))
-(defsubst shen/predicate->shen (X)
-  (if X (quote true) (quote false)))
-;; Boolean\ Operations:1 ends here
-
 ;; [[file:shen-elisp.org::*AST%20Getter/Setter][AST\ Getter/Setter:1]]
 (defun shen/internal/get-element-at (path ast)
   (let ((res ast))

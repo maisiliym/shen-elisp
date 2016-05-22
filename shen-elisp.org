@@ -507,14 +507,6 @@ when writing out to the [[Shen REPL]] requires calling a function with the chara
   (defun shen/internal/lookup-with-default (KEY ALIST DEFAULT)
     (car (or (assoc-default KEY ALIST) (list DEFAULT))))
 #+END_SRC
-** Boolean Operations
-Helpers for translating between Elisp's and Shen's boolean values:
-#+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defsubst shen/shen->predicate (X)
-    (eq X 'true))
-  (defsubst shen/predicate->shen (X)
-    (if X (quote true) (quote false)))
-#+END_SRC
 ** AST Utilities
 The next few sections are about transforming the KLambda AST so we
 need a few utilites to make the job easier.
@@ -1165,9 +1157,11 @@ value.
 #+END_SRC
 
 This overall approach owes a lot to Wilfred Hughes' excellent [[https://github.com/Wilfred/tco.el][tco.el]]. The
-essential difference is that he returns a function instead of a struct. The
-latter approach guards against the possibility that if the final return value is
-a function there would be no way to tell when recursion terminated.
+essential difference is that he returns a function instead of a vector. Since
+vectors will never appear in the generated Elisp (KLambda vectors are
+hash-tables underneath), latter approach uniquely identifies a trampolined value
+and guards against the possibility that if the final return value is a function
+there would be no way to tell when recursion terminated.
 
 ** Modifying The AST
 Now that we have mechanisms for
