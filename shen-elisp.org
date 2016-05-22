@@ -869,9 +869,10 @@ The general strategy to rewriting KLambda function application to Elisp is to
 first blindly apply the function as though all of its arguments are present and
 only deal with errors if they occur.
 
-In the case of a [[(higher-order function)]] if normal application fails, it is
-applied [[(incremental application)][incrementally]] and barring that if the ~arity~ is known a [[(curried lambda)][curried]] version
-is built and fed arguments one by one.
+In the case of a [[(higher-order function)]] if normal application fails because the
+function cannot be found try again with the ~shen/~ prefix. If the function has
+known ~arity~, build  [[(curried lambda)][curried]] version and apply [[(incremental application)][incrementally]] and barring that just
+feed the function arguments one-by-one and hope for the best.
 
 If it is [[(a list)]] (which presumably evaluates to a function) since there is no
 hope of knowing the arity only the incremental fallback is tried.
@@ -910,6 +911,8 @@ instead of:
 
   (defun shen/internal/apply-higher-order-function (f args)
     (condition-case apply-ex (apply f args)
+      ('void-function
+       (shen/internal/apply-higher-order-function (shen/internal/prefix-symbol f) args))
       ('wrong-number-of-arguments
        (condition-case ex
            (let ((arity (shen/internal/check-partial-application f (length args))))

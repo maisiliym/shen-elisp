@@ -632,6 +632,8 @@
 
 (defun shen/internal/apply-higher-order-function (f args)
   (condition-case apply-ex (apply f args)
+    ('void-function
+     (shen/internal/apply-higher-order-function (shen/internal/prefix-symbol f) args))
     ('wrong-number-of-arguments
      (condition-case ex
          (let ((arity (shen/internal/check-partial-application f (length args))))
