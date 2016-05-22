@@ -15,7 +15,7 @@
   (let ((Form (gethash Name Table)))
     (if (not Form)
         (shen/simple-error
-         (shen/app Name " has no lambda expansion\n" 'shen.a))
+         (shen/shen.app Name " has no lambda expansion\n" 'shen.a))
       Form)))
 
 (defun shen/shen.update-symbol-table
