@@ -75,7 +75,7 @@
       ((tail-trampoline
         (V15590)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15590))
           nil)
          ((shen/and
@@ -151,7 +151,7 @@
               (nthcdr 1
                       (shen/snd V15604)))
              (shen/and
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/snd V15604))))
@@ -199,7 +199,7 @@
             (shen/cons\?
              (shen/snd V15604))
             (shen/and
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 1
                        (shen/snd V15604))))
@@ -445,7 +445,7 @@
       ((tail-trampoline
         (V15643 V15644)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15644))
           nil)
          ((shen/and
@@ -479,7 +479,7 @@
       ((tail-trampoline
         (V15658 V15659)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15658))
           'true)
          ((shen/and
@@ -509,7 +509,7 @@
       ((tail-trampoline
         (V15671 V15672 V15673)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15672))
           '_)
          ((shen/and
@@ -568,7 +568,7 @@
               (shen/cons\?
                (nthcdr 2 V15676))
               (shen/and
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V15676)))
                (shen/= 'true V15677))))))
@@ -594,7 +594,7 @@
          ((shen/and
            (shen/cons\? V15676)
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 1 V15676)))
             (shen/= 'true V15677)))
@@ -604,7 +604,7 @@
          ((shen/and
            (shen/cons\? V15676)
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 1 V15676)))
             (shen/= 'false V15677)))
@@ -664,10 +664,10 @@
       ((tail-trampoline
         (V15697 V15698 V15699)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15697))
           V15699)
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15698))
           V15699)
          ((shen/and
@@ -1810,7 +1810,7 @@
       ((tail-trampoline
         (V13186 V13187 V13188 V13189)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13188))
           (shen/let NewEntry
                     (append
@@ -1871,7 +1871,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13193))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13193)))))
     (shen/let Bound
@@ -1908,7 +1908,7 @@
             (shen/cons\?
              (nthcdr 1 V13208))
             (shen/and
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 2 V13208)))
              (shen/=
@@ -1931,7 +1931,7 @@
              (shen/and
               (shen/cons\?
                (nthcdr 2 V13208))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 3 V13208)))))))
           (vector
@@ -1957,7 +1957,7 @@
               (shen/and
                (shen/cons\?
                 (nthcdr 3 V13208))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 4 V13208))))))))
           (shen/union
@@ -1991,7 +1991,7 @@
 (defun shen/shen\.free_variable_warnings
     (V13213 V13214)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13214))
     '_)
    (shen/true
@@ -2008,7 +2008,7 @@
   (shen/cond
    ((shen/and
      (shen/cons\? V13216)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (nthcdr 1 V13216))))
     (shen/cn
@@ -2036,7 +2036,7 @@
             (shen/cons\?
              (nthcdr 1 V13218))
             (shen/and
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 2 V13218)))
              (shen/=
@@ -2069,7 +2069,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13220))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13220)))))
     (shen/shen\.linearise_help
@@ -2083,7 +2083,7 @@
 (defun shen/shen\.flatten
     (V13222)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13222))
     nil)
    ((shen/cons\? V13222)
@@ -2100,7 +2100,7 @@
       ((tail-trampoline
         (V13226 V13227 V13228)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13226))
           (list V13227 V13228))
          ((shen/cons\? V13226)
@@ -2180,11 +2180,11 @@
               (nthcdr 1
                       (shen/hd V13247)))
              (shen/and
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/hd V13247))))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 1 V13247)))))))
           (shen/do
@@ -2207,7 +2207,7 @@
               (nthcdr 1
                       (shen/hd V13247)))
              (shen/and
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/hd V13247))))
@@ -2223,7 +2223,7 @@
                   (nthcdr 1
                           (shen/hd
                            (nthcdr 1 V13247))))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 2
                            (shen/hd
@@ -2319,7 +2319,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13274))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13274)))))
     (shen/shen\.abstraction_build
@@ -2331,7 +2331,7 @@
 (defun shen/shen\.abstraction_build
     (V13277 V13278)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13277))
     V13278)
    ((shen/cons\? V13277)
@@ -2359,7 +2359,7 @@
       ((tail-trampoline
         (V13283 V13284)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13283))
           V13284)
          ((shen/cons\? V13283)
@@ -2387,7 +2387,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13288))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13288)))))
     (shen/let Arity
@@ -2457,7 +2457,7 @@
               (shen/cons\?
                (nthcdr 2 V13305))
               (shen/and
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13305)))
                (shen/cons\? V13306))))))
@@ -2506,7 +2506,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 3 V13312))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 4 V13312))))))))
     (list 'let
@@ -2535,7 +2535,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13312))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13312)))))))
     (list 'lambda
@@ -2669,7 +2669,7 @@
                             (nthcdr 1
                                     (shen/hd V13324)))))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3
                              (shen/hd
@@ -2680,14 +2680,14 @@
                      (nthcdr 2
                              (shen/hd V13324)))
                     (shen/and
-                     (shen/predicate->shen
+                     (shen/internal/predicate->shen
                       (null
                        (nthcdr 3
                                (shen/hd V13324))))
                      (shen/and
                       (shen/cons\?
                        (nthcdr 1 V13324))
-                      (shen/predicate->shen
+                      (shen/internal/predicate->shen
                        (null
                         (nthcdr 2 V13324)))))))))))))))
           (shen/do
@@ -2765,7 +2765,7 @@
                             (nthcdr 1
                                     (shen/hd V13324)))))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3
                              (shen/hd
@@ -2776,14 +2776,14 @@
                      (nthcdr 2
                              (shen/hd V13324)))
                     (shen/and
-                     (shen/predicate->shen
+                     (shen/internal/predicate->shen
                       (null
                        (nthcdr 3
                                (shen/hd V13324))))
                      (shen/and
                       (shen/cons\?
                        (nthcdr 1 V13324))
-                      (shen/predicate->shen
+                      (shen/internal/predicate->shen
                        (null
                         (nthcdr 2 V13324)))))))))))))))
           (shen/do
@@ -2861,7 +2861,7 @@
                             (nthcdr 1
                                     (shen/hd V13324)))))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3
                              (shen/hd
@@ -2872,14 +2872,14 @@
                      (nthcdr 2
                              (shen/hd V13324)))
                     (shen/and
-                     (shen/predicate->shen
+                     (shen/internal/predicate->shen
                       (null
                        (nthcdr 3
                                (shen/hd V13324))))
                      (shen/and
                       (shen/cons\?
                        (nthcdr 1 V13324))
-                      (shen/predicate->shen
+                      (shen/internal/predicate->shen
                        (null
                         (nthcdr 2 V13324)))))))))))))))
           (shen/do
@@ -2957,7 +2957,7 @@
                             (nthcdr 1
                                     (shen/hd V13324)))))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3
                              (shen/hd
@@ -2968,14 +2968,14 @@
                      (nthcdr 2
                              (shen/hd V13324)))
                     (shen/and
-                     (shen/predicate->shen
+                     (shen/internal/predicate->shen
                       (null
                        (nthcdr 3
                                (shen/hd V13324))))
                      (shen/and
                       (shen/cons\?
                        (nthcdr 1 V13324))
-                      (shen/predicate->shen
+                      (shen/internal/predicate->shen
                        (null
                         (nthcdr 2 V13324)))))))))))))))
           (shen/do
@@ -3035,7 +3035,7 @@
                 (nthcdr 2
                         (shen/hd V13324)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13324))))
@@ -3043,7 +3043,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13324))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13324)))
                   (shen/not
@@ -3082,14 +3082,14 @@
                 (nthcdr 2
                         (shen/hd V13324)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13324))))
                 (shen/and
                  (shen/cons\?
                   (nthcdr 1 V13324))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 2 V13324))))))))))
           (vector
@@ -3114,7 +3114,7 @@
              (shen/and
               (shen/cons\?
                (nthcdr 2 V13324))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 3 V13324)))))))
           (shen/do
@@ -3130,7 +3130,7 @@
            (shen/and
             (shen/cons\?
              (nthcdr 1 V13324))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2 V13324)))))
           (shen/let Z
@@ -3188,7 +3188,7 @@
         (shen/cons\?
          (nthcdr 2 V13344))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V13344)))
          (shen/>
@@ -3209,7 +3209,7 @@
         (shen/cons\?
          (nthcdr 2 V13344))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V13344)))
          (shen/>
@@ -3233,7 +3233,7 @@
          (shen/cons\?
           (nthcdr 3 V13344))
          (shen/and
-          (shen/predicate->shen
+          (shen/internal/predicate->shen
            (null
             (nthcdr 4 V13344)))
           (shen/=
@@ -3289,7 +3289,7 @@
         (shen/cons\?
          (nthcdr 1
                  (shen/hd V13356)))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 2
                   (shen/hd V13356))))))))
@@ -3303,7 +3303,7 @@
 (defun shen/shen\.encode-choices
     (V13361 V13362)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13361))
     nil)
    ((shen/and
@@ -3337,18 +3337,18 @@
                      (nthcdr 1
                              (shen/hd V13361)))))
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2
                       (shen/hd
                        (nthcdr 1
                                (shen/hd V13361))))))
             (shen/and
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 2
                        (shen/hd V13361))))
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 1 V13361))))))))))))
     (list
@@ -3398,13 +3398,13 @@
                      (nthcdr 1
                              (shen/hd V13361)))))
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2
                       (shen/hd
                        (nthcdr 1
                                (shen/hd V13361))))))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2
                       (shen/hd V13361))))))))))))
@@ -3451,13 +3451,13 @@
                     (nthcdr 1
                             (shen/hd V13361)))))
           (shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 2
                      (shen/hd
                       (nthcdr 1
                               (shen/hd V13361))))))
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 2
                      (shen/hd V13361)))))))))))
@@ -3493,7 +3493,7 @@
        (shen/cons\?
         (nthcdr 1
                 (shen/hd V13361)))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2
                  (shen/hd V13361)))))))
@@ -3508,7 +3508,7 @@
 (defun shen/shen\.case-form
     (V13369 V13370)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13369))
     (list V13370))
    ((shen/and
@@ -3537,7 +3537,7 @@
                            (shen/hd
                             (shen/hd V13369)))))
           (shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 2
                      (shen/hd
@@ -3564,13 +3564,13 @@
                          (nthcdr 1
                                  (shen/hd V13369)))))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 2
                           (shen/hd
                            (nthcdr 1
                                    (shen/hd V13369))))))
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 2
                           (shen/hd V13369))))))))))))))))
@@ -3609,7 +3609,7 @@
                            (shen/hd
                             (shen/hd V13369)))))
           (shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 2
                      (shen/hd
@@ -3618,7 +3618,7 @@
             (shen/cons\?
              (nthcdr 1
                      (shen/hd V13369)))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2
                       (shen/hd V13369))))))))))))
@@ -3656,7 +3656,7 @@
            (shen/cons\?
             (nthcdr 1
                     (shen/hd V13369)))
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 2
                      (shen/hd V13369)))))))))))
@@ -3680,7 +3680,7 @@
   (shen/cond
    ((shen/and
      (shen/cons\? V13372)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (nthcdr 1 V13372))))
     (shen/hd V13372))
@@ -3737,7 +3737,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V14542))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14542)))))))
     (append
@@ -3757,7 +3757,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V14542))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14542)))))))
     (append
@@ -4274,7 +4274,7 @@
       ((tail-trampoline
         (V14695 V14696)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14696))
           nil)
          ((shen/and
@@ -4340,7 +4340,7 @@
       ((tail-trampoline
         (V14709 V14710)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14709))
           nil)
          ((shen/cons\? V14709)
@@ -4378,7 +4378,7 @@
       ((tail-trampoline
         (V14726 V14727)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14727))
           'false)
          ((shen/and
@@ -4405,7 +4405,7 @@
 (defun shen/empty\?
     (V14733)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14733))
     'true)
    (shen/true 'false)))
@@ -4461,7 +4461,7 @@
 (defun shen/shen\.remove-pointer
     (V14772 V14773 V14774)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14774))
     nil)
    ((shen/and
@@ -4479,7 +4479,7 @@
                  (shen/hd
                   (shen/hd V14774))))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 2
                    (shen/hd
@@ -4508,7 +4508,7 @@
 (defun shen/shen\.change-pointer-value
     (V14783 V14784 V14785 V14786)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14786))
     (list
      (append
@@ -4530,7 +4530,7 @@
                  (shen/hd
                   (shen/hd V14786))))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 2
                    (shen/hd
@@ -4636,7 +4636,7 @@
         (shen/cond
          ((shen/= 0 V14809)
           0)
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14810))
           V14809)
          ((shen/and
@@ -4671,7 +4671,7 @@
 (defun shen/sum
     (V14812)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14812))
     0)
    ((shen/cons\? V14812)
@@ -4704,7 +4704,7 @@
       ((tail-trampoline
         (V14835 V14836)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14835))
           nil)
          ((shen/cons\? V14835)
@@ -4742,7 +4742,7 @@
       ((tail-trampoline
         (V14841 V14842)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14841))
           V14842)
          ((shen/cons\? V14841)
@@ -4770,7 +4770,7 @@
       ((tail-trampoline
         (V14845 V14846)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14845))
           V14846)
          ((shen/cons\? V14845)
@@ -4888,7 +4888,7 @@
       ((tail-trampoline
         (V14881 V14882 V14883)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14882))
           (shen/reverse V14883))
          ((shen/cons\? V14882)
@@ -4921,7 +4921,7 @@
       ((tail-trampoline
         (V14888 V14889)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14888))
           V14889)
          (shen/true
@@ -4955,7 +4955,8 @@
   (nth I Xs))
 (defun shen/integer\?
     (N)
-  (integerp N))
+  (shen/internal/predicate->shen
+   (integerp N)))
 (defun shen/shen\.abs
     (V14916)
   (shen/if
@@ -5013,7 +5014,7 @@
 (defun shen/mapcan
     (V14932 V14933)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14933))
     nil)
    ((shen/cons\? V14933)
@@ -5108,7 +5109,7 @@
       ((tail-trampoline
         (V14976 V14977)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14977))
           (shen/simple-error
            (shen/shen\.app V14976 " has no lambda expansion\n" 'shen\.a)))
@@ -5146,7 +5147,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V14350))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V14350)))))
     (shen/simple-error
@@ -5442,7 +5443,7 @@
        (shen/cons\?
         (nthcdr 2 V14364))
        (shen/and
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14364)))
         (shen/=
@@ -5927,7 +5928,7 @@
       ((tail-trampoline
         (V14411 V14412)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14412))
           nil)
          ((shen/and
@@ -5995,12 +5996,12 @@
          (shen/hd
           (nthcdr 2 V14418)))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (shen/fst
             (shen/hd
              (nthcdr 2 V14418)))))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V14418))))))))
     (shen/let Q
@@ -6032,7 +6033,7 @@
   (shen/cond
    ((shen/and
      (shen/tuple\? V14424)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (shen/fst V14424))))
     (shen/snd V14424))
@@ -6053,7 +6054,7 @@
         (shen/tuple\?
          (shen/hd
           (nthcdr 2 V14428)))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14428)))))))
     (list
@@ -6091,7 +6092,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V14434))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14434)))))))
     (list 'mode
@@ -6134,9 +6135,9 @@
     (V14449 V14450 V14451 V14452)
   (shen/cond
    ((shen/and
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14449))
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14450)))
     nil)
    (shen/true
@@ -6145,9 +6146,9 @@
     (V14459 V14460 V14461 V14462)
   (shen/cond
    ((shen/and
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14459))
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14460)))
     (list
      (list 'bind 'ContextOut_1957 V14461)))
@@ -6175,12 +6176,12 @@
         (V14466 V14467 V14468)
         (shen/cond
          ((shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null V14466))
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null V14467))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null V14468))))
           'shen\.skip)
          ((shen/and
@@ -6250,7 +6251,7 @@
       ((tail-trampoline
         (V14492)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14492))
           nil)
          ((shen/and
@@ -6266,7 +6267,7 @@
               (shen/cons\?
                (nthcdr 1
                        (shen/hd V14492)))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/hd V14492))))))))
@@ -6295,7 +6296,7 @@
                (shen/cons\?
                 (nthcdr 2
                         (shen/hd V14492)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3
                          (shen/hd V14492)))))))))
@@ -6340,12 +6341,12 @@
   (shen/cond
    ((shen/and
      (shen/= 'true V14503)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14504)))
     'Context_1957)
    ((shen/and
      (shen/= 'false V14503)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V14504)))
     'ContextOut_1957)
    ((shen/cons\? V14504)
@@ -6422,7 +6423,7 @@
       ((tail-trampoline
         (V14524)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14524))
           (shen/shen\.demodulation-function
            (shen/value 'shen\.*tc*)
@@ -6486,7 +6487,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V14530))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V14530)))))
     (list
@@ -6571,12 +6572,12 @@
         (V15940 V15941 V15942)
         (shen/cond
          ((shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null V15941))
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null V15942)))
           nil)
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15941))
           (list
            (shen/shen\.split_cc_rule V15940
@@ -6627,7 +6628,7 @@
             (shen/and
              (shen/cons\?
               (nthcdr 1 V15951))
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 2 V15951))))))
           (append
@@ -6652,7 +6653,7 @@
                (shen/and
                 (shen/cons\?
                  (nthcdr 3 V15951))
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 4 V15951)))))))))
           (list
@@ -6662,7 +6663,7 @@
                   (nthcdr 3 V15951))
                  (shen/hd
                   (nthcdr 1 V15951)))))
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15951))
           (shen/do
            (shen/shen\.semantic-completion-warning V15950 V15952)
@@ -6711,13 +6712,13 @@
 (defun shen/shen\.default_semantics
     (V15966)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V15966))
     nil)
    ((shen/and
      (shen/cons\? V15966)
      (shen/and
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V15966)))
       (shen/shen\.grammar_symbol\?
@@ -6758,7 +6759,7 @@
   (shen/cond
    ((shen/and
      (shen/cons\? V15970)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (nthcdr 1 V15970))))
     (shen/hd V15970))
@@ -6782,7 +6783,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V15972))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V15972)))))
     (shen/shen\.syntax
@@ -6796,7 +6797,7 @@
     (V15976 V15977 V15978)
   (shen/cond
    ((shen/and
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V15976))
      (shen/and
       (shen/cons\? V15978)
@@ -6809,7 +6810,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 2 V15978))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V15978))))))))
     (list 'if
@@ -6822,7 +6823,7 @@
                  (shen/hd
                   (nthcdr 2 V15978))))
           (list 'fail)))
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V15976))
     (list 'shen\.pair
           (list 'hd V15977)
@@ -6903,11 +6904,11 @@
         (shen/cons\?
          (nthcdr 2 V15988))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (shen/hd
             (nthcdr 2 V15988))))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V15988))))))))
     (list
@@ -6924,7 +6925,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V15988))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V15988)))))))
     (append
@@ -6950,7 +6951,7 @@
         (shen/cons\?
          (nthcdr 2 V16005))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V16005)))
          (shen/=
@@ -7104,7 +7105,7 @@
 (defun shen/shen\.semantics
     (V16053)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V16053))
     nil)
    ((shen/shen\.grammar_symbol\? V16053)
@@ -7126,7 +7127,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V16061))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V16061)))))
     (shen/hd
@@ -7149,7 +7150,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V16075))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V16075)))))
     (list nil
@@ -7164,7 +7165,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V16081))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V16081)))))
     (list
@@ -7449,7 +7450,7 @@
 (defun shen/shen\.cn-all
     (V14136)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14136))
     "")
    ((shen/cons\? V14136)
@@ -7493,7 +7494,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V14148))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V14148))))))
     (shen/simple-error
@@ -7507,7 +7508,7 @@
 (defun shen/shen\.compress-50
     (V14155 V14156)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14156))
     "")
    ((shen/= 0 V14155)
@@ -8182,7 +8183,7 @@
 (defun shen/shen\.control-chars
     (V14186)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14186))
     "")
    ((shen/and
@@ -8243,7 +8244,7 @@
       ((tail-trampoline
         (V14196)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14196))
           nil)
          ((shen/and
@@ -9088,7 +9089,7 @@
 (defun shen/shen\.pre
     (V14257 V14258)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14257))
     0)
    ((shen/cons\? V14257)
@@ -9104,7 +9105,7 @@
 (defun shen/shen\.post
     (V14263 V14264)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14263))
     0)
    ((shen/cons\? V14263)
@@ -9504,7 +9505,7 @@
 (defun shen/shen\.cons_form
     (V14298)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V14298))
     nil)
    ((shen/and
@@ -9516,7 +9517,7 @@
        (shen/cons\?
         (nthcdr 2 V14298))
        (shen/and
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V14298)))
         (shen/=
@@ -9545,7 +9546,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V14303))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V14303))))))
     (shen/append
@@ -9719,7 +9720,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13548))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13548)))))
     (shen/simple-error
@@ -9738,7 +9739,7 @@
 (defun shen/shen\.next-50
     (V13555 V13556)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13556))
     "")
    ((shen/= 0 V13555)
@@ -9766,7 +9767,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13558))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13558)))))))
     (shen/shen\.app
@@ -9782,7 +9783,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13562))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13562)))))
     (append
@@ -9972,7 +9973,7 @@
              (shen/and
               (shen/cons\?
                (nthcdr 2 V13578))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 3 V13578)))))))
           (shen/and
@@ -9997,7 +9998,7 @@
                (shen/= '+
                        (shen/hd
                         (nthcdr 2 V13578)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13578))))))))
           (vector
@@ -10019,7 +10020,7 @@
                (shen/= '-
                        (shen/hd
                         (nthcdr 2 V13578)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13578))))))))
           (vector
@@ -10052,7 +10053,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13580))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13580)))))))
     (append
@@ -10074,7 +10075,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13580))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13580)))))))
     (append
@@ -10204,11 +10205,11 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13594))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13594)))))))
     V13594)
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13594))
     nil)
    ((shen/cons\? V13594)
@@ -10255,7 +10256,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13600))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13600)))))))
     (list
@@ -10284,7 +10285,7 @@
         (shen/cons\?
          (nthcdr 2 V13602))
         (shen/and
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V13602)))
          (shen/<
@@ -10307,7 +10308,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 2 V13602))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V13602))))))))
     (shen/let Terms
@@ -10385,7 +10386,7 @@
                           (shen/hd
                            (nthcdr 1 V13617))))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 3
                             (shen/hd
@@ -10393,7 +10394,7 @@
                   (shen/and
                    (shen/cons\?
                     (nthcdr 2 V13617))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3 V13617))))))))))))
           (vector
@@ -10419,7 +10420,7 @@
                 (shen/= '+
                         (shen/hd
                          (nthcdr 2 V13617)))
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3 V13617)))))))))
           (shen/* 2
@@ -10457,7 +10458,7 @@
                 (shen/= '-
                         (shen/hd
                          (nthcdr 2 V13617)))
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3 V13617)))))))))
           (shen/*
@@ -10487,7 +10488,7 @@
               (shen/cons\?
                (nthcdr 2 V13617))
               (shen/and
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13617)))
                (shen/variable\?
@@ -10509,7 +10510,7 @@
                (shen/= '+
                        (shen/hd
                         (nthcdr 2 V13617)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13617))))))))
           2)
@@ -10528,7 +10529,7 @@
                (shen/= '-
                        (shen/hd
                         (nthcdr 2 V13617)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13617))))))))
           1)
@@ -10548,7 +10549,7 @@
 (defun shen/shen\.product
     (V13619)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13619))
     1)
    ((shen/cons\? V13619)
@@ -10572,7 +10573,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13621))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13621)))))))
     (list 'bind
@@ -10589,7 +10590,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13621))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13621))))))
     (list 'fwhen
@@ -10607,7 +10608,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13621))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13621)))))))
     (list 'bind
@@ -10624,7 +10625,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13621))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13621))))))
     (list 'fwhen
@@ -10664,7 +10665,7 @@
 (defun shen/shen\.group_clauses
     (V13627)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13627))
     nil)
    ((shen/cons\? V13627)
@@ -10688,7 +10689,7 @@
       ((tail-trampoline
         (V13632 V13633)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13633))
           nil)
          ((shen/cons\? V13633)
@@ -10817,7 +10818,7 @@
   (shen/cond
    ((shen/and
      (shen/cons\? V13686)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (nthcdr 1 V13686))))
     (shen/hd V13686))
@@ -10842,7 +10843,7 @@
         (shen/cond
          ((shen/and
            (shen/cons\? V13696)
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null
              (nthcdr 1 V13696))))
           (shen/-
@@ -10894,7 +10895,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13698))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13698)))))))
     (shen/let Linear
@@ -10914,7 +10915,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V13700))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V13700)))))
     (list
@@ -10953,7 +10954,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13704))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13704)))))))
     V13704)
@@ -10990,7 +10991,7 @@
                     (shen/hd
                      (nthcdr 1 V13706))))
            (shen/and
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 3
                       (shen/hd
@@ -10998,7 +10999,7 @@
             (shen/and
              (shen/cons\?
               (nthcdr 2 V13706))
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 3 V13706))))))))))))
     (append
@@ -11042,7 +11043,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 2 V13715))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V13715))))))))
     (shen/let MuApplication
@@ -11080,7 +11081,7 @@
       ((tail-trampoline
         (V13731 V13732 V13733)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13732))
           (shen/reverse V13733))
          ((shen/and
@@ -11116,16 +11117,16 @@
     (V13736 V13737)
   (shen/cond
    ((shen/and
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V13736))
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null V13737)))
     (list 'shen\.pop 'shen\.the 'shen\.stack))
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13737))
     (list 'shen\.rename 'shen\.the 'shen\.variables 'in V13736 'and 'shen\.then
           (list 'shen\.pop 'shen\.the 'shen\.stack)))
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13736))
     (list 'call 'shen\.the 'shen\.continuation V13737))
    (shen/true
@@ -11143,7 +11144,7 @@
        (shen/cons\?
         (nthcdr 1 V13740))
        (shen/and
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (shen/hd
            (nthcdr 1 V13740))))
@@ -11151,10 +11152,10 @@
          (shen/cons\?
           (nthcdr 2 V13740))
          (shen/and
-          (shen/predicate->shen
+          (shen/internal/predicate->shen
            (null
             (nthcdr 3 V13740)))
-          (shen/predicate->shen
+          (shen/internal/predicate->shen
            (null V13741))))))))
     (shen/hd
      (nthcdr 2 V13740)))
@@ -11174,7 +11175,7 @@
          (shen/cons\?
           (nthcdr 2 V13740))
          (shen/and
-          (shen/predicate->shen
+          (shen/internal/predicate->shen
            (null
             (nthcdr 3 V13740)))
           (shen/cons\? V13741)))))))
@@ -11237,7 +11238,7 @@
                             (nthcdr 1
                                     (shen/hd V13750)))))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 3
                              (shen/hd
@@ -11248,14 +11249,14 @@
                      (nthcdr 2
                              (shen/hd V13750)))
                     (shen/and
-                     (shen/predicate->shen
+                     (shen/internal/predicate->shen
                       (null
                        (nthcdr 3
                                (shen/hd V13750))))
                      (shen/and
                       (shen/cons\?
                        (nthcdr 1 V13750))
-                      (shen/predicate->shen
+                      (shen/internal/predicate->shen
                        (null
                         (nthcdr 2 V13750)))))))))))))))
           (vector
@@ -11295,7 +11296,7 @@
                 (nthcdr 2
                         (shen/hd V13750)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13750))))
@@ -11303,7 +11304,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13750))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13750)))
                   (shen/= '_
@@ -11334,7 +11335,7 @@
                 (nthcdr 2
                         (shen/hd V13750)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13750))))
@@ -11342,7 +11343,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13750))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13750)))
                   (shen/shen\.ephemeral_variable\?
@@ -11380,7 +11381,7 @@
                 (nthcdr 2
                         (shen/hd V13750)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13750))))
@@ -11388,7 +11389,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13750))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13750)))
                   (shen/variable\?
@@ -11426,7 +11427,7 @@
                 (nthcdr 2
                         (shen/hd V13750)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13750))))
@@ -11434,7 +11435,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13750))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13750)))
                   (shen/and
@@ -11480,7 +11481,7 @@
                 (nthcdr 2
                         (shen/hd V13750)))
                (shen/and
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3
                           (shen/hd V13750))))
@@ -11488,7 +11489,7 @@
                  (shen/cons\?
                   (nthcdr 1 V13750))
                  (shen/and
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 2 V13750)))
                   (shen/and
@@ -11553,7 +11554,7 @@
                  (nthcdr 2
                          (shen/hd V13750)))
                 (shen/and
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 3
                            (shen/hd V13750))))
@@ -11561,7 +11562,7 @@
                   (shen/cons\?
                    (nthcdr 1 V13750))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 2 V13750)))
                    (shen/= '- V13751))))))))))
@@ -11618,7 +11619,7 @@
                  (nthcdr 2
                          (shen/hd V13750)))
                 (shen/and
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 3
                            (shen/hd V13750))))
@@ -11626,7 +11627,7 @@
                   (shen/cons\?
                    (nthcdr 1 V13750))
                   (shen/and
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 2 V13750)))
                    (shen/= '+ V13751))))))))))
@@ -11723,7 +11724,7 @@
                (shen/= '+
                        (shen/hd
                         (nthcdr 2 V13755)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13755))))))))
           (vector
@@ -11745,7 +11746,7 @@
                (shen/= '-
                        (shen/hd
                         (nthcdr 2 V13755)))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13755))))))))
           (vector
@@ -11814,7 +11815,7 @@
                   (shen/and
                    (shen/cons\?
                     (nthcdr 5 V13771))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 6 V13771))))))))))))
           (list 'let
@@ -11855,7 +11856,7 @@
                   (shen/and
                    (shen/cons\?
                     (nthcdr 4 V13771))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 5 V13771))))))))))))
           (list 'shen\.lazyderef
@@ -11891,7 +11892,7 @@
                   (shen/and
                    (shen/cons\?
                     (nthcdr 5 V13771))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 6 V13771))))))))))))
           (list 'if
@@ -11927,7 +11928,7 @@
                  (shen/= 'shen\.variable
                          (shen/hd
                           (nthcdr 3 V13771)))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 4 V13771))))))))))
           (list 'shen\.pvar\?
@@ -11962,7 +11963,7 @@
                    (shen/= 'list
                            (shen/hd
                             (nthcdr 4 V13771)))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 5 V13771))))))))))))
           (list 'cons\?
@@ -11997,7 +11998,7 @@
                    (shen/cons\?
                     (nthcdr 4 V13771))
                    (shen/and
-                    (shen/predicate->shen
+                    (shen/internal/predicate->shen
                      (null
                       (shen/hd
                        (nthcdr 4 V13771))))
@@ -12018,7 +12019,7 @@
                         (shen/and
                          (shen/cons\?
                           (nthcdr 7 V13771))
-                         (shen/predicate->shen
+                         (shen/internal/predicate->shen
                           (null
                            (nthcdr 8 V13771))))))))))))))))))
           (vector
@@ -12075,7 +12076,7 @@
                         (shen/and
                          (shen/cons\?
                           (nthcdr 7 V13771))
-                         (shen/predicate->shen
+                         (shen/internal/predicate->shen
                           (null
                            (nthcdr 8 V13771))))))))))))))))))
           (list 'let
@@ -12118,7 +12119,7 @@
                   (shen/and
                    (shen/cons\?
                     (nthcdr 5 V13771))
-                   (shen/predicate->shen
+                   (shen/internal/predicate->shen
                     (null
                      (nthcdr 6 V13771))))))))))))
           (list 'do
@@ -12165,7 +12166,7 @@
                  (shen/and
                   (shen/cons\?
                    (nthcdr 4 V13771))
-                  (shen/predicate->shen
+                  (shen/internal/predicate->shen
                    (null
                     (nthcdr 5 V13771)))))))))))
           (list '=
@@ -12196,7 +12197,7 @@
                 (shen/and
                  (shen/cons\?
                   (nthcdr 3 V13771))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 4 V13771))))))))))
           (append
@@ -12224,7 +12225,7 @@
                 (shen/and
                  (shen/cons\?
                   (nthcdr 3 V13771))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 4 V13771))))))))))
           (append
@@ -12249,7 +12250,7 @@
                 (shen/= 'shen\.stack
                         (shen/hd
                          (nthcdr 2 V13771)))
-                (shen/predicate->shen
+                (shen/internal/predicate->shen
                  (null
                   (nthcdr 3 V13771)))))))))
           (list 'do
@@ -12277,7 +12278,7 @@
                 (shen/and
                  (shen/cons\?
                   (nthcdr 3 V13771))
-                 (shen/predicate->shen
+                 (shen/internal/predicate->shen
                   (null
                    (nthcdr 4 V13771))))))))))
           (list 'do
@@ -12459,7 +12460,7 @@
      (shen/and
       (shen/cons\?
        (shen/hd V13835))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13835)))))
     (append
@@ -12491,7 +12492,7 @@
 (defun shen/shen\.newcontinuation
     (V13841 V13842 V13843)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13841))
     V13843)
    ((shen/and
@@ -12785,7 +12786,7 @@
       ((tail-trampoline
         (V14040 V14041 V14042 V14043)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14041))
           (shen/internal/apply-higher-order-function V14040
                                                      (list V14042 V14043)))
@@ -12837,7 +12838,7 @@
      (shen/and
       (shen/cons\?
        (nthcdr 1 V14050))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 2 V14050)))))
     (shen/shen\.intprolog-help-help V14049
@@ -12853,7 +12854,7 @@
       ((tail-trampoline
         (V14056 V14057 V14058 V14059)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14057))
           (shen/internal/apply-higher-order-function V14056
                                                      (list V14059
@@ -12884,7 +12885,7 @@
       ((tail-trampoline
         (V14064 V14065)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14064))
           'true)
          ((shen/and
@@ -12917,7 +12918,7 @@
            (shen/and
             (shen/cons\?
              (shen/hd V14064))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 1
                       (shen/hd V14064))))))
@@ -12957,7 +12958,7 @@
       ((tail-trampoline
         (V14077 V14078 V14079)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V14078))
           V14077)
          ((shen/and
@@ -13051,7 +13052,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 3 V15707))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 4 V15707))))))))
     (shen/let KL
@@ -13163,7 +13164,7 @@
       ((tail-trampoline
         (V15739)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15739))
           (shen/shen\.prhush " ==>"
                              (shen/stoutput)))
@@ -13246,7 +13247,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 3 V15757))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 4 V15757))))))))
     (shen/let G
@@ -13446,7 +13447,7 @@
       ((tail-trampoline
         (V13429 V13430)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13430))
           (shen/simple-error
            (shen/error-to-string V13429)))
@@ -13483,7 +13484,7 @@
       ((tail-trampoline
         (V13440 V13441)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13441))
           nil)
          ((shen/and
@@ -13613,7 +13614,7 @@
       ((tail-trampoline
         (V15826 V15827)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15827))
           V15826)
          ((shen/cons\? V15827)
@@ -13704,7 +13705,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V15833))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V15833)))))))
     (list 'cn
@@ -13727,7 +13728,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 3 V15833))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 4 V15833))))))))
     (append
@@ -13774,13 +13775,13 @@
                      (shen/hd
                       (nthcdr 2 V15835))))
             (shen/and
-             (shen/predicate->shen
+             (shen/internal/predicate->shen
               (null
                (nthcdr 3
                        (shen/hd
                         (nthcdr 2 V15835)))))
              (shen/and
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 3 V15835)))
               (shen/and
@@ -13840,7 +13841,7 @@
       ((tail-trampoline
         (V15840 V15841)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15841))
           V15840)
          ((shen/cons\? V15841)
@@ -13979,14 +13980,14 @@
 (defun shen/shen\.iter-list
     (V15886 V15887 V15888)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V15886))
     "")
    ((shen/= 0 V15888)
     "... etc")
    ((shen/and
      (shen/cons\? V15886)
-     (shen/predicate->shen
+     (shen/internal/predicate->shen
       (null
        (nthcdr 1 V15886))))
     (shen/shen\.arg->str
@@ -14171,7 +14172,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13453))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13453))))))
     (list 'pr
@@ -14202,7 +14203,7 @@
      (shen/and
       (shen/= 'lineread
               (shen/hd V13457))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13457)))))
     (list 'lineread
@@ -14212,7 +14213,7 @@
      (shen/and
       (shen/= 'input
               (shen/hd V13457))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13457)))))
     (list 'input
@@ -14222,7 +14223,7 @@
      (shen/and
       (shen/= 'read
               (shen/hd V13457))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13457)))))
     (list 'read
@@ -14235,7 +14236,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13457))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13457))))))
     (list 'input+
@@ -14247,7 +14248,7 @@
      (shen/and
       (shen/= 'read-byte
               (shen/hd V13457))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13457)))))
     (list 'read-byte
@@ -14259,7 +14260,7 @@
       ((tail-trampoline
         (V13460 V13461)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13460))
           V13461)
          ((shen/cons\? V13460)
@@ -14294,7 +14295,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13463))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13463)))))))
     (list 'compile
@@ -14346,7 +14347,7 @@
       ((tail-trampoline
         (V13471)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13471))
           nil)
          ((shen/and
@@ -14362,7 +14363,7 @@
               (shen/cons\?
                (nthcdr 1
                        (shen/hd V13471)))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/hd V13471))))))))
@@ -14394,7 +14395,7 @@
       ((tail-trampoline
         (V13475)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13475))
           nil)
          ((shen/and
@@ -14410,7 +14411,7 @@
               (shen/cons\?
                (nthcdr 1
                        (shen/hd V13475)))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2
                         (shen/hd V13475))))))))
@@ -14518,7 +14519,7 @@
               (shen/cons\?
                (nthcdr 2 V13483))
               (shen/and
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V13483)))
                (shen/string\?
@@ -14575,7 +14576,7 @@
      (shen/and
       (shen/= 'nl
               (shen/hd V13489))
-      (shen/predicate->shen
+      (shen/internal/predicate->shen
        (null
         (nthcdr 1 V13489)))))
     (list 'nl 1))
@@ -14670,7 +14671,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13495))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13495)))))))
     (append
@@ -14707,7 +14708,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13499))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13499)))))))
     (list 'if
@@ -14743,7 +14744,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13499))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13499))))))
     (shen/simple-error "error: odd number of case elements\n"))
@@ -14759,7 +14760,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13501))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13501))))))
     (shen/shen\.let-macro
@@ -14807,7 +14808,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 3 V13505))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 4 V13505))))))))
     (list 'put
@@ -14829,7 +14830,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13505))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13505)))))))
     (list 'get
@@ -14849,7 +14850,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V13505))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V13505)))))))
     (list 'unput
@@ -14870,7 +14871,7 @@
       (shen/and
        (shen/cons\?
         (nthcdr 1 V13507))
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V13507))))))
     (shen/shen\.function-abstraction
@@ -14922,7 +14923,7 @@
 (defun shen/shen\.findpos
     (V13529 V13530)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V13530))
     (shen/simple-error
      (shen/shen\.app V13529 " is not a macro\n" 'shen\.a)))
@@ -15037,7 +15038,7 @@
       ((tail-trampoline
         (V13378)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V13378))
           nil)
          ((shen/and
@@ -15827,7 +15828,7 @@
              (shen/and
               (shen/cons\?
                (nthcdr 2 V15302))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 3 V15302)))))))
           (append
@@ -15857,7 +15858,7 @@
            (shen/and
             (shen/cons\?
              (nthcdr 1 V15302))
-            (shen/predicate->shen
+            (shen/internal/predicate->shen
              (null
               (nthcdr 2 V15302)))))
           (list
@@ -15948,7 +15949,7 @@
                                                                                                                                             (nthcdr 1 V15295)
                                                                                                                                             V15313)
                                                                                                                                            (shen/if
-                                                                                                                                            (shen/predicate->shen
+                                                                                                                                            (shen/internal/predicate->shen
                                                                                                                                              (null V15296))
                                                                                                                                             (shen/do
                                                                                                                                              (shen/shen\.incinfs)
@@ -16100,7 +16101,7 @@
                                                                                                                        (nthcdr 1 V15183)
                                                                                                                        V15351)
                                                                                                                       (shen/if
-                                                                                                                       (shen/predicate->shen
+                                                                                                                       (shen/internal/predicate->shen
                                                                                                                         (null V15184))
                                                                                                                        (shen/do
                                                                                                                         (shen/shen\.incinfs)
@@ -16131,7 +16132,7 @@
                                                                                                                                                        (nthcdr 1 V15186)
                                                                                                                                                        V15351)
                                                                                                                                                       (shen/if
-                                                                                                                                                       (shen/predicate->shen
+                                                                                                                                                       (shen/internal/predicate->shen
                                                                                                                                                         (null V15187))
                                                                                                                                                        (shen/let B
                                                                                                                                                                  (shen/shen\.newpv V15351)
@@ -16179,7 +16180,7 @@
                                                                                                                                                                                         (nthcdr 1 V15191)
                                                                                                                                                                                         V15351)
                                                                                                                                                                                        (shen/if
-                                                                                                                                                                                        (shen/predicate->shen
+                                                                                                                                                                                        (shen/internal/predicate->shen
                                                                                                                                                                                          (null V15192))
                                                                                                                                                                                         (shen/let V15193
                                                                                                                                                                                                   (shen/shen\.lazyderef V15349 V15351)
@@ -16204,7 +16205,7 @@
                                                                                                                                                                                                                                               (nthcdr 1 V15195)
                                                                                                                                                                                                                                               V15351)
                                                                                                                                                                                                                                              (shen/if
-                                                                                                                                                                                                                                              (shen/predicate->shen
+                                                                                                                                                                                                                                              (shen/internal/predicate->shen
                                                                                                                                                                                                                                                (null V15196))
                                                                                                                                                                                                                                               (shen/do
                                                                                                                                                                                                                                                (shen/shen\.incinfs)
@@ -16267,7 +16268,7 @@
                                                                                                                                                                                                                                                           (nthcdr 1 V15197)
                                                                                                                                                                                                                                                           V15351)
                                                                                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                                                                                            (null V15198))
                                                                                                                                                                                                                                                           (shen/do
                                                                                                                                                                                                                                                            (shen/shen\.incinfs)
@@ -16375,7 +16376,7 @@
                                                                                                                                                                                                    (nthcdr 1 V15202)
                                                                                                                                                                                                    V15351)
                                                                                                                                                                                                   (shen/if
-                                                                                                                                                                                                   (shen/predicate->shen
+                                                                                                                                                                                                   (shen/internal/predicate->shen
                                                                                                                                                                                                     (null V15203))
                                                                                                                                                                                                    (shen/let V15204
                                                                                                                                                                                                              (shen/shen\.lazyderef V15349 V15351)
@@ -16408,7 +16409,7 @@
                                                                                                                                                                                                                                                                               (nthcdr 1 V15207)
                                                                                                                                                                                                                                                                               V15351)
                                                                                                                                                                                                                                                                              (shen/if
-                                                                                                                                                                                                                                                                              (shen/predicate->shen
+                                                                                                                                                                                                                                                                              (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                (null V15208))
                                                                                                                                                                                                                                                                               (shen/do
                                                                                                                                                                                                                                                                                (shen/shen\.incinfs)
@@ -16465,7 +16466,7 @@
                                                                                                                                                                                                                                                                                           (nthcdr 1 V15209)
                                                                                                                                                                                                                                                                                           V15351)
                                                                                                                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                            (null V15210))
                                                                                                                                                                                                                                                                                           (shen/do
                                                                                                                                                                                                                                                                                            (shen/shen\.incinfs)
@@ -16585,7 +16586,7 @@
                                                                                                                                                                                                               (nthcdr 1 V15214)
                                                                                                                                                                                                               V15351)
                                                                                                                                                                                                              (shen/if
-                                                                                                                                                                                                              (shen/predicate->shen
+                                                                                                                                                                                                              (shen/internal/predicate->shen
                                                                                                                                                                                                                (null V15215))
                                                                                                                                                                                                               (shen/let V15216
                                                                                                                                                                                                                         (shen/shen\.lazyderef V15349 V15351)
@@ -16610,7 +16611,7 @@
                                                                                                                                                                                                                                                                     (nthcdr 1 V15218)
                                                                                                                                                                                                                                                                     V15351)
                                                                                                                                                                                                                                                                    (shen/if
-                                                                                                                                                                                                                                                                    (shen/predicate->shen
+                                                                                                                                                                                                                                                                    (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                      (null V15219))
                                                                                                                                                                                                                                                                     (shen/do
                                                                                                                                                                                                                                                                      (shen/shen\.incinfs)
@@ -16673,7 +16674,7 @@
                                                                                                                                                                                                                                                                                 (nthcdr 1 V15220)
                                                                                                                                                                                                                                                                                 V15351)
                                                                                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                  (null V15221))
                                                                                                                                                                                                                                                                                 (shen/do
                                                                                                                                                                                                                                                                                  (shen/shen\.incinfs)
@@ -16781,7 +16782,7 @@
                                                                                                                                                                                                                          (nthcdr 1 V15225)
                                                                                                                                                                                                                          V15351)
                                                                                                                                                                                                                         (shen/if
-                                                                                                                                                                                                                         (shen/predicate->shen
+                                                                                                                                                                                                                         (shen/internal/predicate->shen
                                                                                                                                                                                                                           (null V15226))
                                                                                                                                                                                                                          (shen/let V15227
                                                                                                                                                                                                                                    (shen/shen\.lazyderef V15349 V15351)
@@ -16845,7 +16846,7 @@
                                                                                                                                                                                                                                     (nthcdr 1 V15231)
                                                                                                                                                                                                                                     V15351)
                                                                                                                                                                                                                                    (shen/if
-                                                                                                                                                                                                                                    (shen/predicate->shen
+                                                                                                                                                                                                                                    (shen/internal/predicate->shen
                                                                                                                                                                                                                                      (null V15232))
                                                                                                                                                                                                                                     (shen/let V15233
                                                                                                                                                                                                                                               (shen/shen\.lazyderef V15349 V15351)
@@ -16878,7 +16879,7 @@
                                                                                                                                                                                                                                                                                                                (nthcdr 1 V15236)
                                                                                                                                                                                                                                                                                                                V15351)
                                                                                                                                                                                                                                                                                                               (shen/if
-                                                                                                                                                                                                                                                                                                               (shen/predicate->shen
+                                                                                                                                                                                                                                                                                                               (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                                                 (null V15237))
                                                                                                                                                                                                                                                                                                                (shen/let Z
                                                                                                                                                                                                                                                                                                                          (shen/shen\.newpv V15351)
@@ -16995,7 +16996,7 @@
                                                                                                                                                                                                                                                                                                                            (nthcdr 1 V15238)
                                                                                                                                                                                                                                                                                                                            V15351)
                                                                                                                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                                                             (null V15239))
                                                                                                                                                                                                                                                                                                                            (shen/let Z
                                                                                                                                                                                                                                                                                                                                      (shen/shen\.newpv V15351)
@@ -17223,7 +17224,7 @@
                                                                                                                                                                                                                                                                     (nthcdr 1 V15244)
                                                                                                                                                                                                                                                                     V15351)
                                                                                                                                                                                                                                                                    (shen/if
-                                                                                                                                                                                                                                                                    (shen/predicate->shen
+                                                                                                                                                                                                                                                                    (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                      (null V15245))
                                                                                                                                                                                                                                                                     (shen/let W
                                                                                                                                                                                                                                                                               (shen/shen\.newpv V15351)
@@ -17292,7 +17293,7 @@
                                                                                                                                                                                                                                                           (nthcdr 1 V15249)
                                                                                                                                                                                                                                                           V15351)
                                                                                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                                                                                            (null V15250))
                                                                                                                                                                                                                                                           (shen/let V15251
                                                                                                                                                                                                                                                                     (shen/shen\.lazyderef V15349 V15351)
@@ -17317,7 +17318,7 @@
                                                                                                                                                                                                                                                                                                                 (nthcdr 1 V15253)
                                                                                                                                                                                                                                                                                                                 V15351)
                                                                                                                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                                                  (null V15254))
                                                                                                                                                                                                                                                                                                                 (shen/do
                                                                                                                                                                                                                                                                                                                  (shen/shen\.incinfs)
@@ -17398,7 +17399,7 @@
                                                                                                                                                                                                                                                                                                                             (nthcdr 1 V15255)
                                                                                                                                                                                                                                                                                                                             V15351)
                                                                                                                                                                                                                                                                                                                            (shen/if
-                                                                                                                                                                                                                                                                                                                            (shen/predicate->shen
+                                                                                                                                                                                                                                                                                                                            (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                                                              (null V15256))
                                                                                                                                                                                                                                                                                                                             (shen/do
                                                                                                                                                                                                                                                                                                                              (shen/shen\.incinfs)
@@ -17530,7 +17531,7 @@
                                                                                                                                                                                                                                                                      (nthcdr 1 V15260)
                                                                                                                                                                                                                                                                      V15351)
                                                                                                                                                                                                                                                                     (shen/if
-                                                                                                                                                                                                                                                                     (shen/predicate->shen
+                                                                                                                                                                                                                                                                     (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                       (null V15261))
                                                                                                                                                                                                                                                                      (shen/do
                                                                                                                                                                                                                                                                       (shen/shen\.incinfs)
@@ -17578,7 +17579,7 @@
                                                                                                                                                                                                                                                                                 (nthcdr 1 V15265)
                                                                                                                                                                                                                                                                                 V15351)
                                                                                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                  (null V15266))
                                                                                                                                                                                                                                                                                 (shen/let C
                                                                                                                                                                                                                                                                                           (shen/shen\.newpv V15351)
@@ -17633,7 +17634,7 @@
                                                                                                                                                                                                                                                                                            (nthcdr 1 V15270)
                                                                                                                                                                                                                                                                                            V15351)
                                                                                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                                             (null V15271))
                                                                                                                                                                                                                                                                                            (shen/do
                                                                                                                                                                                                                                                                                             (shen/shen\.incinfs)
@@ -17880,7 +17881,7 @@
                                                                                                              (nthcdr 1 V15099)
                                                                                                              V15359)
                                                                                                             (shen/if
-                                                                                                             (shen/predicate->shen
+                                                                                                             (shen/internal/predicate->shen
                                                                                                               (null V15100))
                                                                                                              (shen/let V15101
                                                                                                                        (shen/shen\.lazyderef
@@ -17925,14 +17926,14 @@
                                                                                                                                                                                                     (nthcdr 1 V15106)
                                                                                                                                                                                                     V15359)
                                                                                                                                                                                                    (shen/if
-                                                                                                                                                                                                    (shen/predicate->shen
+                                                                                                                                                                                                    (shen/internal/predicate->shen
                                                                                                                                                                                                      (null V15107))
                                                                                                                                                                                                     (shen/let V15108
                                                                                                                                                                                                               (shen/shen\.lazyderef
                                                                                                                                                                                                                (nthcdr 1 V15103)
                                                                                                                                                                                                                V15359)
                                                                                                                                                                                                               (shen/if
-                                                                                                                                                                                                               (shen/predicate->shen
+                                                                                                                                                                                                               (shen/internal/predicate->shen
                                                                                                                                                                                                                 (null V15108))
                                                                                                                                                                                                                (shen/let Hyp
                                                                                                                                                                                                                          (nthcdr 1 V15094)
@@ -17989,7 +17990,7 @@
                                                                                                                                                                                                                            (nthcdr 1 V15103)
                                                                                                                                                                                                                            V15359)
                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                             (null V15109))
                                                                                                                                                                                                                            (shen/let Hyp
                                                                                                                                                                                                                                      (nthcdr 1 V15094)
@@ -18054,7 +18055,7 @@
                                                                                                                                                                                                                 (nthcdr 1 V15103)
                                                                                                                                                                                                                 V15359)
                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                  (null V15110))
                                                                                                                                                                                                                 (shen/let Hyp
                                                                                                                                                                                                                           (nthcdr 1 V15094)
@@ -18123,14 +18124,14 @@
                                                                                                                                                                                                                 (nthcdr 1 V15111)
                                                                                                                                                                                                                 V15359)
                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                  (null V15112))
                                                                                                                                                                                                                 (shen/let V15113
                                                                                                                                                                                                                           (shen/shen\.lazyderef
                                                                                                                                                                                                                            (nthcdr 1 V15103)
                                                                                                                                                                                                                            V15359)
                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                             (null V15113))
                                                                                                                                                                                                                            (shen/let Hyp
                                                                                                                                                                                                                                      (nthcdr 1 V15094)
@@ -18187,7 +18188,7 @@
                                                                                                                                                                                                                                        (nthcdr 1 V15103)
                                                                                                                                                                                                                                        V15359)
                                                                                                                                                                                                                                       (shen/if
-                                                                                                                                                                                                                                       (shen/predicate->shen
+                                                                                                                                                                                                                                       (shen/internal/predicate->shen
                                                                                                                                                                                                                                         (null V15114))
                                                                                                                                                                                                                                        (shen/let Hyp
                                                                                                                                                                                                                                                  (nthcdr 1 V15094)
@@ -18252,7 +18253,7 @@
                                                                                                                                                                                                                             (nthcdr 1 V15103)
                                                                                                                                                                                                                             V15359)
                                                                                                                                                                                                                            (shen/if
-                                                                                                                                                                                                                            (shen/predicate->shen
+                                                                                                                                                                                                                            (shen/internal/predicate->shen
                                                                                                                                                                                                                              (null V15115))
                                                                                                                                                                                                                             (shen/let Hyp
                                                                                                                                                                                                                                       (nthcdr 1 V15094)
@@ -18321,7 +18322,7 @@
                                                                                                                                                                                           (nthcdr 1 V15103)
                                                                                                                                                                                           V15359)
                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                            (null V15116))
                                                                                                                                                                                           (shen/let Hyp
                                                                                                                                                                                                     (nthcdr 1 V15094)
@@ -18428,7 +18429,7 @@
                                                                                                                         (nthcdr 1 V15122)
                                                                                                                         V15359)
                                                                                                                        (shen/if
-                                                                                                                        (shen/predicate->shen
+                                                                                                                        (shen/internal/predicate->shen
                                                                                                                          (null V15123))
                                                                                                                         (shen/let V15124
                                                                                                                                   (shen/shen\.lazyderef
@@ -18481,14 +18482,14 @@
                                                                                                                                                                                                                                     (nthcdr 1 V15130)
                                                                                                                                                                                                                                     V15359)
                                                                                                                                                                                                                                    (shen/if
-                                                                                                                                                                                                                                    (shen/predicate->shen
+                                                                                                                                                                                                                                    (shen/internal/predicate->shen
                                                                                                                                                                                                                                      (null V15131))
                                                                                                                                                                                                                                     (shen/let V15132
                                                                                                                                                                                                                                               (shen/shen\.lazyderef
                                                                                                                                                                                                                                                (nthcdr 1 V15126)
                                                                                                                                                                                                                                                V15359)
                                                                                                                                                                                                                                               (shen/if
-                                                                                                                                                                                                                                               (shen/predicate->shen
+                                                                                                                                                                                                                                               (shen/internal/predicate->shen
                                                                                                                                                                                                                                                 (null V15132))
                                                                                                                                                                                                                                                (shen/let Hyp
                                                                                                                                                                                                                                                          (nthcdr 1 V15117)
@@ -18543,7 +18544,7 @@
                                                                                                                                                                                                                                                            (nthcdr 1 V15126)
                                                                                                                                                                                                                                                            V15359)
                                                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                                                             (null V15133))
                                                                                                                                                                                                                                                            (shen/let Hyp
                                                                                                                                                                                                                                                                      (nthcdr 1 V15117)
@@ -18606,7 +18607,7 @@
                                                                                                                                                                                                                                                 (nthcdr 1 V15126)
                                                                                                                                                                                                                                                 V15359)
                                                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                                                  (null V15134))
                                                                                                                                                                                                                                                 (shen/let Hyp
                                                                                                                                                                                                                                                           (nthcdr 1 V15117)
@@ -18673,14 +18674,14 @@
                                                                                                                                                                                                                                                 (nthcdr 1 V15135)
                                                                                                                                                                                                                                                 V15359)
                                                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                                                  (null V15136))
                                                                                                                                                                                                                                                 (shen/let V15137
                                                                                                                                                                                                                                                           (shen/shen\.lazyderef
                                                                                                                                                                                                                                                            (nthcdr 1 V15126)
                                                                                                                                                                                                                                                            V15359)
                                                                                                                                                                                                                                                           (shen/if
-                                                                                                                                                                                                                                                           (shen/predicate->shen
+                                                                                                                                                                                                                                                           (shen/internal/predicate->shen
                                                                                                                                                                                                                                                             (null V15137))
                                                                                                                                                                                                                                                            (shen/let Hyp
                                                                                                                                                                                                                                                                      (nthcdr 1 V15117)
@@ -18735,7 +18736,7 @@
                                                                                                                                                                                                                                                                        (nthcdr 1 V15126)
                                                                                                                                                                                                                                                                        V15359)
                                                                                                                                                                                                                                                                       (shen/if
-                                                                                                                                                                                                                                                                       (shen/predicate->shen
+                                                                                                                                                                                                                                                                       (shen/internal/predicate->shen
                                                                                                                                                                                                                                                                         (null V15138))
                                                                                                                                                                                                                                                                        (shen/let Hyp
                                                                                                                                                                                                                                                                                  (nthcdr 1 V15117)
@@ -18798,7 +18799,7 @@
                                                                                                                                                                                                                                                             (nthcdr 1 V15126)
                                                                                                                                                                                                                                                             V15359)
                                                                                                                                                                                                                                                            (shen/if
-                                                                                                                                                                                                                                                            (shen/predicate->shen
+                                                                                                                                                                                                                                                            (shen/internal/predicate->shen
                                                                                                                                                                                                                                                              (null V15139))
                                                                                                                                                                                                                                                             (shen/let Hyp
                                                                                                                                                                                                                                                                       (nthcdr 1 V15117)
@@ -18865,7 +18866,7 @@
                                                                                                                                                                                                                           (nthcdr 1 V15126)
                                                                                                                                                                                                                           V15359)
                                                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                                                            (null V15140))
                                                                                                                                                                                                                           (shen/let Hyp
                                                                                                                                                                                                                                     (nthcdr 1 V15117)
@@ -18930,7 +18931,7 @@
                                                                                                                                                                                                                (nthcdr 1 V15126)
                                                                                                                                                                                                                V15359)
                                                                                                                                                                                                               (shen/if
-                                                                                                                                                                                                               (shen/predicate->shen
+                                                                                                                                                                                                               (shen/internal/predicate->shen
                                                                                                                                                                                                                 (null V15141))
                                                                                                                                                                                                                (shen/let Hyp
                                                                                                                                                                                                                          (nthcdr 1 V15117)
@@ -19035,7 +19036,7 @@
                                                                                                                                    (nthcdr 1 V15147)
                                                                                                                                    V15359)
                                                                                                                                   (shen/if
-                                                                                                                                   (shen/predicate->shen
+                                                                                                                                   (shen/internal/predicate->shen
                                                                                                                                     (null V15148))
                                                                                                                                    (shen/let V15149
                                                                                                                                              (shen/shen\.lazyderef
@@ -19080,14 +19081,14 @@
                                                                                                                                                                                                                           (nthcdr 1 V15154)
                                                                                                                                                                                                                           V15359)
                                                                                                                                                                                                                          (shen/if
-                                                                                                                                                                                                                          (shen/predicate->shen
+                                                                                                                                                                                                                          (shen/internal/predicate->shen
                                                                                                                                                                                                                            (null V15155))
                                                                                                                                                                                                                           (shen/let V15156
                                                                                                                                                                                                                                     (shen/shen\.lazyderef
                                                                                                                                                                                                                                      (nthcdr 1 V15151)
                                                                                                                                                                                                                                      V15359)
                                                                                                                                                                                                                                     (shen/if
-                                                                                                                                                                                                                                     (shen/predicate->shen
+                                                                                                                                                                                                                                     (shen/internal/predicate->shen
                                                                                                                                                                                                                                       (null V15156))
                                                                                                                                                                                                                                      (shen/let Hyp
                                                                                                                                                                                                                                                (nthcdr 1 V15142)
@@ -19144,7 +19145,7 @@
                                                                                                                                                                                                                                                  (nthcdr 1 V15151)
                                                                                                                                                                                                                                                  V15359)
                                                                                                                                                                                                                                                 (shen/if
-                                                                                                                                                                                                                                                 (shen/predicate->shen
+                                                                                                                                                                                                                                                 (shen/internal/predicate->shen
                                                                                                                                                                                                                                                   (null V15157))
                                                                                                                                                                                                                                                  (shen/let Hyp
                                                                                                                                                                                                                                                            (nthcdr 1 V15142)
@@ -19209,7 +19210,7 @@
                                                                                                                                                                                                                                       (nthcdr 1 V15151)
                                                                                                                                                                                                                                       V15359)
                                                                                                                                                                                                                                      (shen/if
-                                                                                                                                                                                                                                      (shen/predicate->shen
+                                                                                                                                                                                                                                      (shen/internal/predicate->shen
                                                                                                                                                                                                                                        (null V15158))
                                                                                                                                                                                                                                       (shen/let Hyp
                                                                                                                                                                                                                                                 (nthcdr 1 V15142)
@@ -19278,14 +19279,14 @@
                                                                                                                                                                                                                                       (nthcdr 1 V15159)
                                                                                                                                                                                                                                       V15359)
                                                                                                                                                                                                                                      (shen/if
-                                                                                                                                                                                                                                      (shen/predicate->shen
+                                                                                                                                                                                                                                      (shen/internal/predicate->shen
                                                                                                                                                                                                                                        (null V15160))
                                                                                                                                                                                                                                       (shen/let V15161
                                                                                                                                                                                                                                                 (shen/shen\.lazyderef
                                                                                                                                                                                                                                                  (nthcdr 1 V15151)
                                                                                                                                                                                                                                                  V15359)
                                                                                                                                                                                                                                                 (shen/if
-                                                                                                                                                                                                                                                 (shen/predicate->shen
+                                                                                                                                                                                                                                                 (shen/internal/predicate->shen
                                                                                                                                                                                                                                                   (null V15161))
                                                                                                                                                                                                                                                  (shen/let Hyp
                                                                                                                                                                                                                                                            (nthcdr 1 V15142)
@@ -19342,7 +19343,7 @@
                                                                                                                                                                                                                                                              (nthcdr 1 V15151)
                                                                                                                                                                                                                                                              V15359)
                                                                                                                                                                                                                                                             (shen/if
-                                                                                                                                                                                                                                                             (shen/predicate->shen
+                                                                                                                                                                                                                                                             (shen/internal/predicate->shen
                                                                                                                                                                                                                                                               (null V15162))
                                                                                                                                                                                                                                                              (shen/let Hyp
                                                                                                                                                                                                                                                                        (nthcdr 1 V15142)
@@ -19407,7 +19408,7 @@
                                                                                                                                                                                                                                                   (nthcdr 1 V15151)
                                                                                                                                                                                                                                                   V15359)
                                                                                                                                                                                                                                                  (shen/if
-                                                                                                                                                                                                                                                  (shen/predicate->shen
+                                                                                                                                                                                                                                                  (shen/internal/predicate->shen
                                                                                                                                                                                                                                                    (null V15163))
                                                                                                                                                                                                                                                   (shen/let Hyp
                                                                                                                                                                                                                                                             (nthcdr 1 V15142)
@@ -19476,7 +19477,7 @@
                                                                                                                                                                                                                 (nthcdr 1 V15151)
                                                                                                                                                                                                                 V15359)
                                                                                                                                                                                                                (shen/if
-                                                                                                                                                                                                                (shen/predicate->shen
+                                                                                                                                                                                                                (shen/internal/predicate->shen
                                                                                                                                                                                                                  (null V15164))
                                                                                                                                                                                                                 (shen/let Hyp
                                                                                                                                                                                                                           (nthcdr 1 V15142)
@@ -19583,7 +19584,7 @@
                                                                                                                                               (nthcdr 1 V15170)
                                                                                                                                               V15359)
                                                                                                                                              (shen/if
-                                                                                                                                              (shen/predicate->shen
+                                                                                                                                              (shen/internal/predicate->shen
                                                                                                                                                (null V15171))
                                                                                                                                               (shen/let V15172
                                                                                                                                                         (shen/shen\.lazyderef
@@ -19614,7 +19615,7 @@
                                                                                                                                                                                                      (nthcdr 1 V15174)
                                                                                                                                                                                                      V15359)
                                                                                                                                                                                                     (shen/if
-                                                                                                                                                                                                     (shen/predicate->shen
+                                                                                                                                                                                                     (shen/internal/predicate->shen
                                                                                                                                                                                                       (null V15176))
                                                                                                                                                                                                      (shen/let Hyp
                                                                                                                                                                                                                (nthcdr 1 V15165)
@@ -19665,7 +19666,7 @@
                                                                                                                                                                                                                  (nthcdr 1 V15174)
                                                                                                                                                                                                                  V15359)
                                                                                                                                                                                                                 (shen/if
-                                                                                                                                                                                                                 (shen/predicate->shen
+                                                                                                                                                                                                                 (shen/internal/predicate->shen
                                                                                                                                                                                                                   (null V15177))
                                                                                                                                                                                                                  (shen/let Hyp
                                                                                                                                                                                                                            (nthcdr 1 V15165)
@@ -19801,7 +19802,7 @@
        (shen/and
         (shen/cons\?
          (nthcdr 2 V15382))
-        (shen/predicate->shen
+        (shen/internal/predicate->shen
          (null
           (nthcdr 3 V15382)))))))
     (shen/shen\.prhush
@@ -19824,7 +19825,7 @@
       ((tail-trampoline
         (V15387 V15388)
         (shen/cond
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15387))
           'shen\.skip)
          ((shen/cons\? V15387)
@@ -19999,7 +20000,7 @@
                                               (shen/let V15085
                                                         (shen/shen\.lazyderef V15397 V15399)
                                                         (shen/if
-                                                         (shen/predicate->shen
+                                                         (shen/internal/predicate->shen
                                                           (null V15085))
                                                          (shen/let V15086
                                                                    (shen/shen\.lazyderef V15398 V15399)
@@ -20024,7 +20025,7 @@
                                                                                                                (nthcdr 1 V15088)
                                                                                                                V15399)
                                                                                                               (shen/if
-                                                                                                               (shen/predicate->shen
+                                                                                                               (shen/internal/predicate->shen
                                                                                                                 (null V15089))
                                                                                                                (shen/do
                                                                                                                 (shen/shen\.incinfs)
@@ -20075,7 +20076,7 @@
                                                                                                                            (nthcdr 1 V15090)
                                                                                                                            V15399)
                                                                                                                           (shen/if
-                                                                                                                           (shen/predicate->shen
+                                                                                                                           (shen/internal/predicate->shen
                                                                                                                             (null V15091))
                                                                                                                            (shen/do
                                                                                                                             (shen/shen\.incinfs)
@@ -20176,7 +20177,7 @@
                                                                                                         (nthcdr 1 V15076)
                                                                                                         V15409)
                                                                                                        (shen/if
-                                                                                                        (shen/predicate->shen
+                                                                                                        (shen/internal/predicate->shen
                                                                                                          (null V15077))
                                                                                                         (shen/do
                                                                                                          (shen/shen\.incinfs)
@@ -20371,7 +20372,7 @@
       (shen/cons\?
        (nthcdr 1 V15464))
       (shen/and
-       (shen/predicate->shen
+       (shen/internal/predicate->shen
         (null
          (nthcdr 2 V15464)))
        (shen/=
@@ -20441,7 +20442,7 @@
                                            (shen/let V15046
                                                      (shen/shen\.lazyderef V15490 V15495)
                                                      (shen/if
-                                                      (shen/predicate->shen
+                                                      (shen/internal/predicate->shen
                                                        (null V15046))
                                                       (shen/do
                                                        (shen/shen\.incinfs)
@@ -20513,7 +20514,7 @@
                                                                                       (nthcdr 1 V15039)
                                                                                       V15505)
                                                                                      (shen/if
-                                                                                      (shen/predicate->shen
+                                                                                      (shen/internal/predicate->shen
                                                                                        (null V15040))
                                                                                       (shen/let NewHyps
                                                                                                 (shen/shen\.newpv V15505)
@@ -20554,7 +20555,7 @@
             (shen/let V15025
                       (shen/shen\.lazyderef V15518 V15521)
                       (shen/if
-                       (shen/predicate->shen
+                       (shen/internal/predicate->shen
                         (null V15025))
                        (shen/do
                         (shen/shen\.incinfs)
@@ -20607,7 +20608,7 @@
                                                                                                                                   (nthcdr 1 V15031)
                                                                                                                                   V15521)
                                                                                                                                  (shen/if
-                                                                                                                                  (shen/predicate->shen
+                                                                                                                                  (shen/internal/predicate->shen
                                                                                                                                    (null V15032))
                                                                                                                                   (shen/let NewHyp
                                                                                                                                             (nthcdr 1 V15027)
@@ -20670,7 +20671,7 @@
                                                                                                                                               (nthcdr 1 V15033)
                                                                                                                                               V15521)
                                                                                                                                              (shen/if
-                                                                                                                                              (shen/predicate->shen
+                                                                                                                                              (shen/internal/predicate->shen
                                                                                                                                                (null V15034))
                                                                                                                                               (shen/let NewHyp
                                                                                                                                                         (nthcdr 1 V15027)
@@ -20791,7 +20792,7 @@
 (defun shen/shen\.patthyps
     (V15528 V15529 V15530)
   (shen/cond
-   ((shen/predicate->shen
+   ((shen/internal/predicate->shen
      (null V15528))
     V15530)
    ((shen/and
@@ -20808,7 +20809,7 @@
         (shen/and
          (shen/cons\?
           (nthcdr 2 V15529))
-         (shen/predicate->shen
+         (shen/internal/predicate->shen
           (null
            (nthcdr 3 V15529))))))))
     (shen/adjoin
@@ -20830,7 +20831,7 @@
         (V15537 V15538)
         (shen/cond
          ((shen/and
-           (shen/predicate->shen
+           (shen/internal/predicate->shen
             (null V15537))
            (shen/and
             (shen/cons\? V15538)
@@ -20840,12 +20841,12 @@
              (shen/and
               (shen/cons\?
                (nthcdr 1 V15538))
-              (shen/predicate->shen
+              (shen/internal/predicate->shen
                (null
                 (nthcdr 2 V15538)))))))
           (shen/hd
            (nthcdr 1 V15538)))
-         ((shen/predicate->shen
+         ((shen/internal/predicate->shen
            (null V15537))
           V15538)
          ((shen/and
@@ -20862,7 +20863,7 @@
               (shen/and
                (shen/cons\?
                 (nthcdr 2 V15538))
-               (shen/predicate->shen
+               (shen/internal/predicate->shen
                 (null
                  (nthcdr 3 V15538))))))))
           (vector
@@ -20887,7 +20888,7 @@
             (shen/let V15013
                       (shen/shen\.lazyderef V15544 V15547)
                       (shen/if
-                       (shen/predicate->shen
+                       (shen/internal/predicate->shen
                         (null V15013))
                        (shen/do
                         (shen/shen\.incinfs)
@@ -20934,7 +20935,7 @@
                                                                                                                        (nthcdr 1 V15018)
                                                                                                                        V15547)
                                                                                                                       (shen/if
-                                                                                                                       (shen/predicate->shen
+                                                                                                                       (shen/internal/predicate->shen
                                                                                                                         (null V15019))
                                                                                                                        (shen/do
                                                                                                                         (shen/shen\.incinfs)
@@ -20987,7 +20988,7 @@
                                                                                                                       (nthcdr 1 V14993)
                                                                                                                       V15557)
                                                                                                                      (shen/if
-                                                                                                                      (shen/predicate->shen
+                                                                                                                      (shen/internal/predicate->shen
                                                                                                                        (null V14994))
                                                                                                                       (shen/do
                                                                                                                        (shen/shen\.incinfs)
@@ -21060,7 +21061,7 @@
                                                                                                                                                         (nthcdr 1 V15001)
                                                                                                                                                         V15557)
                                                                                                                                                        (shen/if
-                                                                                                                                                        (shen/predicate->shen
+                                                                                                                                                        (shen/internal/predicate->shen
                                                                                                                                                          (null V15002))
                                                                                                                                                         (shen/let V15003
                                                                                                                                                                   (shen/shen\.lazyderef
@@ -21075,14 +21076,14 @@
                                                                                                                                                                                         (nthcdr 1 V15003)
                                                                                                                                                                                         V15557)
                                                                                                                                                                                        (shen/if
-                                                                                                                                                                                        (shen/predicate->shen
+                                                                                                                                                                                        (shen/internal/predicate->shen
                                                                                                                                                                                          (null V15004))
                                                                                                                                                                                         (shen/let V15005
                                                                                                                                                                                                   (shen/shen\.lazyderef
                                                                                                                                                                                                    (nthcdr 1 V14997)
                                                                                                                                                                                                    V15557)
                                                                                                                                                                                                   (shen/if
-                                                                                                                                                                                                   (shen/predicate->shen
+                                                                                                                                                                                                   (shen/internal/predicate->shen
                                                                                                                                                                                                     (null V15005))
                                                                                                                                                                                                    (shen/do
                                                                                                                                                                                                     (shen/shen\.incinfs)
@@ -21131,7 +21132,7 @@
                                                                                                                        (nthcdr 1 V15008)
                                                                                                                        V15557)
                                                                                                                       (shen/if
-                                                                                                                       (shen/predicate->shen
+                                                                                                                       (shen/internal/predicate->shen
                                                                                                                         (null V15009))
                                                                                                                        (shen/do
                                                                                                                         (shen/shen\.incinfs)

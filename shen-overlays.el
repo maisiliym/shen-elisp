@@ -48,7 +48,7 @@
 
 ;; [[file:shen-elisp.org::*Changing%20Directories][Changing\ Directories:1]]
 (defun shen/cd (Path)
-  (if (shen/shen->predicate (shen/= Path ""))
+  (if (shen/internal/shen->predicate (shen/= Path ""))
       (shen/set '*home-directory* "")
     (let ((PathString (concat Path "/")))
       (progn

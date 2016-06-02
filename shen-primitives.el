@@ -69,17 +69,17 @@
 ;; KLambda\ Constants:1 ends here
 
 ;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:1]]
-(defsubst shen/shen->predicate (X)
+(defsubst shen/internal/shen->predicate (X)
   (eq X 'true))
-(defsubst shen/predicate->shen (X)
+(defsubst shen/internal/predicate->shen (X)
   (if X (quote true) (quote false)))
 ;; Boolean\ Operations:1 ends here
 
 ;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:2]]
 (defmacro shen/if (X Y Z)
   `(if (eq ,X 'true) ,Y ,Z))
-(defmacro shen/and (X Y) `(shen/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
-(defmacro shen/or (X Y) `(shen/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
+(defmacro shen/and (X Y) `(shen/internal/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
+(defmacro shen/or (X Y) `(shen/internal/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
 ;; Boolean\ Operations:2 ends here
 
 ;; [[file:shen-elisp.org::*Boolean%20Operations][Boolean\ Operations:3]]
@@ -88,7 +88,7 @@
           (mapcar (lambda (predicate-result-pair)
                     (list (if (shen/symbol-p (nth 0 predicate-result-pair))
                               (list 'quote (nth 0 predicate-result-pair))
-                            (list 'shen/shen->predicate (nth 0 predicate-result-pair)))
+                            (list 'shen/internal/shen->predicate (nth 0 predicate-result-pair)))
                           (nth 1 predicate-result-pair)))
                   CASES))
          (fallthrough-added (append predicates-quoted-cases (list '(t (error "One of the cond predicates must be true."))))))
@@ -113,7 +113,7 @@
 
 ;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:1]]
 (defsubst shen/= (X Y)
-  (shen/predicate->shen
+  (shen/internal/predicate->shen
    (cond ((and (consp X) (consp Y)) (equal X Y))
          ((and (stringp X) (stringp Y)) (string-equal X Y))
          ((and (numberp X) (numberp Y)) (= X Y))
@@ -135,7 +135,7 @@
 ;; [[file:shen-elisp.org::*Lists][Lists:2]]
 (defsubst shen/hd (List)    (car List))
 (defsubst shen/tl (List)    (cdr List))
-(defsubst shen/cons? (List) (shen/predicate->shen (consp List)))
+(defsubst shen/cons? (List) (shen/internal/predicate->shen (consp List)))
 ;; Lists:2 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:1]]
@@ -160,7 +160,7 @@
 ;; Strings:3 ends here
 
 ;; [[file:shen-elisp.org::*Strings][Strings:4]]
-(defsubst shen/string? (S) (shen/predicate->shen (stringp S)))
+(defsubst shen/string? (S) (shen/internal/predicate->shen (stringp S)))
 (defsubst shen/cn (Str1 Str2) (concat Str1 Str2))
 (defsubst shen/n->string (N) (string N))
 (defsubst shen/string->n (S) (string-to-char S))
@@ -182,7 +182,7 @@
 (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
 (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
 (defsubst shen/<-address (Vector N) (gethash N Vector))
-(defsubst shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
+(defsubst shen/absvector? (X) (shen/internal/predicate->shen (hash-table-p X)))
 ;; Vectors:1 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:1]]
@@ -226,11 +226,11 @@
 ;; Arithmetic\ Operations:4 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:5]]
-(defsubst shen/> (X Y)     (shen/predicate->shen (> X Y)))
-(defsubst shen/< (X Y)     (shen/predicate->shen (< X Y)))
-(defsubst shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
-(defsubst shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
-(defsubst shen/number? (N) (shen/predicate->shen (numberp N)))
+(defsubst shen/> (X Y)     (shen/internal/predicate->shen (> X Y)))
+(defsubst shen/< (X Y)     (shen/internal/predicate->shen (< X Y)))
+(defsubst shen/>= (X Y)    (shen/internal/predicate->shen (>= X Y)))
+(defsubst shen/<= (X Y)    (shen/internal/predicate->shen (<= X Y)))
+(defsubst shen/number? (N) (shen/internal/predicate->shen (numberp N)))
 ;; Arithmetic\ Operations:5 ends here
 
 ;; [[file:shen-elisp.org::*Time][Time:1]]
@@ -1045,7 +1045,7 @@
          (list (nth 2 current-list) nil)
        (list (nth 1 current-list) nil)))
    (lambda (accum remaining-chain)
-     `(shen/predicate->shen (null ,accum)))))
+     `(shen/internal/predicate->shen (null ,accum)))))
 ;; Nil\ Comparisons\ To\ Null:1 ends here
 
 ;; [[file:shen-elisp.org::*Evaluate%20KLambda][Evaluate\ KLambda:1]]
@@ -1105,7 +1105,7 @@
                  `(defun shen/shen.mod (N Div) (mod N Div))
                  table)
         (puthash 'integer?
-                 `(defun shen/integer? (N) (integerp N))
+                 `(defun shen/integer? (N) (shen/internal/predicate->shen (integerp N)))
                  table)
         (puthash 'abs
                  `(defun shen/shen.abs (N) (abs N))

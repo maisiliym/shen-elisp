@@ -30,7 +30,7 @@
 (defun shen/make-prompt nil
   (format "(%d%s) "
           (shen/length (shen/value 'shen.*history*))
-          (if (shen/shen->predicate (shen/value 'shen.*tc*))
+          (if (shen/internal/shen->predicate (shen/value 'shen.*tc*))
               "+"
             "-")))
 ;; Prompt:2 ends here

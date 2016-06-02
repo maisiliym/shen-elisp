@@ -132,9 +132,9 @@ Once [[Assignments][the assigning mechanism]] is in place the spec requires some
 Unlike Elisp in KLambda booleans are ~false~ and ~true~, distinct symbols which
 are not synonymous with ~nil~ and ~(not nil)~ so wrappers are required:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defsubst shen/shen->predicate (X)
+  (defsubst shen/internal/shen->predicate (X)
     (eq X 'true))
-  (defsubst shen/predicate->shen (X)
+  (defsubst shen/internal/predicate->shen (X)
     (if X (quote true) (quote false)))
 #+END_SRC
 
@@ -143,8 +143,8 @@ preserve evaluation order.
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defmacro shen/if (X Y Z)
     `(if (eq ,X 'true) ,Y ,Z))
-  (defmacro shen/and (X Y) `(shen/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
-  (defmacro shen/or (X Y) `(shen/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
+  (defmacro shen/and (X Y) `(shen/internal/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
+  (defmacro shen/or (X Y) `(shen/internal/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
 #+END_SRC
 
 KLambda's ~cond~, unlike Elisp's forbids a fallthrough case - one of the
@@ -155,7 +155,7 @@ predicates must be true.
             (mapcar (lambda (predicate-result-pair)
                       (list (if (shen/symbol-p (nth 0 predicate-result-pair))
                                 (list 'quote (nth 0 predicate-result-pair))
-                              (list 'shen/shen->predicate (nth 0 predicate-result-pair)))
+                              (list 'shen/internal/shen->predicate (nth 0 predicate-result-pair)))
                             (nth 1 predicate-result-pair)))
                     CASES))
            (fallthrough-added (append predicates-quoted-cases (list '(t (error "One of the cond predicates must be true."))))))
@@ -211,7 +211,7 @@ before the body is spliced in.
 ** Other Generic Functions
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defsubst shen/= (X Y)
-    (shen/predicate->shen
+    (shen/internal/predicate->shen
      (cond ((and (consp X) (consp Y)) (equal X Y))
            ((and (stringp X) (stringp Y)) (string-equal X Y))
            ((and (numberp X) (numberp Y)) (= X Y))
@@ -244,7 +244,7 @@ The rest of the list operations function as expected:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defsubst shen/hd (List)    (car List))
   (defsubst shen/tl (List)    (cdr List))
-  (defsubst shen/cons? (List) (shen/predicate->shen (consp List)))
+  (defsubst shen/cons? (List) (shen/internal/predicate->shen (consp List)))
 #+END_SRC
 ** Strings
 - Printing KLambda datatypes.
@@ -275,7 +275,7 @@ The rest of the list operations function as expected:
 
 - Test for a string, join them and convert between characters and strings:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defsubst shen/string? (S) (shen/predicate->shen (stringp S)))
+  (defsubst shen/string? (S) (shen/internal/predicate->shen (stringp S)))
   (defsubst shen/cn (Str1 Str2) (concat Str1 Str2))
   (defsubst shen/n->string (N) (string N))
   (defsubst shen/string->n (S) (string-to-char S))
@@ -307,7 +307,7 @@ speed-ups across the board.
   (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
   (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
   (defsubst shen/<-address (Vector N) (gethash N Vector))
-  (defsubst shen/absvector? (X) (shen/predicate->shen (hash-table-p X)))
+  (defsubst shen/absvector? (X) (shen/internal/predicate->shen (hash-table-p X)))
 #+END_SRC
 ** Arithmetic Operations
 In KLambda there is only ~number~ so we have to take care to coerce to between ~float~ and
@@ -364,11 +364,11 @@ When we divide we leave the result an integer if we can:
 And finally the standard number predicates are pretty compatible with Elisp so we just
 wrap the Elisp functions:
 #+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defsubst shen/> (X Y)     (shen/predicate->shen (> X Y)))
-  (defsubst shen/< (X Y)     (shen/predicate->shen (< X Y)))
-  (defsubst shen/>= (X Y)    (shen/predicate->shen (>= X Y)))
-  (defsubst shen/<= (X Y)    (shen/predicate->shen (<= X Y)))
-  (defsubst shen/number? (N) (shen/predicate->shen (numberp N)))
+  (defsubst shen/> (X Y)     (shen/internal/predicate->shen (> X Y)))
+  (defsubst shen/< (X Y)     (shen/internal/predicate->shen (< X Y)))
+  (defsubst shen/>= (X Y)    (shen/internal/predicate->shen (>= X Y)))
+  (defsubst shen/<= (X Y)    (shen/internal/predicate->shen (<= X Y)))
+  (defsubst shen/number? (N) (shen/internal/predicate->shen (numberp N)))
 #+END_SRC
 
 ** Time
@@ -1424,7 +1424,7 @@ Convert ~(+ X 1)~ or ~(+ 1 X)~ to ~(1+ X)~
            (list (nth 2 current-list) nil)
          (list (nth 1 current-list) nil)))
      (lambda (accum remaining-chain)
-       `(shen/predicate->shen (null ,accum)))))
+       `(shen/internal/predicate->shen (null ,accum)))))
 #+END_SRC
 
 * Evaluate KLambda
@@ -1504,7 +1504,7 @@ There are three types of overrides, those which:
                    `(defun shen/shen.mod (N Div) (mod N Div))
                    table)
           (puthash 'integer?
-                   `(defun shen/integer? (N) (integerp N))
+                   `(defun shen/integer? (N) (shen/internal/predicate->shen (integerp N)))
                    table)
           (puthash 'abs
                    `(defun shen/shen.abs (N) (abs N))
@@ -1681,7 +1681,7 @@ Overlay the routines that take input from the user in the REPL session to use th
 When changing directories in the REPL, for convenience, also change Emacs' working directory.
 #+BEGIN_SRC elisp :tangle shen-overlays.el
   (defun shen/cd (Path)
-    (if (shen/shen->predicate (shen/= Path ""))
+    (if (shen/internal/shen->predicate (shen/= Path ""))
         (shen/set '*home-directory* "")
       (let ((PathString (concat Path "/")))
         (progn
@@ -1736,7 +1736,7 @@ and make them:
   (defun shen/make-prompt nil
     (format "(%d%s) "
             (shen/length (shen/value 'shen.*history*))
-            (if (shen/shen->predicate (shen/value 'shen.*tc*))
+            (if (shen/internal/shen->predicate (shen/value 'shen.*tc*))
                 "+"
               "-")))
 #+END_SRC
