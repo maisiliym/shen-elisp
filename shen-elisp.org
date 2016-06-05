@@ -208,17 +208,65 @@ before the body is spliced in.
   (defmacro shen/defun (F Args Body) `(defun ,F ,Args ,Body))
 #+END_SRC
 
-** Other Generic Functions
-#+BEGIN_SRC elisp :tangle shen-primitives.el
+** Equality
+Using [[Vectors][hash-tables for tuples and vectors]] complicates equality. It also slows
+down equality tests across the board but using hash-tables still results in
+a substantial net-gain.
+
+In the case of [[(strings-and-numbers)][strings and numbers]] using built-in functions suffices but for
+compound structures which might contain hash-tables simply using ~(equal ...)~
+will not work because two hash-tables containing the same keys and values are not
+~equal~.
+
+While ~(equal ...)~ isn't sufficient, it does have the nice property of being
+right when it returns true. Two structures which are ~(equal ...)~ are equal but
+~(equal ...)~ returning nil does not mean they are unequal. So we first try the
+[[(obvious-equality-test)][obvious equality test]] and only perform the expensive tests when that fails.
+
+In the case of [[(dotted-pairs)][dotted pairs]] which are sometimes generated from KLambda we
+explicitly test the first and the second element. For [[(normal-lists)][all other lists]] iterate
+over the elements checking each one against the element from the corresponding
+list and in the case of [[(hash-tables)][hash tables]] check that the keys and values match.
+#+BEGIN_SRC elisp "(ref:%s)" :tangle shen-primitives.el
+  (defun shen/internal/dotted-pair? (X)
+    (and (consp X) (not (consp (cdr X)))))
+
+  (defun shen/internal/normal-list (X)
+    (and (consp X) (consp (cdr X))))
+
+  (defun shen/internal/= (X Y)
+    (cond ((and (stringp X) (stringp Y)) (string-equal X Y))  ;;; (ref:strings-and-numbers)
+          ((and (numberp X) (numberp Y)) (= X Y))
+          (t
+           (or (equal X Y) ;;; (ref:obvious-equality-test)
+               (cond
+                ((and (shen/internal/dotted-pair? X) ;;; (ref:dotted-pairs)
+                      (shen/internal/dotted-pair? Y))
+                 (and (shen/internal/= (car X) (car Y))
+                      (shen/internal/= (cdr X) (cdr Y))))
+                ((and (shen/internal/normal-list X) ;;; (ref:normal-lists)
+                      (shen/internal/normal-list Y))
+                 (let ((LengthX (length X))
+                       (LengthY (length Y)))
+                   (and (= LengthX LengthY)
+                        (let ((StillEqual 't)
+                              (i 0))
+                          (while (and StillEqual (< i LengthX))
+                            (progn
+                              (setq StillEqual (shen/internal/= (nth i X) (nth i Y)))
+                              (setq i (1+ i))))
+                          StillEqual))))
+                ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
+                 (and (= (hash-table-count X) (hash-table-count Y))
+                      (shen/internal/= (hash-table-keys X) (hash-table-keys Y))
+                      (shen/internal/= (hash-table-values X) (hash-table-values Y))))
+                (t nil))))))
+
   (defsubst shen/= (X Y)
-    (shen/internal/predicate->shen
-     (cond ((and (consp X) (consp Y)) (equal X Y))
-           ((and (stringp X) (stringp Y)) (string-equal X Y))
-           ((and (numberp X) (numberp Y)) (= X Y))
-           ((and (vectorp X) (vectorp Y)) (and (= (length X) (length Y)) (equal X Y)))
-           (t (equal X Y)))))
+    (shen/internal/predicate->shen (shen/internal/= X Y)))
 #+END_SRC
 
+** Other Generic Functions
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defmacro shen/freeze (X)
     `(function (lambda nil ,X)))
@@ -304,10 +352,27 @@ Since KLambda code tends to allocate huge vectors and resize often, switching
 from vectors to hash-tables where resizing is natively supported led to 4-5x
 speed-ups across the board.
 #+BEGIN_SRC elisp :tangle shen-primitives.el
-  (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
+  (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0 :test 'shen/internal/hash-table-test))
   (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
   (defsubst shen/<-address (Vector N) (gethash N Vector))
   (defsubst shen/absvector? (X) (shen/internal/predicate->shen (hash-table-p X)))
+#+END_SRC
+
+While using hash-tables for Shen vectors, tuples and property lists do offer a
+significant speed-ups there is an ugly downside: if any of those structures are
+used as keys, lookups will fail because in Elisp two hash-tables do not hash to
+the same number and so using ~(make-hash-table ... :test 'equal)~ does not work.
+So we roll our own test which delegates to ~shen/internal/=~ for testing equality
+and only generates a hash for these structures using only their keys and values.
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (define-hash-table-test
+    'shen/internal/hash-table-test
+    (lambda (X Y)
+      (shen/internal/= X Y))
+    (lambda (X)
+      (if (hash-table-p X)
+          (sxhash (list (hash-table-keys X) (hash-table-values X)))
+        (sxhash X))))
 #+END_SRC
 ** Arithmetic Operations
 In KLambda there is only ~number~ so we have to take care to coerce to between ~float~ and
@@ -1520,7 +1585,7 @@ There are three types of overrides, those which:
                         (if (= 0 Hash) 1 Hash)))
                    table)
           (puthash '(set *property-vector* (vector 20000))
-                   `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
+                   `(shen/set '*property-vector* (make-hash-table :size 1000 :test 'shen/internal/hash-table-test))
                    table)
           (puthash 'get
                    `(defun shen/get
@@ -1540,7 +1605,7 @@ There are three types of overrides, those which:
                         (Pointer Key Value Table)
                       (let ((Subtable (gethash Pointer Table)))
                         (if (not Subtable)
-                            (let ((Subtable (make-hash-table :test 'equal)))
+                            (let ((Subtable (make-hash-table :test 'shen/internal/hash-table-test)))
                               (progn
                                 (puthash Pointer Subtable Table)
                                 (puthash Key Value Subtable)))

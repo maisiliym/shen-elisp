@@ -111,21 +111,50 @@
 (defmacro shen/defun (F Args Body) `(defun ,F ,Args ,Body))
 ;; Defuns:1 ends here
 
-;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:1]]
-(defsubst shen/= (X Y)
-  (shen/internal/predicate->shen
-   (cond ((and (consp X) (consp Y)) (equal X Y))
-         ((and (stringp X) (stringp Y)) (string-equal X Y))
-         ((and (numberp X) (numberp Y)) (= X Y))
-         ((and (vectorp X) (vectorp Y)) (and (= (length X) (length Y)) (equal X Y)))
-         (t (equal X Y)))))
-;; Other\ Generic\ Functions:1 ends here
+;; [[file:shen-elisp.org::*Equality][Equality:1]]
+(defun shen/internal/dotted-pair? (X)
+  (and (consp X) (not (consp (cdr X)))))
 
-;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:2]]
+(defun shen/internal/normal-list (X)
+  (and (consp X) (consp (cdr X))))
+
+(defun shen/internal/= (X Y)
+  (cond ((and (stringp X) (stringp Y)) (string-equal X Y))  ;;; (ref:strings-and-numbers)
+        ((and (numberp X) (numberp Y)) (= X Y))
+        (t
+         (or (equal X Y) ;;; (ref:obvious-equality-test)
+             (cond
+              ((and (shen/internal/dotted-pair? X) ;;; (ref:dotted-pairs)
+                    (shen/internal/dotted-pair? Y))
+               (and (shen/internal/= (car X) (car Y))
+                    (shen/internal/= (cdr X) (cdr Y))))
+              ((and (shen/internal/normal-list X) ;;; (ref:normal-lists)
+                    (shen/internal/normal-list Y))
+               (let ((LengthX (length X))
+                     (LengthY (length Y)))
+                 (and (= LengthX LengthY)
+                      (let ((StillEqual 't)
+                            (i 0))
+                        (while (and StillEqual (< i LengthX))
+                          (progn
+                            (setq StillEqual (shen/internal/= (nth i X) (nth i Y)))
+                            (setq i (1+ i))))
+                        StillEqual))))
+              ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
+               (and (= (hash-table-count X) (hash-table-count Y))
+                    (shen/internal/= (hash-table-keys X) (hash-table-keys Y))
+                    (shen/internal/= (hash-table-values X) (hash-table-values Y))))
+              (t nil))))))
+
+(defsubst shen/= (X Y)
+  (shen/internal/predicate->shen (shen/internal/= X Y)))
+;; Equality:1 ends here
+
+;; [[file:shen-elisp.org::*Other%20Generic%20Functions][Other\ Generic\ Functions:1]]
 (defmacro shen/freeze (X)
   `(function (lambda nil ,X)))
 (defsubst shen/type (X MyType) (declare (ignore MyType)) X)
-;; Other\ Generic\ Functions:2 ends here
+;; Other\ Generic\ Functions:1 ends here
 
 ;; [[file:shen-elisp.org::*Lists][Lists:1]]
 (defsubst shen/cons (A Rest)
@@ -179,11 +208,22 @@
 ;; Error\ Handling:1 ends here
 
 ;; [[file:shen-elisp.org::*Vectors][Vectors:1]]
-(defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0))
+(defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0 :test 'shen/internal/hash-table-test))
 (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
 (defsubst shen/<-address (Vector N) (gethash N Vector))
 (defsubst shen/absvector? (X) (shen/internal/predicate->shen (hash-table-p X)))
 ;; Vectors:1 ends here
+
+;; [[file:shen-elisp.org::*Vectors][Vectors:2]]
+(define-hash-table-test
+  'shen/internal/hash-table-test
+  (lambda (X Y)
+    (shen/internal/= X Y))
+  (lambda (X)
+    (if (hash-table-p X)
+        (sxhash (list (hash-table-keys X) (hash-table-values X)))
+      (sxhash X))))
+;; Vectors:2 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:1]]
 (defconst shen/multiplication-limit (floor (sqrt most-positive-fixnum)))
@@ -1121,7 +1161,7 @@
                       (if (= 0 Hash) 1 Hash)))
                  table)
         (puthash '(set *property-vector* (vector 20000))
-                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test (quote equal)))
+                 `(shen/set '*property-vector* (make-hash-table :size 1000 :test 'shen/internal/hash-table-test))
                  table)
         (puthash 'get
                  `(defun shen/get
@@ -1141,7 +1181,7 @@
                       (Pointer Key Value Table)
                     (let ((Subtable (gethash Pointer Table)))
                       (if (not Subtable)
-                          (let ((Subtable (make-hash-table :test 'equal)))
+                          (let ((Subtable (make-hash-table :test 'shen/internal/hash-table-test)))
                             (progn
                               (puthash Pointer Subtable Table)
                               (puthash Key Value Subtable)))

@@ -4445,7 +4445,7 @@
         (not Subtable)
         (let
             ((Subtable
-              (make-hash-table :test 'equal)))
+              (make-hash-table :test 'shen/internal/hash-table-test)))
           (progn
             (puthash Pointer Subtable Table)
             (puthash Key Value Subtable)))
@@ -14959,7 +14959,7 @@
 (shen/set 'shen\.*history* nil)
 (shen/set 'shen\.*tc* 'false)
 (shen/set '*property-vector*
-          (make-hash-table :size 1000 :test 'equal))
+          (make-hash-table :size 1000 :test 'shen/internal/hash-table-test))
 (shen/set 'shen\.*process-counter* 0)
 (shen/set 'shen\.*varcounter*
           (shen/vector 1000))
