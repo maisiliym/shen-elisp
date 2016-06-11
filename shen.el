@@ -12345,19 +12345,15 @@
                        (shen/value 'shen\.*prologvectors*)
                        V13778 BigVector))))
 (defun shen/shen\.resize-vector
-    (Vector NewSize Fill)
-  (let*
-      ((VectorLimit
-        (shen/<-address Vector 0))
-       (Current-Index
-        (1+ VectorLimit)))
-    (puthash 0 NewSize Vector)
-    (while
-        (<= Current-Index NewSize)
-      (puthash Current-Index Fill Vector)
-      (setq Current-Index
-            (1+ Current-Index)))
-    Vector))
+    (V13783 V13784 V13785)
+  (shen/let BigVector
+            (shen/address->
+             (shen/absvector
+              (1+ V13784))
+             0 V13784)
+            (shen/shen\.copy-vector V13783 BigVector
+                                    (shen/limit V13783)
+                                    V13784 V13785)))
 (defun shen/shen\.copy-vector
     (V13791 V13792 V13793 V13794 V13795)
   (shen/shen\.copy-vector-stage-2
@@ -12613,7 +12609,7 @@
     (X ProcessN)
   (let
       ((Current X)
-       (KeepLooking 't))
+       (KeepLooking t))
     (while KeepLooking
       (shen/if
        (shen/shen\.pvar\? Current)
@@ -13221,9 +13217,9 @@
 (defun shen/untrack
     (F)
   (progn
-    (shen/set 'shen\.*tracking*
+    (shen/set shen\.*tracking*
               (shen/internal/delete-first-eq F
-                                             (shen/value 'shen\.*tracking*)))
+                                             (shen/value shen\.*tracking*)))
     (shen/eval
      (shen/ps F))))
 (defun shen/profile
