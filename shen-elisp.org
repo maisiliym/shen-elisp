@@ -258,14 +258,12 @@ list and in the case of [[(hash-tables)][hash tables]] check that the keys and v
                           StillEqual))))
                 ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
                  (and (= (hash-table-count X) (hash-table-count Y))
-                      (shen/internal/= (hash-table-keys X) (hash-table-keys Y))
-                      (shen/internal/= (hash-table-values X) (hash-table-values Y))))
+                      (= (sxhash (prin1-to-string X)) (sxhash (prin1-to-string Y)))))
                 (t nil))))))
 
   (defsubst shen/= (X Y)
     (shen/internal/predicate->shen (shen/internal/= X Y)))
 #+END_SRC
-
 ** Other Generic Functions
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defmacro shen/freeze (X)
@@ -370,9 +368,15 @@ and only generates a hash for these structures using only their keys and values.
     (lambda (X Y)
       (shen/internal/= X Y))
     (lambda (X)
-      (if (hash-table-p X)
-          (sxhash (list (hash-table-keys X) (hash-table-values X)))
-        (sxhash X))))
+      (let ((HashTablePaths (shen/internal/hash-table-paths X)))
+        (if HashTablePaths
+            (sxhash
+             (shen/internal/modify-ast
+              (copy X)
+              HashTablePaths
+              (lambda (Path X)
+                (sxhash (prin1-to-string (shen/internal/get-element-at Path X))))))
+          (sxhash X)))))
 #+END_SRC
 ** Arithmetic Operations
 In KLambda there is only ~number~ so we have to take care to coerce to between ~float~ and
@@ -766,9 +770,38 @@ A function that deletes the first occurrences of X
         Xs)))
 #+END_SRC
 
-** Hash Table Plist
+** Find Hash Tables
 #+BEGIN_SRC elisp :tangle shen-primitives.el
-
+  (defun shen/internal/hash-table-paths (X)
+    (let ((paths))
+      (if (not (consp X))
+          paths
+        (let ((current-path)
+              (current-list X)
+              (current-list-length (length X))
+              (current-index 0)
+              (inner-lists))
+          (while (or (< current-index current-list-length)
+                     inner-lists)
+            (cond
+             ((and (= current-index current-list-length) inner-lists)
+              (progn
+                (setq current-path (car inner-lists))
+                (setq inner-lists (cdr inner-lists))
+                (setq current-list (shen/internal/get-element-at current-path X))
+                (setq current-index 0)
+                (setq current-list-length (length current-list))))
+             ((< current-index current-list-length)
+              (progn
+                (cond
+                 ((not (consp (nth current-index current-list)))
+                  (if (hash-table-p (nth current-index current-list))
+                      (push (cons current-index current-path) paths)))
+                 ((consp (nth current-index current-list))
+                  (push (cons current-index current-path) inner-lists))
+                 (t nil))
+                (setq current-index (1+ current-index))))))
+          paths))))
 #+END_SRC
 
 * Rewriting The AST
@@ -1502,6 +1535,10 @@ There are four types of overrides, those which:
 2. are necessary because KLambda vectors are represented as [[Hash Table][hash tables]].
 3. are necessary because Klambda functions are [[Namespacing][prefixed]].
 4. fix [[Bug Fixes][klambda bugs]].
+
+They are represented as a dotted pair alists where the ~car~ of the list is a
+function name or form which when found in Klambda code is replaces with the
+~cdr~ of the form.
 ** Performance
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (setq shen/internal/*performance-overrides*

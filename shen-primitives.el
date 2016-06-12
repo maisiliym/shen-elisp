@@ -142,8 +142,7 @@
                         StillEqual))))
               ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
                (and (= (hash-table-count X) (hash-table-count Y))
-                    (shen/internal/= (hash-table-keys X) (hash-table-keys Y))
-                    (shen/internal/= (hash-table-values X) (hash-table-values Y))))
+                    (= (sxhash (prin1-to-string X)) (sxhash (prin1-to-string Y)))))
               (t nil))))))
 
 (defsubst shen/= (X Y)
@@ -220,9 +219,15 @@
   (lambda (X Y)
     (shen/internal/= X Y))
   (lambda (X)
-    (if (hash-table-p X)
-        (sxhash (list (hash-table-keys X) (hash-table-values X)))
-      (sxhash X))))
+    (let ((HashTablePaths (shen/internal/hash-table-paths X)))
+      (if HashTablePaths
+          (sxhash
+           (shen/internal/modify-ast
+            (copy X)
+            HashTablePaths
+            (lambda (Path X)
+              (sxhash (prin1-to-string (shen/internal/get-element-at Path X))))))
+        (sxhash X)))))
 ;; Vectors:2 ends here
 
 ;; [[file:shen-elisp.org::*Arithmetic%20Operations][Arithmetic\ Operations:1]]
@@ -539,6 +544,39 @@
           (nreverse copy))
       Xs)))
 ;; List\ Filtering:4 ends here
+
+;; [[file:shen-elisp.org::*Find%20Hash%20Tables][Find\ Hash\ Tables:1]]
+(defun shen/internal/hash-table-paths (X)
+  (let ((paths))
+    (if (not (consp X))
+        paths
+      (let ((current-path)
+            (current-list X)
+            (current-list-length (length X))
+            (current-index 0)
+            (inner-lists))
+        (while (or (< current-index current-list-length)
+                   inner-lists)
+          (cond
+           ((and (= current-index current-list-length) inner-lists)
+            (progn
+              (setq current-path (car inner-lists))
+              (setq inner-lists (cdr inner-lists))
+              (setq current-list (shen/internal/get-element-at current-path X))
+              (setq current-index 0)
+              (setq current-list-length (length current-list))))
+           ((< current-index current-list-length)
+            (progn
+              (cond
+               ((not (consp (nth current-index current-list)))
+                (if (hash-table-p (nth current-index current-list))
+                    (push (cons current-index current-path) paths)))
+               ((consp (nth current-index current-list))
+                (push (cons current-index current-path) inner-lists))
+               (t nil))
+              (setq current-index (1+ current-index))))))
+        paths))))
+;; Find\ Hash\ Tables:1 ends here
 
 ;; [[file:shen-elisp.org::*Walking%20The%20AST][Walking\ The\ AST:1]]
 (defun shen/internal/get-function-symbol-and-funcall-paths (ast)

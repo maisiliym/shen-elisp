@@ -3,7 +3,7 @@
   "shen-elisp"
   "19.2-0.0.1"
   "Shen implementation in Elisp"
-  '((emacs "24.3"))
+  '((emacs "24.4"))
   :url "http://github.com/deech/shen-elisp"
   :keywords '("shen" "elisp"))
 ;; Package\ Details:1 ends here
