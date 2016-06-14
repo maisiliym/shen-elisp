@@ -98,8 +98,8 @@
 ;; [[file:shen-elisp.org::*Lambdas][Lambdas:3]]
 (defmacro shen/lambda (X Y)
   (if (eq X nil)
-        `(lambda () ,Y)
-      `(lambda (,X) ,Y)))
+      `(lambda () ,Y)
+    `(lambda (,X) ,Y)))
 ;; Lambdas:3 ends here
 
 ;; [[file:shen-elisp.org::*Lets][Lets:2]]
@@ -112,34 +112,20 @@
 ;; Defuns:1 ends here
 
 ;; [[file:shen-elisp.org::*Equality][Equality:1]]
-(defun shen/internal/dotted-pair? (X)
-  (and (consp X) (not (consp (cdr X)))))
-
-(defun shen/internal/normal-list (X)
-  (and (consp X) (consp (cdr X))))
-
 (defun shen/internal/= (X Y)
   (cond ((and (stringp X) (stringp Y)) (string-equal X Y))  ;;; (ref:strings-and-numbers)
         ((and (numberp X) (numberp Y)) (= X Y))
+        ((and (symbolp X) (symbolp Y)) (eq X Y))
         (t
          (or (equal X Y) ;;; (ref:obvious-equality-test)
              (cond
-              ((and (shen/internal/dotted-pair? X) ;;; (ref:dotted-pairs)
-                    (shen/internal/dotted-pair? Y))
-               (and (shen/internal/= (car X) (car Y))
-                    (shen/internal/= (cdr X) (cdr Y))))
-              ((and (shen/internal/normal-list X) ;;; (ref:normal-lists)
-                    (shen/internal/normal-list Y))
-               (let ((LengthX (length X))
-                     (LengthY (length Y)))
-                 (and (= LengthX LengthY)
-                      (let ((StillEqual 't)
-                            (i 0))
-                        (while (and StillEqual (< i LengthX))
-                          (progn
-                            (setq StillEqual (shen/internal/= (nth i X) (nth i Y)))
-                            (setq i (1+ i))))
-                        StillEqual))))
+              ((and (consp X) (consp Y))
+               (and
+                (= (safe-length X)
+                   (safe-length Y))
+                (equal
+                 (shen/internal/all-hash-tables->alists X)
+                 (shen/internal/all-hash-tables->alists Y))))
               ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
                (and (= (hash-table-count X) (hash-table-count Y))
                     (equal
@@ -218,17 +204,6 @@
 ;; Vectors:1 ends here
 
 ;; [[file:shen-elisp.org::*Vectors][Vectors:2]]
-(defun shen/internal/hash-list (L)
-  (let ((HashTablePaths (shen/internal/hash-table-paths X)))
-    (if HashTablePaths
-        (sxhash
-         (shen/internal/modify-ast
-          (copy-tree L)
-          HashTablePaths
-          (lambda (Path X)
-            (sxhash (prin1-to-string (shen/internal/get-element-at Path X))))))
-      (sxhash X))))
-
 (define-hash-table-test
   'shen/internal/hash-table-test
   (lambda (X Y)
@@ -236,7 +211,7 @@
   (lambda (X)
     (cond
      ((numberp X) X)
-     ((consp X) (shen/internal/hash-list X))
+     ((consp X) (sxhash (shen/internal/all-hash-tables->alists X)))
      ((hash-table-p X)
       (sxhash
        (shen/internal/all-hash-tables->alists
@@ -402,21 +377,30 @@
 (defun shen/internal/get-element-at (path ast)
   (let ((res ast))
     (dolist (current-index (reverse path) res)
-      (setq res (nth current-index res)))))
+      (if (listp current-index)
+          (setq res (nthcdr (car current-index) res))
+        (setq res (nth current-index res))))))
 ;; AST\ Getter ends here
 
 ;; [[file:shen-elisp.org::AST%20Setter][AST\ Setter]]
 (defun shen/internal/nset-element-at (path ast new-element)
-  (if (= 0 (length path))
+  (if (not path)
       (setf ast new-element)
     (let ((place-fn)
-          (path (reverse path)))
+          (path (reverse path))
+          (make-place-fn
+           (lambda (path target)
+             (if (listp path)
+                 `(nthcdr ,path ,target)
+                 `(nth ,path ,target)))))
       (progn
         (dotimes (current-index (length path) nil)
           (setq place-fn
-                (if (= current-index 0)
-                    `(nth ,(nth current-index path) (quote ,ast))
-                  `(nth ,(nth current-index path) ,place-fn))))
+                (funcall make-place-fn
+                         (nth current-index path)
+                         (if (= current-index 0)
+                             'ast
+                           place-fn))))
         (if (or (consp new-element) (shen/symbol-p new-element))
             (eval `(setf ,place-fn (quote ,new-element)) 't)
           (eval `(setf ,place-fn ,new-element)) 't)
@@ -485,8 +469,8 @@
   (and (<= (length parent-path) (length path))
        (equal parent-path
               (shen/internal/path-slice path
-                               (- (length path)
-                                  (length parent-path))))))
+                                        (- (length path)
+                                           (length parent-path))))))
 
 (defun shen/internal/get-path-parent (path) (cdr path))
 
@@ -511,6 +495,11 @@
       (setq current-ast
             (shen/internal/nset-element-at path ast (funcall tx-fn path ast))))))
 ;; AST\ Modification:1 ends here
+
+;; [[file:shen-elisp.org::*Detect%20Dotted%20Pair][Detect\ Dotted\ Pair:1]]
+(defun shen/internal/dotted-pair? (X)
+  (and (consp X) (not (consp (cdr X)))))
+;; Detect\ Dotted\ Pair:1 ends here
 
 ;; [[file:shen-elisp.org::*List%20Filtering][List\ Filtering:1]]
 (defun shen/internal/partition (pred Xs)
@@ -566,7 +555,7 @@
         paths
       (let ((current-path)
             (current-list X)
-            (current-list-length (length X))
+            (current-list-length (safe-length X))
             (current-index 0)
             (inner-lists))
         (while (or (< current-index current-list-length)
@@ -578,17 +567,24 @@
               (setq inner-lists (cdr inner-lists))
               (setq current-list (shen/internal/get-element-at current-path X)) ;;; (ref:reusing the getter)
               (setq current-index 0)
-              (setq current-list-length (length current-list))))
+              (setq current-list-length (safe-length current-list))))
            ((< current-index current-list-length)
-            (progn
-              (cond
-               ((not (consp (nth current-index current-list)))
-                (if (hash-table-p (nth current-index current-list))
-                    (push (cons current-index current-path) paths)))
-               ((consp (nth current-index current-list))
-                (push (cons current-index current-path) inner-lists))
-               (t nil))
-              (setq current-index (1+ current-index))))))
+            (let ((CurrentElement (nth current-index current-list)))
+              (progn
+                (cond
+                 ((shen/internal/dotted-pair? CurrentElement)
+                  (progn
+                    (if (hash-table-p (car CurrentElement))
+                        (push (cons 0 (cons current-index current-path)) paths))
+                    (if (hash-table-p (cdr CurrentElement))
+                        (push (cons '(1) (cons current-index current-path)) paths))))
+                 ((not (consp CurrentElement))
+                  (if (hash-table-p CurrentElement)
+                      (push (cons current-index current-path) paths)))
+                 ((consp CurrentElement)
+                  (push (cons current-index current-path) inner-lists))
+                 (t nil))
+                (setq current-index (1+ current-index)))))))
         paths))))
 ;; Finding\ Hash\ Tables ends here
 
@@ -604,27 +600,29 @@
 
 ;; [[file:shen-elisp.org::*Converting%20Hash%20Tables%20To%20Association%20Lists][Converting\ Hash\ Tables\ To\ Association\ Lists:2]]
 (defun shen/internal/all-hash-tables->alists (X)
-  (let ((HashTablePaths (shen/internal/hash-table-paths X))
-        (Result (copy-tree X)))
+  (let* ((HashTablePaths (shen/internal/hash-table-paths X))
+         (Result (if HashTablePaths (copy-tree X) nil)))
     (while HashTablePaths
-      (setq Result
-            (shen/internal/modify-ast
-             Result
-             HashTablePaths
-             (lambda (Path X)
-               (let* ((HashTable (shen/internal/get-element-at Path X))
-                      (Alist (shen/internal/hash-table->alist HashTable))
-                      (NestedHashTablePaths (shen/internal/hash-table-paths Alist))) ;;; (ref:nested hash list search)
-                 (if NestedHashTablePaths
-                     (setq HashTablePaths
-                           (append
-                            (mapcar
-                             (lambda (P)
-                               (append P Path)) ;;; (ref:path added to current context)
-                             NestedHashTablePaths)
-                            HashTablePaths)))
-                 Alist)))))
-    Result))
+      (let ((NestedPaths))
+        (setq Result
+              (shen/internal/modify-ast
+               Result
+               HashTablePaths
+               (lambda (Path X)
+                 (let* ((HashTable (shen/internal/get-element-at Path X))
+                        (Alist (shen/internal/hash-table->alist HashTable))
+                        (Nested (shen/internal/hash-table-paths Alist))) ;;; (ref:nested hash list search)
+                   (if Nested
+                       (setq NestedPaths
+                             (append
+                              (mapcar
+                               (lambda (P)
+                                 (append P Path)) ;;; (ref:path added to current context)
+                               Nested)
+                              NestedPaths)))
+                   Alist))))
+        (setq HashTablePaths NestedPaths)))
+    (or Result X)))
 ;; Converting\ Hash\ Tables\ To\ Association\ Lists:2 ends here
 
 ;; [[file:shen-elisp.org::*Walking%20The%20AST][Walking\ The\ AST:1]]
@@ -747,7 +745,7 @@
         (let ((arity (shen/internal/check-partial-application f (length args)))) ;; (ref:known arity)
           (if (= arity -1)
               `(,f ,@args)
-          `(shen/internal/apply-partially (function ,f) (list ,@args))))
+            `(shen/internal/apply-partially (function ,f) (list ,@args))))
       `(,f ,@args)))))
 
 (defun shen/internal/apply-higher-order-function (f args)
@@ -757,9 +755,9 @@
     ('wrong-number-of-arguments
      (condition-case ex
          (let ((arity (shen/internal/check-partial-application f (length args))))
-          (if (= arity -1)
-              (signal (car apply-ex) (cdr apply-ex))
-            (apply (eval (shen/internal/make-lambda-expression f arity (length args)) 't) args)))
+           (if (= arity -1)
+               (signal (car apply-ex) (cdr apply-ex))
+             (apply (eval (shen/internal/make-lambda-expression f arity (length args)) 't) args)))
        ('wrong-number-of-arguments
         (shen/internal/apply-incrementally f args))))))
 
@@ -952,57 +950,57 @@
 (defun shen/internal/parse-ast (ast)
   (if (not (consp ast))
       (if (shen/symbol-p ast) (list 'quote ast) ast)
-   (let* ((function-and-symbol-paths (shen/internal/get-function-symbol-and-funcall-paths ast)) ;;; (ref:paths)
-         (namespace-only (nth 0 function-and-symbol-paths))
-         (quote-only (nth 1 function-and-symbol-paths))
-         (possibly-apply-function (nth 2 function-and-symbol-paths))
-         (current-ast ast))
-    (progn
-      (shen/internal/namespace-and-quote current-ast namespace-only quote-only) ;;; (ref:quote and namespace)
-      (let ((apply-function (shen/internal/filter
-                             (lambda (path-local)
-                               (let ((token (shen/internal/get-element-at (nth 0 path-local) ast)))
-                                 (not (memq token shen/*primitive-macros*))))
-                             possibly-apply-function)))
-        (if (eq (car current-ast) 'defun) ;;; (ref:defun form)
-            (let* ((tail-call-paths (shen/internal/get-tail-call-paths ast)))
-              (if (not (eq tail-call-paths 'shen/not-found))
-                  (let ((not-in-tail-call apply-function)
-                        (in-tail-call))
-                    (progn
-                      (dolist (path tail-call-paths nil)
-                        (let* ((tco-non-tco-pair ;;; (ref:inside the recursive call)
-                                (shen/internal/partition
-                                 (lambda (apply-function-path-local)
-                                   (shen/internal/starts-with-path path (nth 0 apply-function-path-local)))
-                                 not-in-tail-call))
-                               (funcalled-tco
-                                (let* ((normalized-paths
-                                        (shen/internal/filter
-                                         (lambda (path-local) (not (equal (nth 0 path-local) '(0))))
-                                         (mapcar
-                                          (lambda (in-tco-path-local)
-                                            (list
-                                             (shen/internal/get-path-relative-to path (nth 0 in-tco-path-local))
-                                             (nth 1 in-tco-path-local)))
-                                          (nth 0 tco-non-tco-pair))))
-                                       (tail-call (shen/internal/get-element-at path current-ast)))
-                                  (list
-                                   path
-                                   `(vector (list ,@(cdr (shen/internal/add-funcalls tail-call normalized-paths)))))))) ;;; (ref:package up the arguments)
-                          (progn
-                            (setq not-in-tail-call (nth 1 tco-non-tco-pair))
-                            (push funcalled-tco in-tail-call))))
-                      (dolist (path-tail-call in-tail-call nil)  ;;; (ref:Sub in the recurs marker)
-                        (shen/internal/modify-ast current-ast (list (nth 0 path-tail-call))
-                                         (lambda (path current-ast) (nth 1 path-tail-call))))
-                      (setq current-ast (shen/internal/add-funcalls current-ast not-in-tail-call)) ;;; (ref:rest of the function applications)
-                      (setq current-ast `(defun ,(nth 1 current-ast) ,(nth 2 current-ast) ,(shen/trampoline-body current-ast))))) ;;; (ref:write out the defun)
-                (setq current-ast (shen/internal/add-funcalls current-ast apply-function)))
-              current-ast)
-          (progn
-            (setq current-ast (shen/internal/add-funcalls current-ast apply-function))
-            current-ast)))))))
+    (let* ((function-and-symbol-paths (shen/internal/get-function-symbol-and-funcall-paths ast)) ;;; (ref:paths)
+           (namespace-only (nth 0 function-and-symbol-paths))
+           (quote-only (nth 1 function-and-symbol-paths))
+           (possibly-apply-function (nth 2 function-and-symbol-paths))
+           (current-ast ast))
+      (progn
+        (shen/internal/namespace-and-quote current-ast namespace-only quote-only) ;;; (ref:quote and namespace)
+        (let ((apply-function (shen/internal/filter
+                               (lambda (path-local)
+                                 (let ((token (shen/internal/get-element-at (nth 0 path-local) ast)))
+                                   (not (memq token shen/*primitive-macros*))))
+                               possibly-apply-function)))
+          (if (eq (car current-ast) 'defun) ;;; (ref:defun form)
+              (let* ((tail-call-paths (shen/internal/get-tail-call-paths ast)))
+                (if (not (eq tail-call-paths 'shen/not-found))
+                    (let ((not-in-tail-call apply-function)
+                          (in-tail-call))
+                      (progn
+                        (dolist (path tail-call-paths nil)
+                          (let* ((tco-non-tco-pair ;;; (ref:inside the recursive call)
+                                  (shen/internal/partition
+                                   (lambda (apply-function-path-local)
+                                     (shen/internal/starts-with-path path (nth 0 apply-function-path-local)))
+                                   not-in-tail-call))
+                                 (funcalled-tco
+                                  (let* ((normalized-paths
+                                          (shen/internal/filter
+                                           (lambda (path-local) (not (equal (nth 0 path-local) '(0))))
+                                           (mapcar
+                                            (lambda (in-tco-path-local)
+                                              (list
+                                               (shen/internal/get-path-relative-to path (nth 0 in-tco-path-local))
+                                               (nth 1 in-tco-path-local)))
+                                            (nth 0 tco-non-tco-pair))))
+                                         (tail-call (shen/internal/get-element-at path current-ast)))
+                                    (list
+                                     path
+                                     `(vector (list ,@(cdr (shen/internal/add-funcalls tail-call normalized-paths)))))))) ;;; (ref:package up the arguments)
+                            (progn
+                              (setq not-in-tail-call (nth 1 tco-non-tco-pair))
+                              (push funcalled-tco in-tail-call))))
+                        (dolist (path-tail-call in-tail-call nil)  ;;; (ref:Sub in the recurs marker)
+                          (shen/internal/modify-ast current-ast (list (nth 0 path-tail-call))
+                                                    (lambda (path current-ast) (nth 1 path-tail-call))))
+                        (setq current-ast (shen/internal/add-funcalls current-ast not-in-tail-call)) ;;; (ref:rest of the function applications)
+                        (setq current-ast `(defun ,(nth 1 current-ast) ,(nth 2 current-ast) ,(shen/trampoline-body current-ast))))) ;;; (ref:write out the defun)
+                  (setq current-ast (shen/internal/add-funcalls current-ast apply-function)))
+                current-ast)
+            (progn
+              (setq current-ast (shen/internal/add-funcalls current-ast apply-function))
+              current-ast)))))))
 ;; Modifying\ The\ AST:1 ends here
 
 ;; [[file:shen-elisp.org::*Modifying%20The%20AST][Modifying\ The\ AST:2]]
@@ -1101,8 +1099,8 @@
            (nth 2 current-chain)))
    (lambda (accum remaining-chain)
      (if (eq remaining-chain 'nil)
-         (cons 'list (reverse accum))
-       (list 'append (cons 'list (reverse accum)) remaining-chain)))))
+         `(list ,@(reverse accum))
+       `(append (list ,@(reverse accum)) ,remaining-chain)))))
 ;; Consolidate\ Cons:1 ends here
 
 ;; [[file:shen-elisp.org::*Consolidate%20@s][Consolidate\ @s:1]]
