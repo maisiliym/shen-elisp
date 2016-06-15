@@ -14955,7 +14955,11 @@
 (shen/set 'shen\.*history* nil)
 (shen/set 'shen\.*tc* 'false)
 (shen/set '*property-vector*
-          (make-hash-table :size 1000 :test 'shen/internal/hash-table-test))
+          (let
+              ((HashTable
+                (make-hash-table :size 1000 :test 'shen/internal/hash-table-test)))
+            (puthash 0 20000 HashTable)
+            HashTable))
 (shen/set 'shen\.*process-counter* 0)
 (shen/set 'shen\.*varcounter*
           (shen/vector 1000))

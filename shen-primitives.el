@@ -123,16 +123,14 @@
                (and
                 (= (safe-length X)
                    (safe-length Y))
-                (equal
-                 (shen/internal/all-hash-tables->alists X)
-                 (shen/internal/all-hash-tables->alists Y))))
+                (string=
+                 (prin1-to-string X)
+                 (prin1-to-string Y))))
               ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
                (and (= (hash-table-count X) (hash-table-count Y))
-                    (equal
-                     (shen/internal/all-hash-tables->alists
-                      (shen/internal/hash-table->alist X))
-                     (shen/internal/all-hash-tables->alists
-                      (shen/internal/hash-table->alist Y)))))
+                    (string=
+                     (prin1-to-string X)
+                     (prin1-to-string Y))))
               (t nil))))))
 
 (defsubst shen/= (X Y)
@@ -211,11 +209,9 @@
   (lambda (X)
     (cond
      ((numberp X) X)
-     ((consp X) (sxhash (shen/internal/all-hash-tables->alists X)))
+     ((consp X) (sxhash (prin1-to-string X)))
      ((hash-table-p X)
-      (sxhash
-       (shen/internal/all-hash-tables->alists
-        (shen/internal/hash-table->alist X))))
+      (sxhash (prin1-to-string X)))
      (t (sxhash X)))))
 ;; Vectors:2 ends here
 
@@ -547,83 +543,6 @@
           (nreverse copy))
       Xs)))
 ;; List\ Filtering:4 ends here
-
-;; [[file:shen-elisp.org::Finding%20Hash%20Tables][Finding\ Hash\ Tables]]
-(defun shen/internal/hash-table-paths (X)
-  (let ((paths))
-    (if (not (consp X))
-        paths
-      (let ((current-path)
-            (current-list X)
-            (current-list-length (safe-length X))
-            (current-index 0)
-            (inner-lists))
-        (while (or (< current-index current-list-length)
-                   inner-lists)
-          (cond
-           ((and (= current-index current-list-length) inner-lists)
-            (progn
-              (setq current-path (car inner-lists))
-              (setq inner-lists (cdr inner-lists))
-              (setq current-list (shen/internal/get-element-at current-path X)) ;;; (ref:reusing the getter)
-              (setq current-index 0)
-              (setq current-list-length (safe-length current-list))))
-           ((< current-index current-list-length)
-            (let ((CurrentElement (nth current-index current-list)))
-              (progn
-                (cond
-                 ((shen/internal/dotted-pair? CurrentElement)
-                  (progn
-                    (if (hash-table-p (car CurrentElement))
-                        (push (cons 0 (cons current-index current-path)) paths))
-                    (if (hash-table-p (cdr CurrentElement))
-                        (push (cons '(1) (cons current-index current-path)) paths))))
-                 ((not (consp CurrentElement))
-                  (if (hash-table-p CurrentElement)
-                      (push (cons current-index current-path) paths)))
-                 ((consp CurrentElement)
-                  (push (cons current-index current-path) inner-lists))
-                 (t nil))
-                (setq current-index (1+ current-index)))))))
-        paths))))
-;; Finding\ Hash\ Tables ends here
-
-;; [[file:shen-elisp.org::*Converting%20Hash%20Tables%20To%20Association%20Lists][Converting\ Hash\ Tables\ To\ Association\ Lists:1]]
-(defun shen/internal/hash-table->alist (H)
-  (let ((KVS))
-    (maphash
-     (lambda (Key Value)
-       (push (list Key Value) KVS))
-     H)
-    (reverse KVS)))
-;; Converting\ Hash\ Tables\ To\ Association\ Lists:1 ends here
-
-;; [[file:shen-elisp.org::*Converting%20Hash%20Tables%20To%20Association%20Lists][Converting\ Hash\ Tables\ To\ Association\ Lists:2]]
-(defun shen/internal/all-hash-tables->alists (X)
-  (let* ((HashTablePaths (shen/internal/hash-table-paths X))
-         (Result (if HashTablePaths (copy-tree X) nil)))
-    (while HashTablePaths
-      (let ((NestedPaths))
-        (setq Result
-              (shen/internal/modify-ast
-               Result
-               HashTablePaths
-               (lambda (Path X)
-                 (let* ((HashTable (shen/internal/get-element-at Path X))
-                        (Alist (shen/internal/hash-table->alist HashTable))
-                        (Nested (shen/internal/hash-table-paths Alist))) ;;; (ref:nested hash list search)
-                   (if Nested
-                       (setq NestedPaths
-                             (append
-                              (mapcar
-                               (lambda (P)
-                                 (append P Path)) ;;; (ref:path added to current context)
-                               Nested)
-                              NestedPaths)))
-                   Alist))))
-        (setq HashTablePaths NestedPaths)))
-    (or Result X)))
-;; Converting\ Hash\ Tables\ To\ Association\ Lists:2 ends here
 
 ;; [[file:shen-elisp.org::*Walking%20The%20AST][Walking\ The\ AST:1]]
 (defun shen/internal/get-function-symbol-and-funcall-paths (ast)
@@ -1205,9 +1124,11 @@
 ;; [[file:shen-elisp.org::*Hash%20Table][Hash\ Table:1]]
 (setq shen/internal/*hash-table-overrides*
       '(((set *property-vector* (vector 20000)) . (shen/set '*property-vector*
-                                                            (make-hash-table
-                                                             :size 1000
-                                                             :test 'shen/internal/hash-table-test)))
+                                                            (let ((HashTable (make-hash-table
+                                                                              :size 1000
+                                                                              :test 'shen/internal/hash-table-test)))
+                                                              (puthash 0 20000 HashTable)
+                                                              HashTable)))
         (get . (defun shen/get
                    (Pointer Key Table)
                  (let ((Subtable (gethash Pointer Table)))
