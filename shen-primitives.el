@@ -120,15 +120,45 @@
          (or (equal X Y) ;;; (ref:obvious-equality-test)
              (cond
               ((and (consp X) (consp Y))
-               (and
-                (= (safe-length X)
-                   (safe-length Y))
-                (string=
-                 (prin1-to-string X)
-                 (prin1-to-string Y))))
-              ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:hash-tables)
+               (let ((LengthX (safe-length X))
+                     (LengthY (safe-length Y)))
+                 (and
+                  (= LengthX LengthY)
+                  (let ((SoFar 't)
+                        (InnerListsX (list X))
+                        (InnerListsY (list Y))
+                        (FirstTime 't)
+                        (CurrentIndex 0))
+                    (while (and SoFar InnerListsX InnerListsY)
+                      (let* ((CurrentListX (pop InnerListsX))
+                             (CurrentListY (pop InnerListsY))
+                             (Iterate
+                              (lambda ()
+                                (let ((I 0))
+                                  (while (and SoFar (< I LengthX))
+                                    (let* ((CurrentX (nth I CurrentListX))
+                                           (CurrentY (nth I CurrentListY)))
+                                      (cond
+                                       ((not (equal (type-of CurrentX) (type-of CurrentY))) ;;; (ref:elements are of the same type)
+                                        (setq SoFar nil))
+                                       ((and (consp CurrentX) (consp CurrentY)) ;;; (ref:store the inner list)
+                                        (progn
+                                          (push CurrentX InnerListsX)
+                                          (push CurrentY InnerListsY)))
+                                       (t (setq SoFar (shen/internal/= CurrentX CurrentY)))) ;;; (ref:compare the elements)
+                                      (setq I (1+ I))))))))
+                        (if (not FirstTime)
+                            (progn
+                              (setq FirstTime nil)
+                              (setq LengthX (safe-length CurrentListX))
+                              (setq LengthY (safe-length CurrentListY))
+                              (setq SoFar (= LengthX LengthY))
+                              (funcall Iterate))
+                          (funcall Iterate))))
+                    SoFar))))
+              ((and (hash-table-p X) (hash-table-p Y)) ;;; (ref:compare hash tables)
                (and (= (hash-table-count X) (hash-table-count Y))
-                    (string=
+                    (string=  ;;; (ref:hash table comparison)
                      (prin1-to-string X)
                      (prin1-to-string Y))))
               (t nil))))))
@@ -283,59 +313,61 @@
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:2]]
 (defun shen/open (Path Direction)
-  (let ((Path (concat (file-name-as-directory (shen/value '*home-directory*))
-                      (file-relative-name Path)))
-        (Buffer))
-    (cond
-     ((equal Direction 'in)
-      (if (not (file-exists-p Path))
-          (error (format "Path does not exist: %s" Path))
+  (let* ((Path (concat (file-name-as-directory (shen/value '*home-directory*))
+                       (file-relative-name Path)))
+         (Buffer (find-buffer-visiting Path)))
+    (if Buffer
         (progn
-          (setq Buffer (find-file-noselect Path))
-          (with-current-buffer
-              Buffer
-            (progn
-              (make-local-variable 'shen/shen-buffer)
-              (setq buffer-read-only 't
-                    shen/shen-buffer 't)
-              (goto-char (point-min))))
-          Buffer)))
-     ((equal Direction 'out)
-      (progn
-        (setq Buffer (find-buffer-visiting Path))
-        (if (bufferp Buffer)
-            (if (and (buffer-local-value 'buffer-read-only Buffer) (buffer-local-value 'shen/shen-buffer Buffer))
-                (error (format  "A stream to %s already open read-only. Call (close \"%s\") followed by (open \"%s\" 'out). " Path Path Path))
-              Buffer)
+          (with-current-buffer Buffer
+            (goto-char (point-min)))
+          Buffer)
+      (cond
+       ((equal Direction 'in)
+        (if (not (file-exists-p Path))
+            (error (format "Path does not exist: %s" Path))
           (progn
             (setq Buffer (find-file-noselect Path))
-            (with-current-buffer Buffer
+            (with-current-buffer
+                Buffer
               (progn
-                (goto-char (point-max))
-                (make-local-variable 'shen/shen-buffer)
-                (setq shen/shen-buffer 't))))))))))
+                (setq buffer-read-only 't)
+                (setq-local shen/shen-buffer 't)
+                (goto-char (point-min))))
+            Buffer)))
+       ((equal Direction 'out)
+        (progn
+          (setq Buffer (find-buffer-visiting Path))
+          (if (bufferp Buffer)
+              (if (and (buffer-local-value 'buffer-read-only Buffer) (buffer-local-value 'shen/shen-buffer Buffer))
+                  (error (format  "A stream to %s already open read-only. Call (close \"%s\") followed by (open \"%s\" 'out). " Path Path Path))
+                Buffer)
+            (progn
+              (setq Buffer (find-file-noselect Path))
+              (with-current-buffer Buffer
+                (progn
+                  (goto-char (point-max))
+                  (setq-local shen/shen-buffer 't)))))))))))
 ;; Streams\ and\ I/O:2 ends here
 
 ;; [[file:shen-elisp.org::*Streams%20and%20I/O][Streams\ and\ I/O:3]]
 (defun shen/close (Stream)
   (if (not Stream)
       (error "Stream is nil.")
-    (if (or (not (local-variable-p 'shen/shen-buffer Stream))
-            (not (buffer-local-value 'shen/shen-buffer Stream)))
-        (error (format "Buffer %s for file %s was not opened by Shen's (open ...) function." Stream (buffer-file-name Stream)))
-      (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
-            (t (with-current-buffer
-                   Stream
-                 (progn
-                   (write-file (buffer-file-name Stream))
-                   (kill-buffer Stream)
-                   '())))))))
+    (if (and (local-variable-p 'shen/shen-buffer Stream)
+             (buffer-local-value 'shen/shen-buffer Stream))
+        (cond ((buffer-local-value 'buffer-read-only Stream) (kill-buffer Stream))
+              (t (with-current-buffer
+                     Stream
+                   (progn
+                     (write-file (buffer-file-name Stream))
+                     (kill-buffer Stream)
+                     '())))))))
 
 (defun shen/write-byte (Byte &optional S)
   (if S
       (cond
        ((bufferp S)
-        (if (not (buffer-local-value 'buffer-read-only S))
+        (if (not (local-variable-p 'buffer-read-only S))
             (error (format "Buffer %s is read-only." S))
           (if (buffer-local-value 'shen/shen-buffer S)
               (write-char Byte S)
@@ -348,16 +380,14 @@
 (defun shen/read-byte (&optional S)
   (cond
    ((and (bufferp S) (buffer-file-name S))
-    (if (buffer-local-value 'shen/shen-buffer S)
-        (with-current-buffer S
-          (let ((current-byte))
-            (if (eq (point) (point-max))
-                -1
-              (progn
-                (setq current-byte (get-byte))
-                (forward-char)
-                current-byte))))
-      (error (format "Buffer %s was not opened by Shen." S))))
+    (with-current-buffer S
+      (let ((current-byte))
+        (if (eq (point) (point-max))
+            -1
+          (progn
+            (setq current-byte (get-byte))
+            (forward-char)
+            current-byte)))))
    ((vectorp S) (if (not (aref S 0))
                     -1
                   (pop (aref S 0))))

@@ -628,14 +628,23 @@ right when it returns true. Two structures which are <code>(equal ...)</code> ar
 </p>
 
 <p>
-If both arguments are cons lists first ensure they are the same length. Note that
-we use <code>safe-length</code> and not <code>length</code>. Only the former is robust to lists that end in
-dotted pairs, eg. ~'(a b c . d)~ which are sometimes generated from KLambda code.
+If both arguments are cons lists and the equality check has failed it might be
+that they contain hash tables so we need to check for that. First ensure they
+are the same length. Note that we use <code>safe-length</code> and not <code>length</code>. Only the
+former is robust to lists that end in dotted pairs, eg. ~'(a b c . d)~ which are
+sometimes generated from KLambda code.
 </p>
 
 <p>
-Some might wonder why we're using <code>(string= ...)</code> to compare lists and hash tables.
-The unsatisfying answer is that it was about 30% faster than whatever I could cook
+Then we loop through the elements of the list ensuring that the <a href="#coderef-elements are of the same type"class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-elements are of the same type');" onmouseout="CodeHighlightOff(this, 'coderef-elements are of the same type');">elements are of the same type</a> , or <a href="#coderef-store the inner list"class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-store the inner list');" onmouseout="CodeHighlightOff(this, 'coderef-store the inner list');">storing inner lists</a> as we encounter then or recursing to
+<a href="#coderef-compare the elements"class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-compare the elements');" onmouseout="CodeHighlightOff(this, 'coderef-compare the elements');">compare the elements</a>. Note that even though we recur there is no risk of
+blowing stack because only list comparison recurses and by this point we have
+ensured that the elements are not lists.
+</p>
+
+<p>
+One might wonder why we're using <code>(string= ...)</code> to <a href="#coderef-compare hash tables"class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-compare hash tables');" onmouseout="CodeHighlightOff(this, 'coderef-compare hash tables');">compare hash tables</a>. The
+unsatisfying answer is that it was about 30% faster than whatever I could cook
 up in Elisp.
 </p>
 <div class="org-src-container">
@@ -648,15 +657,45 @@ up in Elisp.
 <span id="coderef-obvious-equality-test" class="coderef-off">         <span style="color: #709870;">(</span>or <span style="color: #907373;">(</span>equal X Y<span style="color: #907373;">)</span> <span style="color: #d9d9d9;">;;;</span> (obvious-equality-test)</span>
              <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
               <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>and <span style="color: #80a880;">(</span>consp X<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>consp Y<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-               <span style="color: #858580;">(</span>and
-                <span style="color: #80a880;">(</span>= <span style="color: #887070;">(</span>safe-length X<span style="color: #887070;">)</span>
-                   <span style="color: #887070;">(</span>safe-length Y<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                <span style="color: #80a880;">(</span>string=
-                 <span style="color: #887070;">(</span>prin1-to-string X<span style="color: #887070;">)</span>
-                 <span style="color: #887070;">(</span>prin1-to-string Y<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-<span id="coderef-hash-tables" class="coderef-off">              <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>and <span style="color: #80a880;">(</span>hash-table-p X<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>hash-table-p Y<span style="color: #80a880;">)</span><span style="color: #858580;">)</span> <span style="color: #d9d9d9;">;;;</span> (hash-tables)</span>
+               <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #80a880;">(</span><span style="color: #887070;">(</span>LengthX <span style="color: #707183;">(</span>safe-length X<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                     <span style="color: #887070;">(</span>LengthY <span style="color: #707183;">(</span>safe-length Y<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+                 <span style="color: #80a880;">(</span>and
+                  <span style="color: #887070;">(</span>= LengthX LengthY<span style="color: #887070;">)</span>
+                  <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #707183;">(</span><span style="color: #7388d6;">(</span>SoFar 't<span style="color: #7388d6;">)</span>
+                        <span style="color: #7388d6;">(</span>InnerListsX <span style="color: #909183;">(</span>list X<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+                        <span style="color: #7388d6;">(</span>InnerListsY <span style="color: #909183;">(</span>list Y<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+                        <span style="color: #7388d6;">(</span>FirstTime 't<span style="color: #7388d6;">)</span>
+                        <span style="color: #7388d6;">(</span>CurrentIndex <span style="color: #333333; font-weight: bold;">0</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                    <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #7388d6;">(</span>and SoFar InnerListsX InnerListsY<span style="color: #7388d6;">)</span>
+                      <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>CurrentListX <span style="color: #907373;">(</span>pop InnerListsX<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+                             <span style="color: #709870;">(</span>CurrentListY <span style="color: #907373;">(</span>pop InnerListsY<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+                             <span style="color: #709870;">(</span>Iterate
+                              <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #6276ba;">()</span>
+                                <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>I <span style="color: #333333; font-weight: bold;">0</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                                  <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">while</span> <span style="color: #80a880;">(</span>and SoFar <span style="color: #887070;">(</span>&lt; I LengthX<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+                                    <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #887070;">(</span><span style="color: #707183;">(</span>CurrentX <span style="color: #7388d6;">(</span>nth I CurrentListX<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                                           <span style="color: #707183;">(</span>CurrentY <span style="color: #7388d6;">(</span>nth I CurrentListY<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                                      <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
+<span id="coderef-elements are of the same type" class="coderef-off">                                       <span style="color: #707183;">(</span><span style="color: #7388d6;">(</span>not <span style="color: #909183;">(</span>equal <span style="color: #709870;">(</span>type-of CurrentX<span style="color: #709870;">)</span> <span style="color: #709870;">(</span>type-of CurrentY<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;;</span> (elements are of the same type)</span>
+                                        <span style="color: #7388d6;">(</span>setq SoFar nil<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<span id="coderef-store the inner list" class="coderef-off">                                       <span style="color: #707183;">(</span><span style="color: #7388d6;">(</span>and <span style="color: #909183;">(</span>consp CurrentX<span style="color: #909183;">)</span> <span style="color: #909183;">(</span>consp CurrentY<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span> <span style="color: #d9d9d9;">;;;</span> (store the inner list)</span>
+                                        <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                                          <span style="color: #909183;">(</span>push CurrentX InnerListsX<span style="color: #909183;">)</span>
+                                          <span style="color: #909183;">(</span>push CurrentY InnerListsY<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<span id="coderef-compare the elements" class="coderef-off">                                       <span style="color: #707183;">(</span>t <span style="color: #7388d6;">(</span>setq SoFar <span style="color: #909183;">(</span>shen/internal/= CurrentX CurrentY<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span> <span style="color: #d9d9d9;">;;;</span> (compare the elements)</span>
+                                      <span style="color: #887070;">(</span>setq I <span style="color: #707183;">(</span>1+ I<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+                        <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>not FirstTime<span style="color: #709870;">)</span>
+                            <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                              <span style="color: #907373;">(</span>setq FirstTime nil<span style="color: #907373;">)</span>
+                              <span style="color: #907373;">(</span>setq LengthX <span style="color: #6276ba;">(</span>safe-length CurrentListX<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+                              <span style="color: #907373;">(</span>setq LengthY <span style="color: #6276ba;">(</span>safe-length CurrentListY<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+                              <span style="color: #907373;">(</span>setq SoFar <span style="color: #6276ba;">(</span>= LengthX LengthY<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+                              <span style="color: #907373;">(</span>funcall Iterate<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+                          <span style="color: #709870;">(</span>funcall Iterate<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                    SoFar<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+<span id="coderef-compare hash tables" class="coderef-off">              <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>and <span style="color: #80a880;">(</span>hash-table-p X<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>hash-table-p Y<span style="color: #80a880;">)</span><span style="color: #858580;">)</span> <span style="color: #d9d9d9;">;;;</span> (compare hash tables)</span>
                <span style="color: #858580;">(</span>and <span style="color: #80a880;">(</span>= <span style="color: #887070;">(</span>hash-table-count X<span style="color: #887070;">)</span> <span style="color: #887070;">(</span>hash-table-count Y<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                    <span style="color: #80a880;">(</span>string=
+<span id="coderef-hash table comparison" class="coderef-off">                    <span style="color: #80a880;">(</span>string=  <span style="color: #d9d9d9;">;;;</span> (hash table comparison)</span>
                      <span style="color: #887070;">(</span>prin1-to-string X<span style="color: #887070;">)</span>
                      <span style="color: #887070;">(</span>prin1-to-string Y<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
               <span style="color: #6276ba;">(</span>t nil<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
@@ -997,42 +1036,45 @@ file stream must be <code>close</code> -ed and re-opened <code>out</code> before
 <p>
 Additionally buffers <code>open</code> -ed by Shen are "marked" with a buffer local variable
 <code>shen/shen-buffer</code> to ensure that only Shen code can <code>read</code> / <code>write</code> / <code>close</code>
-them:
+them. Buffers that are already open are left alone:
 </p>
 <div class="org-src-container">
 
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/open</span> <span style="color: #7388d6;">(</span>Path Direction<span style="color: #7388d6;">)</span>
-  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Path <span style="color: #907373;">(</span>concat <span style="color: #6276ba;">(</span>file-name-as-directory <span style="color: #858580;">(</span>shen/value '*home-directory*<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-                      <span style="color: #6276ba;">(</span>file-relative-name Path<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span>Buffer<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
-     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>equal Direction 'in<span style="color: #907373;">)</span>
-      <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #6276ba;">(</span>not <span style="color: #858580;">(</span>file-exists-p Path<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-          <span style="color: #6276ba;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #858580;">(</span>format <span style="color: #666666;">"Path does not exist: %s"</span> Path<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-          <span style="color: #858580;">(</span>setq Buffer <span style="color: #80a880;">(</span>find-file-noselect Path<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-          <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span>
-              Buffer
-            <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-              <span style="color: #887070;">(</span>make-local-variable 'shen/shen-buffer<span style="color: #887070;">)</span>
-              <span style="color: #887070;">(</span>setq buffer-read-only 't
-                    shen/shen-buffer 't<span style="color: #887070;">)</span>
-              <span style="color: #887070;">(</span>goto-char <span style="color: #707183;">(</span>point-min<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-          Buffer<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>equal Direction 'out<span style="color: #907373;">)</span>
-      <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-        <span style="color: #6276ba;">(</span>setq Buffer <span style="color: #858580;">(</span>find-buffer-visiting Path<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
-        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>bufferp Buffer<span style="color: #858580;">)</span>
-            <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #80a880;">(</span>and <span style="color: #887070;">(</span>buffer-local-value 'buffer-read-only Buffer<span style="color: #887070;">)</span> <span style="color: #887070;">(</span>buffer-local-value 'shen/shen-buffer Buffer<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                <span style="color: #80a880;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #887070;">(</span>format  <span style="color: #666666;">"A stream to %s already open read-only. Call (close \"%s\") followed by (open \"%s\" 'out). "</span> Path Path Path<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-              Buffer<span style="color: #858580;">)</span>
+  <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">let*</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>Path <span style="color: #907373;">(</span>concat <span style="color: #6276ba;">(</span>file-name-as-directory <span style="color: #858580;">(</span>shen/value '*home-directory*<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                       <span style="color: #6276ba;">(</span>file-relative-name Path<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+         <span style="color: #709870;">(</span>Buffer <span style="color: #907373;">(</span>find-buffer-visiting Path<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> Buffer
+        <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+          <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> Buffer
+            <span style="color: #6276ba;">(</span>goto-char <span style="color: #858580;">(</span>point-min<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+          Buffer<span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
+       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>equal Direction 'in<span style="color: #6276ba;">)</span>
+        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>not <span style="color: #80a880;">(</span>file-exists-p Path<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+            <span style="color: #858580;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #80a880;">(</span>format <span style="color: #666666;">"Path does not exist: %s"</span> Path<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
           <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
             <span style="color: #80a880;">(</span>setq Buffer <span style="color: #887070;">(</span>find-file-noselect Path<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-            <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> Buffer
+            <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span>
+                Buffer
               <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-                <span style="color: #707183;">(</span>goto-char <span style="color: #7388d6;">(</span>point-max<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
-                <span style="color: #707183;">(</span>make-local-variable 'shen/shen-buffer<span style="color: #707183;">)</span>
-                <span style="color: #707183;">(</span>setq shen/shen-buffer 't<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+                <span style="color: #707183;">(</span>setq buffer-read-only 't<span style="color: #707183;">)</span>
+                <span style="color: #707183;">(</span>setq-local shen/shen-buffer 't<span style="color: #707183;">)</span>
+                <span style="color: #707183;">(</span>goto-char <span style="color: #7388d6;">(</span>point-min<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+            Buffer<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+       <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>equal Direction 'out<span style="color: #6276ba;">)</span>
+        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+          <span style="color: #858580;">(</span>setq Buffer <span style="color: #80a880;">(</span>find-buffer-visiting Path<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+          <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #80a880;">(</span>bufferp Buffer<span style="color: #80a880;">)</span>
+              <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #887070;">(</span>and <span style="color: #707183;">(</span>buffer-local-value 'buffer-read-only Buffer<span style="color: #707183;">)</span> <span style="color: #707183;">(</span>buffer-local-value 'shen/shen-buffer Buffer<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                  <span style="color: #887070;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #707183;">(</span>format  <span style="color: #666666;">"A stream to %s already open read-only. Call (close \"%s\") followed by (open \"%s\" 'out). "</span> Path Path Path<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+                Buffer<span style="color: #80a880;">)</span>
+            <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+              <span style="color: #887070;">(</span>setq Buffer <span style="color: #707183;">(</span>find-file-noselect Path<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
+              <span style="color: #887070;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> Buffer
+                <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                  <span style="color: #7388d6;">(</span>goto-char <span style="color: #909183;">(</span>point-max<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+                  <span style="color: #7388d6;">(</span>setq-local shen/shen-buffer 't<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 
@@ -1050,22 +1092,21 @@ when writing out to the <a href="#orgheadline22">10</a> requires calling a funct
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/close</span> <span style="color: #7388d6;">(</span>Stream<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #909183;">(</span>not Stream<span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #666666;">"Stream is nil."</span><span style="color: #909183;">)</span>
-    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>or <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>local-variable-p 'shen/shen-buffer Stream<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-            <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>buffer-local-value 'shen/shen-buffer Stream<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-        <span style="color: #709870;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #907373;">(</span>format <span style="color: #666666;">"Buffer %s for file %s was not opened by Shen's (open ...) function."</span> Stream <span style="color: #6276ba;">(</span>buffer-file-name Stream<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">cond</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>buffer-local-value 'buffer-read-only Stream<span style="color: #6276ba;">)</span> <span style="color: #6276ba;">(</span>kill-buffer Stream<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-            <span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span>
-                   Stream
-                 <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-                   <span style="color: #80a880;">(</span>write-file <span style="color: #887070;">(</span>buffer-file-name Stream<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                   <span style="color: #80a880;">(</span>kill-buffer Stream<span style="color: #80a880;">)</span>
-                   '<span style="color: #80a880;">()</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+    <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>local-variable-p 'shen/shen-buffer Stream<span style="color: #907373;">)</span>
+             <span style="color: #907373;">(</span>buffer-local-value 'shen/shen-buffer Stream<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+        <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">cond</span> <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>buffer-local-value 'buffer-read-only Stream<span style="color: #6276ba;">)</span> <span style="color: #6276ba;">(</span>kill-buffer Stream<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
+              <span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span>
+                     Stream
+                   <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+                     <span style="color: #80a880;">(</span>write-file <span style="color: #887070;">(</span>buffer-file-name Stream<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+                     <span style="color: #80a880;">(</span>kill-buffer Stream<span style="color: #80a880;">)</span>
+                     '<span style="color: #80a880;">()</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/write-byte</span> <span style="color: #7388d6;">(</span>Byte <span style="color: #333333; font-style: italic;">&amp;optional</span> S<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">if</span> S
       <span style="color: #909183;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
        <span style="color: #709870;">(</span><span style="color: #907373;">(</span>bufferp S<span style="color: #907373;">)</span>
-        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #6276ba;">(</span>not <span style="color: #858580;">(</span>buffer-local-value 'buffer-read-only S<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #6276ba;">(</span>not <span style="color: #858580;">(</span>local-variable-p 'buffer-read-only S<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
             <span style="color: #6276ba;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #858580;">(</span>format <span style="color: #666666;">"Buffer %s is read-only."</span> S<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
           <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>buffer-local-value 'shen/shen-buffer S<span style="color: #858580;">)</span>
               <span style="color: #858580;">(</span>write-char Byte S<span style="color: #858580;">)</span>
@@ -1078,16 +1119,14 @@ when writing out to the <a href="#orgheadline22">10</a> requires calling a funct
 <span style="color: #707183;">(</span><span style="color: #333333; font-weight: bold;">defun</span> <span style="color: #333333; font-weight: bold;">shen/read-byte</span> <span style="color: #7388d6;">(</span><span style="color: #333333; font-style: italic;">&amp;optional</span> S<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #333333; font-weight: bold;">cond</span>
    <span style="color: #909183;">(</span><span style="color: #709870;">(</span>and <span style="color: #907373;">(</span>bufferp S<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>buffer-file-name S<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-    <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>buffer-local-value 'shen/shen-buffer S<span style="color: #907373;">)</span>
-        <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> S
-          <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #858580;">(</span><span style="color: #80a880;">(</span>current-byte<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
-            <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #80a880;">(</span>eq <span style="color: #887070;">(</span>point<span style="color: #887070;">)</span> <span style="color: #887070;">(</span>point-max<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
-                <span style="color: #333333; font-weight: bold;">-1</span>
-              <span style="color: #80a880;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
-                <span style="color: #887070;">(</span>setq current-byte <span style="color: #707183;">(</span>get-byte<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
-                <span style="color: #887070;">(</span>forward-char<span style="color: #887070;">)</span>
-                current-byte<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
-      <span style="color: #907373;">(</span><span style="color: #ff0000; font-weight: bold;">error</span> <span style="color: #6276ba;">(</span>format <span style="color: #666666;">"Buffer %s was not opened by Shen."</span> S<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+    <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">with-current-buffer</span> S
+      <span style="color: #907373;">(</span><span style="color: #333333; font-weight: bold;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>current-byte<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+        <span style="color: #6276ba;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #858580;">(</span>eq <span style="color: #80a880;">(</span>point<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>point-max<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+            <span style="color: #333333; font-weight: bold;">-1</span>
+          <span style="color: #858580;">(</span><span style="color: #333333; font-weight: bold;">progn</span>
+            <span style="color: #80a880;">(</span>setq current-byte <span style="color: #887070;">(</span>get-byte<span style="color: #887070;">)</span><span style="color: #80a880;">)</span>
+            <span style="color: #80a880;">(</span>forward-char<span style="color: #80a880;">)</span>
+            current-byte<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
    <span style="color: #909183;">(</span><span style="color: #709870;">(</span>vectorp S<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">if</span> <span style="color: #907373;">(</span>not <span style="color: #6276ba;">(</span>aref S <span style="color: #333333; font-weight: bold;">0</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span>
                     <span style="color: #333333; font-weight: bold;">-1</span>
                   <span style="color: #907373;">(</span>pop <span style="color: #6276ba;">(</span>aref S <span style="color: #333333; font-weight: bold;">0</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
