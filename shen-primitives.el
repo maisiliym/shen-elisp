@@ -852,13 +852,11 @@
             (progn
               (setq locally-scoped (append (nth 2 current-list) locally-scoped))
               (append-and-advance 1 't)))
-           ((eq 'shen/let current-head)      ;; (ref:let-stop-recording)
+           ((or
+             (eq 'shen/let current-head)
+             (eq 'shen/lambda current-head)) ;;; (ref:let-or-lambda-stop-recording)
             (progn
               (setq locally-scoped (append (list (nth 1 current-list)) locally-scoped))
-              (append-and-advance 1 't)))
-           ((eq 'shen/lambda current-head)   ;; (ref:lambda-stop-recording)
-            (progn
-              (setq locally-scoped (append (nth 1 current-list) locally-scoped))
               (append-and-advance 1 't)))
            ((eq 'shen/cond current-head)     ;;; (ref:cond-stop-recording)
             (append-and-advance 2 't))

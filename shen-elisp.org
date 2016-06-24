@@ -1184,7 +1184,7 @@ as they are encountered in the path. When it encounters a function application
 it starts "recording" that context into [[(start-accumulator)][an accumulator]].
 
 Some forms stop the recording because they should not be captured. In the case
-of [[(if-stop-recording)][if's]] just stop recording and move on, with [[(let-stop-recording)][let's]], [[(lambda-stop-recording)][lambda's]] and [[(defun-stop-recording)][defun's]] skip
+of [[(if-stop-recording)][if's]] just stop recording and move on, with [[(let-or-lambda-stop-recording)][let's or lambda's]] and [[(defun-stop-recording)][defun's]] skip
 but also capture the assignments or arguments. In the case of [[(cond-stop-recording)][cond's]] skip twice
 to move into the list containing the predicate action pair. If it is a [[(do-stop-recording)][do]] just
 skip it.
@@ -1219,13 +1219,11 @@ skip it.
               (progn
                 (setq locally-scoped (append (nth 2 current-list) locally-scoped))
                 (append-and-advance 1 't)))
-             ((eq 'shen/let current-head)      ;; (ref:let-stop-recording)
+             ((or
+               (eq 'shen/let current-head)
+               (eq 'shen/lambda current-head)) ;;; (ref:let-or-lambda-stop-recording)
               (progn
                 (setq locally-scoped (append (list (nth 1 current-list)) locally-scoped))
-                (append-and-advance 1 't)))
-             ((eq 'shen/lambda current-head)   ;; (ref:lambda-stop-recording)
-              (progn
-                (setq locally-scoped (append (nth 1 current-list) locally-scoped))
                 (append-and-advance 1 't)))
              ((eq 'shen/cond current-head)     ;;; (ref:cond-stop-recording)
               (append-and-advance 2 't))
