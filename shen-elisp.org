@@ -45,11 +45,11 @@ except for a few important differences:
 2. When calling a symbol function in Shen you can
    simply apply the arguments:
    #+BEGIN_EXAMPLE
-     (defun call-f (f a b c) (f a b c)
+     (defun call-f (f a b c) (f a b c))
    #+END_EXAMPLE
    But in Elisp we need to use ~funcall~:
    #+BEGIN_EXAMPLE
-   (defun call-f (f a b c) (funcall f a b c)
+   (defun call-f (f a b c) (funcall f a b c))
    #+END_EXAMPLE
 
 To deal with these differences a [[Walking The AST][pass]] is taken over the KLambda ast (before
