@@ -157,15 +157,14 @@
 (setq *temp-shen-buffer*
       (find-file-noselect
        (concat (file-name-as-directory default-directory)
-               (file-relative-name "shen.el"))))
+               (file-relative-name "shen-elisp.el"))))
 (defun eval-klambda-files (klambda-files)
   (with-current-buffer *temp-shen-buffer*
     (progn
       (erase-buffer)
+      (insert (format "%s\n" ";; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved."))
+      (insert (format "%s\n" ";; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause"))
       (insert (format "%s\n" ";; -*- lexical-binding: t -*- "))
-      (insert (format "%s\n" ";; Local Variables:"))
-      (insert (format "%s\n" ";; byte-compile-warnings: (not redefine callargs free-vars unresolved obsolete noruntime cl-functions interactive-only make-local mapcar constants suspicious lexical)"))
-      (insert (format "%s\n" ";; End:"))
       (insert (format "%s\n" "(require 'shen-primitives)"))
       (insert (format "%s\n" "(setq max-lisp-eval-depth 60000)"))
       (insert (format "%s\n" "(setq max-specpdl-size 13000)"))
@@ -173,7 +172,7 @@
       (dolist (klambda-file klambda-files nil)
         (eval-klambda-file klambda-file))
       (goto-char (point-max))
-      (insert (format "%s\n" "(provide 'shen)"))
+      (insert (format "%s\n" "(provide 'shen-elisp)"))
       (save-buffer))))
 (defun eval-klambda-file (klambda-file)
   (dolist (klambda-sexp-string (shen/get-klambda-sexp-strings klambda-file) nil)
@@ -202,7 +201,7 @@
     (compile-and-load "shen-primitives.el")
     (compile-and-load "install.el")
     (eval-klambda-files *klambda-files*)
-    (compile-and-load "shen.el")
+    (compile-and-load "shen-elisp.el")
     (compile-and-load "shen-overlays.el")
     (compile-and-load "shen-repl.el")
     (add-to-load-path default-directory)

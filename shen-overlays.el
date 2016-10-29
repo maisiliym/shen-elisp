@@ -1,3 +1,8 @@
+;; [[file:shen-elisp.org::*License][License:1]]
+;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
+;; License:1 ends here
+
 ;; [[file:shen-elisp.org::*Symbol%20Table][Symbol\ Table:1]]
 (defun shen/migrate-symbol-table ()
   (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
