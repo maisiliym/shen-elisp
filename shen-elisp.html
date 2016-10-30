@@ -292,7 +292,8 @@ for the JavaScript code in this tag.
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.</span>
+<pre class="src src-elisp"><span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">-*- lexical-binding: t -*-</span>
+<span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.</span>
 <span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause</span>
 </pre>
 </div>
@@ -303,8 +304,7 @@ for the JavaScript code in this tag.
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">-*- lexical-binding: t -*-</span>
-<span style="color: #707183;">(</span><span style="color: #0000FF;">defconst</span> <span style="color: #BA36A5;">shen/prefix</span> <span style="color: #008000;">"shen/"</span><span style="color: #707183;">)</span>
+<pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #0000FF;">defconst</span> <span style="color: #BA36A5;">shen/prefix</span> <span style="color: #008000;">"shen/"</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 </div>
@@ -2764,10 +2764,9 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.</span>
+<pre class="src src-elisp"><span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">-*- lexical-binding: t -*-</span>
+<span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.</span>
 <span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause</span>
-
-<span style="color: #8D8D84;">;; </span><span style="color: #8D8D84; font-style: italic;">-*- lexical-binding: t -*-</span>
 </pre>
 </div>
 
@@ -3304,12 +3303,34 @@ KLambda code into Elisp.
   <span style="color: #7388D6;">(</span><span style="color: #0000FF;">with-current-buffer</span> *temp-shen-buffer*
     <span style="color: #909183;">(</span><span style="color: #0000FF;">progn</span>
       <span style="color: #709870;">(</span>erase-buffer<span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">";; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved."</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">";; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause"</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">";; -*- lexical-binding: t -*- "</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">"(require 'shen-primitives)"</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">"(setq max-lisp-eval-depth 60000)"</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span>insert <span style="color: #907373;">(</span>format <span style="color: #008000;">"%s\n"</span> <span style="color: #008000;">"(setq max-specpdl-size 13000)"</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span>
+      <span style="color: #709870;">(</span>insert <span style="color: #008000;">"\</span>
+<span style="color: #008000;">;;; shen-elisp.el --- An implementation of the Shen programming language  -*- lexical-binding: t -*-</span>
+
+<span style="color: #008000;">;; Copyright (C) 2015-2016  Aditya Siram</span>
+
+<span style="color: #008000;">;; Author: Aditya Siram <a href="mailto:aditya.siram%40gmail.com">&lt;aditya.siram@gmail.com&gt;</a></span>
+<span style="color: #008000;">;; Homepage: https://github.com/deech/shen-elisp</span>
+<span style="color: #008000;">;; License: BSD 3-Clause License</span>
+<span style="color: #008000;">;;   http://opensource.org/licenses/BSD-3-Clause</span>
+
+<span style="color: #008000;">;;; Commentary:</span>
+
+<span style="color: #008000;">;; This is an implemenatation of the Shen programming language in</span>
+<span style="color: #008000;">;; Elisp. The end goal is to provide:</span>
+<span style="color: #008000;">;;</span>
+<span style="color: #008000;">;; 1. An easy way to play with Shen with no other installation</span>
+<span style="color: #008000;">;;    hassle (assuming you use Emacs).</span>
+<span style="color: #008000;">;; 2. A first-class development experience when writing Shen.</span>
+<span style="color: #008000;">;;    The idea is that an editor that understands the code can</span>
+<span style="color: #008000;">;;    be much more helpful than one that does not. To this end</span>
+<span style="color: #008000;">;;    the roadmap involves a full gamut of source code</span>
+<span style="color: #008000;">;;    introspection and debugging tools.</span>
+
+<span style="color: #008000;">;;; Code:</span>
+
+<span style="color: #008000;">(require 'shen-primitives)</span>
+<span style="color: #008000;">(setq max-lisp-eval-depth 60000)</span>
+<span style="color: #008000;">(setq max-specpdl-size 13000)\n\n"</span><span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span>goto-char <span style="color: #907373;">(</span>point-max<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #0000FF;">dolist</span> <span style="color: #907373;">(</span>klambda-file klambda-files nil<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span>eval-klambda-file klambda-file<span style="color: #907373;">)</span><span style="color: #709870;">)</span>

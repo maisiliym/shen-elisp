@@ -1,9 +1,31 @@
-;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
-;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
-;; -*- lexical-binding: t -*-
+;;; shen-elisp.el --- An implementation of the Shen programming language  -*- lexical-binding: t -*-
+
+;; Copyright (C) 2015-2016  Aditya Siram
+
+;; Author: Aditya Siram <aditya.siram@gmail.com>
+;; Homepage: https://github.com/deech/shen-elisp
+;; License: BSD 3-Clause License
+;;   http://opensource.org/licenses/BSD-3-Clause
+
+;;; Commentary:
+
+;; This is an implemenatation of the Shen programming language in
+;; Elisp. The end goal is to provide:
+;;
+;; 1. An easy way to play with Shen with no other installation
+;;    hassle (assuming you use Emacs).
+;; 2. A first-class development experience when writing Shen.
+;;    The idea is that an editor that understands the code can
+;;    be much more helpful than one that does not. To this end
+;;    the roadmap involves a full gamut of source code
+;;    introspection and debugging tools.
+
+;;; Code:
+
 (require 'shen-primitives)
 (setq max-lisp-eval-depth 60000)
 (setq max-specpdl-size 13000)
+
 (defun shen/shen\.shen nil
   (shen/do
    (shen/shen\.credits)

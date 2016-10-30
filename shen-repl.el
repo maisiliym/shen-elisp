@@ -1,7 +1,6 @@
+;; -*- lexical-binding: t -*-
 ;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
-
-;; -*- lexical-binding: t -*-
 
 ;; [[file:shen-elisp.org::*Shen%20REPL][Shen\ REPL:2]]
 (require 'comint)
