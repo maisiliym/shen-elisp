@@ -1744,7 +1744,7 @@ instead of:
          <span style="color: #709870;">(</span>single-apply-args <span style="color: #907373;">(</span>nth <span style="color: #D0372D;">1</span> all-args<span style="color: #907373;">)</span><span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>expression `<span style="color: #907373;">(</span>apply <span style="color: #6276BA;">(</span><span style="color: #0000FF;">function</span> ,f<span style="color: #6276BA;">)</span> <span style="color: #6276BA;">(</span>list ,@<span style="color: #858580;">(</span>append blast-apply-args single-apply-args<span style="color: #858580;">)</span><span style="color: #6276BA;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #0000FF;">dolist</span> <span style="color: #709870;">(</span>arg <span style="color: #907373;">(</span>reverse single-apply-args<span style="color: #907373;">)</span> expression<span style="color: #709870;">)</span>
-      <span style="color: #709870;">(</span><span style="color: #0000FF;">setq</span> expression `<span style="color: #907373;">(</span><span style="color: #0000FF;">shen/lambda</span> ,arg ,expression<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+      <span style="color: #709870;">(</span><span style="color: #0000FF;">setq</span> expression `<span style="color: #907373;">(</span>shen/lambda ,arg ,expression<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #0000FF;">if</span> blast-apply-args
         `<span style="color: #709870;">(</span><span style="color: #0000FF;">lambda</span> ,<span style="color: #907373;">(</span>reverse blast-apply-args<span style="color: #907373;">)</span> ,expression<span style="color: #709870;">)</span>
       expression<span style="color: #909183;">)</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>
@@ -2405,10 +2405,10 @@ function name or form which when found in Klambda code is replaces with the
                            <span style="color: #907373;">(</span><span style="color: #0000FF;">let</span> <span style="color: #6276BA;">(</span><span style="color: #858580;">(</span>Current X<span style="color: #858580;">)</span>
                                  <span style="color: #858580;">(</span>KeepLooking t<span style="color: #858580;">)</span><span style="color: #6276BA;">)</span>
                              <span style="color: #6276BA;">(</span><span style="color: #0000FF;">while</span> KeepLooking
-                               <span style="color: #858580;">(</span><span style="color: #0000FF;">shen/if</span>
+                               <span style="color: #858580;">(</span>shen/if
                                 <span style="color: #80A880;">(</span>shen/shen.pvar? Current<span style="color: #80A880;">)</span>
-                                <span style="color: #80A880;">(</span><span style="color: #0000FF;">shen/let</span> Value <span style="color: #887070;">(</span>shen/shen.valvector Current ProcessN<span style="color: #887070;">)</span>
-                                          <span style="color: #887070;">(</span><span style="color: #0000FF;">shen/if</span> <span style="color: #707183;">(</span>shen/= Value 'shen.-null-<span style="color: #707183;">)</span>
+                                <span style="color: #80A880;">(</span>shen/let Value <span style="color: #887070;">(</span>shen/shen.valvector Current ProcessN<span style="color: #887070;">)</span>
+                                          <span style="color: #887070;">(</span>shen/if <span style="color: #707183;">(</span>shen/= Value 'shen.-null-<span style="color: #707183;">)</span>
                                                    <span style="color: #707183;">(</span><span style="color: #0000FF;">setq</span> KeepLooking nil<span style="color: #707183;">)</span>
                                                    <span style="color: #707183;">(</span><span style="color: #0000FF;">setq</span> Current Value<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80A880;">)</span>
                                 <span style="color: #80A880;">(</span><span style="color: #0000FF;">setq</span> KeepLooking nil<span style="color: #80A880;">)</span><span style="color: #858580;">)</span><span style="color: #6276BA;">)</span>
@@ -2904,7 +2904,6 @@ It periodically writes to the REPL.
     <span style="color: #909183;">(</span><span style="color: #0000FF;">lambda</span> <span style="color: #709870;">(</span>char<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #0000FF;">let</span> <span style="color: #907373;">(</span>flush-now<span style="color: #907373;">)</span>
         <span style="color: #907373;">(</span><span style="color: #0000FF;">cond</span> <span style="color: #6276BA;">(</span><span style="color: #858580;">(</span><span style="color: #0000FF;">and</span> <span style="color: #80A880;">(</span>eq char t<span style="color: #80A880;">)</span> output-buffer<span style="color: #858580;">)</span>
-               <span style="color: #858580;">(</span><span style="color: #0000FF;">push</span> ?\n output-buffer<span style="color: #858580;">)</span>
                <span style="color: #858580;">(</span><span style="color: #0000FF;">setf</span> flush-now t<span style="color: #858580;">)</span><span style="color: #6276BA;">)</span>
               <span style="color: #6276BA;">(</span><span style="color: #858580;">(</span>characterp char<span style="color: #858580;">)</span>
                <span style="color: #858580;">(</span><span style="color: #0000FF;">push</span> char output-buffer<span style="color: #858580;">)</span><span style="color: #6276BA;">)</span><span style="color: #907373;">)</span>
@@ -2926,11 +2925,11 @@ It periodically writes to the REPL.
          <span style="color: #709870;">(</span>shen/repl-temp-buffer<span style="color: #709870;">)</span>
          <span style="color: #709870;">(</span>clean-up <span style="color: #907373;">(</span><span style="color: #0000FF;">lambda</span> <span style="color: #6276BA;">(</span>active-process <span style="color: #6434A3;">&amp;optional</span> ex<span style="color: #6276BA;">)</span>
                      <span style="color: #6276BA;">(</span><span style="color: #0000FF;">progn</span>
+                       <span style="color: #858580;">(</span>funcall <span style="color: #80A880;">(</span>shen/value '*stoutput*<span style="color: #80A880;">)</span> t<span style="color: #858580;">)</span>
                        <span style="color: #858580;">(</span>comint-output-filter active-process
                                              <span style="color: #80A880;">(</span><span style="color: #0000FF;">if</span> ex
                                                  <span style="color: #887070;">(</span>format <span style="color: #008000;">"\n%s\n\n%s"</span> <span style="color: #707183;">(</span>nth <span style="color: #D0372D;">1</span> ex<span style="color: #707183;">)</span> <span style="color: #707183;">(</span>shen/make-prompt<span style="color: #707183;">)</span><span style="color: #887070;">)</span>
                                                <span style="color: #887070;">(</span>format <span style="color: #008000;">"\n%s"</span> <span style="color: #707183;">(</span>shen/make-prompt<span style="color: #707183;">)</span><span style="color: #887070;">)</span><span style="color: #80A880;">)</span><span style="color: #858580;">)</span>
-                       <span style="color: #858580;">(</span>funcall <span style="color: #80A880;">(</span>shen/value '*stoutput*<span style="color: #80A880;">)</span> t<span style="color: #858580;">)</span>
                        <span style="color: #858580;">(</span>shen/set '*stoutput* standard-output<span style="color: #858580;">)</span><span style="color: #6276BA;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #0000FF;">condition-case</span> ex
         <span style="color: #709870;">(</span><span style="color: #0000FF;">progn</span>

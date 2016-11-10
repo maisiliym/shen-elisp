@@ -84,7 +84,6 @@
     (lambda (char)
       (let (flush-now)
         (cond ((and (eq char t) output-buffer)
-               (push ?\n output-buffer)
                (setf flush-now t))
               ((characterp char)
                (push char output-buffer)))
@@ -104,11 +103,11 @@
          (shen/repl-temp-buffer)
          (clean-up (lambda (active-process &optional ex)
                      (progn
+                       (funcall (shen/value '*stoutput*) t)
                        (comint-output-filter active-process
                                              (if ex
                                                  (format "\n%s\n\n%s" (nth 1 ex) (shen/make-prompt))
                                                (format "\n%s" (shen/make-prompt))))
-                       (funcall (shen/value '*stoutput*) t)
                        (shen/set '*stoutput* standard-output)))))
     (condition-case ex
         (progn
