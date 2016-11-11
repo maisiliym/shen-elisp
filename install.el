@@ -1,4 +1,4 @@
-;; [[file:shen-elisp.org::*Collecting%20KLambda%20files][Collecting\ KLambda\ files:1]]
+;; [[file:shen-elisp.org::*Collecting%20KLambda%20files][Collecting KLambda files:1]]
 (require 'shen-primitives)
 (setq *klambda-directory-name* "KLambda")
 (setq *klambda-directory* (file-name-as-directory (concat (file-name-directory load-file-name) *klambda-directory-name*)))
@@ -7,9 +7,9 @@
               '("toplevel.kl" "core.kl" "sys.kl" "sequent.kl" "yacc.kl"
                 "reader.kl" "prolog.kl" "track.kl" "load.kl" "writer.kl"
                 "macros.kl" "declarations.kl" "types.kl" "t-star.kl")))
-;; Collecting\ KLambda\ files:1 ends here
+;; Collecting KLambda files:1 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:1]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:1]]
 (setq shen/*klambda-syntax-table*
       (let ((table (make-syntax-table lisp-mode-syntax-table)))
         (modify-syntax-entry 59 "_" table) ;; semi-colon
@@ -33,9 +33,9 @@
                 (setq groups (nconc groups (list (buffer-substring current-sexp-start current-sexp-end))))
                 (setq current-sexp-end (scan-lists current-sexp-end 1 0)))))
           groups)))))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:1 ends here
+;; Modifying The Elisp Reader For KLambda:1 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:2]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:2]]
 (setq shen/*illegal-character->spelling*
       '((59 "_sneomlioccoilmoens")  ;; semicolon
         (?, "_caommmmoac")
@@ -45,9 +45,9 @@
 
 (setq shen/*spelling->illegal-character*
       (mapcar #'reverse shen/*illegal-character->spelling*))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:2 ends here
+;; Modifying The Elisp Reader For KLambda:2 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:3]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:3]]
 (defun shen/remove-reserved-elisp-characters (klambda-sexp-string)
   (let ((InString nil)
         (illegal-characters
@@ -81,18 +81,18 @@
                    shen/*illegal-character->spelling*)))))
          (t (append-and-advance))))
       res)))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:3 ends here
+;; Modifying The Elisp Reader For KLambda:3 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:4]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:4]]
 (defun shen/put-reserved-elisp-chars-back (sexp)
   (let ((symbols (shen/find-symbols sexp)))
     (shen/internal/modify-ast sexp
                      symbols
                      (lambda (path ast)
                        (shen/change-back (shen/internal/get-element-at path ast))))))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:4 ends here
+;; Modifying The Elisp Reader For KLambda:4 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:5]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:5]]
 (defun shen/change-back (symbol)
   (let* ((original-length (length (symbol-name symbol)))
          (string-left (symbol-name symbol))
@@ -118,9 +118,9 @@
         (push (nth 0 character-and-remaining) reversed-result)
         (setq string-left (nth 1 character-and-remaining))))
     (intern (apply #'concat (reverse reversed-result)))))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:5 ends here
+;; Modifying The Elisp Reader For KLambda:5 ends here
 
-;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying\ The\ Elisp\ Reader\ For\ KLambda:6]]
+;; [[file:shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:6]]
 (defun shen/find-symbols (sexp)
   (let ((symbols)
         (current-path)
@@ -151,9 +151,9 @@
           (setq current-index (+ current-index 1))))
        (t nil)))
     symbols))
-;; Modifying\ The\ Elisp\ Reader\ For\ KLambda:6 ends here
+;; Modifying The Elisp Reader For KLambda:6 ends here
 
-;; [[file:shen-elisp.org::*Iterating%20over%20KLambda%20Files][Iterating\ over\ KLambda\ Files:1]]
+;; [[file:shen-elisp.org::*Iterating%20over%20KLambda%20Files][Iterating over KLambda Files:1]]
 (setq *temp-shen-buffer*
       (find-file-noselect
        (concat (file-name-as-directory default-directory)
@@ -205,9 +205,9 @@
                (shen/remove-reserved-elisp-characters
                 klambda-sexp-string)))))
     (shen/kl-to-buffer ast *temp-shen-buffer*)))
-;; Iterating\ over\ KLambda\ Files:1 ends here
+;; Iterating over KLambda Files:1 ends here
 
-;; [[file:shen-elisp.org::*The%20Runner][The\ Runner:1]]
+;; [[file:shen-elisp.org::*The%20Runner][The Runner:1]]
 (defun compile-and-load (F)
   (byte-compile-file
    (concat (file-name-as-directory default-directory)
@@ -228,4 +228,4 @@
     (compile-and-load "shen-repl.el")
     (add-to-load-path default-directory)
     (shen/repl)))
-;; The\ Runner:1 ends here
+;; The Runner:1 ends here

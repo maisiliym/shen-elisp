@@ -1,6 +1,6 @@
 #+TITLE: Shen Elisp
 #+AUTHOR: Aditya Siram
-#+PROPERTY: comments noweb
+#+PROPERTY: header-args    :comments noweb
 #+OPTIONS: ^:nil ;; let an underscore be an underscore, disable sub-superscripting
 #+OPTIONS: timestamp:nil
 
@@ -1869,6 +1869,7 @@ and make them:
     (let ((map (make-sparse-keymap)))
       (define-key map "\C-j" 'shen/repl-send-input)
       (define-key map "\C-m" 'shen/repl-return)
+      (define-key map "\t" 'shen/repl-tab)
       map))
 
   (defvaralias 'shen/repl-mode-map 'shen/repl-map)
@@ -1878,6 +1879,14 @@ and make them:
     (shen/repl-send-input))
 
   (defvar shen/repl-input)
+
+  (defun shen/repl-tab nil
+    (interactive)
+    (completion-at-point))
+
+  (defun shen/repl-complete-filename nil
+    (when (nth 3 (parse-partial-sexp comint-last-input-start (point)))
+      (comint-filename-completion)))
 
   (defun shen/repl-send-input nil
     (interactive)
@@ -1992,6 +2001,9 @@ It periodically writes to the REPL.
     (setq comint-prompt-read-only t)
     (setq comint-input-sender 'shen/repl-input-sender)
     (setq-local comment-use-syntax 'undecided)
+    (set (make-local-variable 'completion-at-point-functions)
+         '(comint-replace-by-expanded-history
+           shen/repl-complete-filename))
     (unless (comint-check-proc (current-buffer))
       (condition-case nil
           (start-process "shen/repl" (current-buffer) "cat")

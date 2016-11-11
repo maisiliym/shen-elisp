@@ -3,7 +3,7 @@
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 ;; License:1 ends here
 
-;; [[file:shen-elisp.org::*Symbol%20Table][Symbol\ Table:1]]
+;; [[file:shen-elisp.org::*Symbol%20Table][Symbol Table:1]]
 (defun shen/migrate-symbol-table ()
   (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
     (if (not (hash-table-p SymbolTable))
@@ -12,9 +12,9 @@
             (puthash (car Entry) (cdr Entry) NewTable))
           (shen/set 'shen.*symbol-table* NewTable))
       SymbolTable)))
-;; Symbol\ Table:1 ends here
+;; Symbol Table:1 ends here
 
-;; [[file:shen-elisp.org::*Symbol%20Table][Symbol\ Table:2]]
+;; [[file:shen-elisp.org::*Symbol%20Table][Symbol Table:2]]
 (defun shen/shen.lookup-func
     (Name Table)
   (let ((Form (gethash Name Table)))
@@ -30,7 +30,7 @@
           (shen/shen.lambda-form Name Arity))))
     (puthash Name lambda-function (shen/value 'shen.*symbol-table*))
     (shen/value 'shen.*symbol-table*)))
-;; Symbol\ Table:2 ends here
+;; Symbol Table:2 ends here
 
 ;; [[file:shen-elisp.org::*Questions][Questions:1]]
 (defun shen/y-or-n? (S)
@@ -51,7 +51,7 @@
       (shen/nl 1))))
 ;; Questions:1 ends here
 
-;; [[file:shen-elisp.org::*Changing%20Directories][Changing\ Directories:1]]
+;; [[file:shen-elisp.org::*Changing%20Directories][Changing Directories:1]]
 (defun shen/cd (Path)
   (if (shen/internal/shen->predicate (shen/= Path ""))
       (shen/set '*home-directory* "")
@@ -60,8 +60,8 @@
         (setq default-directory PathString)
         (shen/set '*home-directory* PathString))
       PathString)))
-;; Changing\ Directories:1 ends here
+;; Changing Directories:1 ends here
 
-;; [[file:shen-elisp.org::*Provide%20it][Provide\ it:1]]
+;; [[file:shen-elisp.org::*Provide%20it][Provide it:1]]
 (provide 'shen-overlays)
-;; Provide\ it:1 ends here
+;; Provide it:1 ends here
