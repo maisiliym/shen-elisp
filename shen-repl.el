@@ -51,8 +51,6 @@
   (interactive)
   (shen/repl-send-input))
 
-(defvar shen/repl-input)
-
 (defun shen/repl-tab nil
   (interactive)
   (completion-at-point))
@@ -60,6 +58,38 @@
 (defun shen/repl-complete-filename nil
   (when (nth 3 (parse-partial-sexp comint-last-input-start (point)))
     (comint-filename-completion)))
+
+(defun shen/repl-completion-at-point nil
+  (let* ((pos (point))
+         (beg (condition-case nil
+                  (save-excursion
+                    (backward-sexp 1)
+                    (point))
+                (scan-error pos)))
+         (end
+          (unless (or (eq beg (point-max))
+                      (member (char-syntax (char-after beg))
+                              '(?\s ?\" ?\( ?\))))
+            (condition-case nil
+                (save-excursion
+                  (goto-char beg)
+                  (forward-sexp 1)
+                  (when (>= (point) pos)
+                    (point)))
+              (scan-error pos))))
+         (shen-functions
+          (let ((res (make-vector 100 0)))
+            (mapatoms
+             (lambda (S)
+               (if (and (fboundp S) (string-prefix-p shen/prefix (symbol-name S)))
+                   (intern (substring (symbol-name S) (length shen/prefix))
+                           res))))
+            res)))
+    (list beg end shen-functions)))
+;; Input Events:1 ends here
+
+;; [[file:shen-elisp.org::*Sending%20Input][Sending Input:1]]
+(defvar shen/repl-input)
 
 (defun shen/repl-send-input nil
   (interactive)
@@ -74,7 +104,7 @@
        (signal (car ex) (cdr ex))))
     (with-current-buffer *shen-repl*
       (goto-char (point-max)))))
-;; Input Events:1 ends here
+;; Sending Input:1 ends here
 
 ;; [[file:shen-elisp.org::*Evaluating%20User%20Input][Evaluating User Input:1]]
 (defun shen/repl-standard-output-impl (process)
@@ -171,7 +201,8 @@
   (setq-local comment-use-syntax 'undecided)
   (set (make-local-variable 'completion-at-point-functions)
        '(comint-replace-by-expanded-history
-         shen/repl-complete-filename))
+         shen/repl-complete-filename
+         shen/repl-completion-at-point))
   (unless (comint-check-proc (current-buffer))
     (condition-case nil
         (start-process "shen/repl" (current-buffer) "cat")

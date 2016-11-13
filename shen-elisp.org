@@ -1864,6 +1864,16 @@ and make them:
 #+END_SRC
 
 ** Input Events
+In addition to evaluating input, the REPL also provides some rudimentary
+completion support. Hitting ~TAB~ when inside a string tries to complete a
+filename using ~comint-filename-completion~. ~shen/repl-complete-filename~ is a
+copy of ~ielm-complete-filename~.
+
+'TAB' after an open paren presents a list of Shen functions in scope. Since Shen
+functions are just Elisp functions prefixed with "shen/" we use ~mapatoms~ to
+iterate over all the symbols and functions and keep only the prefixed functions
+as completion candidates. Other that ~shen/repl-completion-at-point~ pretty much
+copies ~elisp-completion-at-point~.
 #+BEGIN_SRC elisp :tangle shen-repl.el
   (defvar shen/repl-map
     (let ((map (make-sparse-keymap)))
@@ -1878,8 +1888,6 @@ and make them:
     (interactive)
     (shen/repl-send-input))
 
-  (defvar shen/repl-input)
-
   (defun shen/repl-tab nil
     (interactive)
     (completion-at-point))
@@ -1887,6 +1895,38 @@ and make them:
   (defun shen/repl-complete-filename nil
     (when (nth 3 (parse-partial-sexp comint-last-input-start (point)))
       (comint-filename-completion)))
+
+  (defun shen/repl-completion-at-point nil
+    (let* ((pos (point))
+           (beg (condition-case nil
+                    (save-excursion
+                      (backward-sexp 1)
+                      (point))
+                  (scan-error pos)))
+           (end
+            (unless (or (eq beg (point-max))
+                        (member (char-syntax (char-after beg))
+                                '(?\s ?\" ?\( ?\))))
+              (condition-case nil
+                  (save-excursion
+                    (goto-char beg)
+                    (forward-sexp 1)
+                    (when (>= (point) pos)
+                      (point)))
+                (scan-error pos))))
+           (shen-functions
+            (let ((res (make-vector 100 0)))
+              (mapatoms
+               (lambda (S)
+                 (if (and (fboundp S) (string-prefix-p shen/prefix (symbol-name S)))
+                     (intern (substring (symbol-name S) (length shen/prefix))
+                             res))))
+              res)))
+      (list beg end shen-functions)))
+#+END_SRC
+** Sending Input
+#+BEGIN_SRC elisp :tangle shen-repl.el
+  (defvar shen/repl-input)
 
   (defun shen/repl-send-input nil
     (interactive)
@@ -1902,7 +1942,6 @@ and make them:
       (with-current-buffer *shen-repl*
         (goto-char (point-max)))))
 #+END_SRC
-
 ** Evaluating User Input
 The following is a cut-and-paste of ~ielm-standard-output-impl~ which apparently
 does not exist in older versions of Emacs (a user reported a bug on 24.4.1).
@@ -2003,7 +2042,8 @@ It periodically writes to the REPL.
     (setq-local comment-use-syntax 'undecided)
     (set (make-local-variable 'completion-at-point-functions)
          '(comint-replace-by-expanded-history
-           shen/repl-complete-filename))
+           shen/repl-complete-filename
+           shen/repl-completion-at-point))
     (unless (comint-check-proc (current-buffer))
       (condition-case nil
           (start-process "shen/repl" (current-buffer) "cat")
