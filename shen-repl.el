@@ -85,7 +85,17 @@
                    (intern (substring (symbol-name S) (length shen/prefix))
                            res))))
             res)))
-    (list beg end shen-functions)))
+    (list beg end shen-functions
+          :annotation-function #'shen/repl-annotate-type-or-arity)))
+
+(defun shen/repl-annotate-type-or-arity (S)
+  (let ((signature (member-if (lambda (F) (string-equal (symbol-name (car F)) S)) shen/shen.*signedfuncs*)))
+    (if signature
+        (format " : %s" (cdr (car signature)))
+      (let ((arity (condition-case ex (shen/arity S) ('error -1))))
+        (if (not (eq arity -1))
+            (format "%d" arity)
+          "")))))
 ;; Input Events:1 ends here
 
 ;; [[file:shen-elisp.org::*Sending%20Input][Sending Input:1]]
