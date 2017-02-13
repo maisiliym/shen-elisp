@@ -1064,7 +1064,7 @@ instead of:
       (dolist (arg (reverse single-apply-args) expression)
         (setq expression `(shen/lambda ,arg ,expression)))
       (if blast-apply-args
-          `(lambda ,(reverse blast-apply-args) ,expression)
+          `(lambda ,blast-apply-args ,expression)
         expression)))
 
   (defun shen/internal/apply-incrementally (f args) ;; (ref:incremental application)
@@ -2229,7 +2229,7 @@ spelling with the original character:
            (string-left (symbol-name symbol))
            (spelling->character
             (let ((hash (make-hash-table)))
-              (mapcar (lambda (spelling-character)
+              (mapc (lambda (spelling-character)
                         (puthash (nth 0 spelling-character) (nth 1 spelling-character) hash))
                       shen/*spelling->illegal-character*)
               hash))

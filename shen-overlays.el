@@ -1,9 +1,9 @@
-;; [[file:shen-elisp.org::*License][License:1]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*License][License:1]]
 ;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 ;; License:1 ends here
 
-;; [[file:shen-elisp.org::*Symbol%20Table][Symbol Table:1]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbol%20Table][Symbol Table:1]]
 (defun shen/migrate-symbol-table ()
   (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
     (if (not (hash-table-p SymbolTable))
@@ -14,7 +14,7 @@
       SymbolTable)))
 ;; Symbol Table:1 ends here
 
-;; [[file:shen-elisp.org::*Symbol%20Table][Symbol Table:2]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbol%20Table][Symbol Table:2]]
 (defun shen/shen.lookup-func
     (Name Table)
   (let ((Form (gethash Name Table)))
@@ -32,7 +32,7 @@
     (shen/value 'shen.*symbol-table*)))
 ;; Symbol Table:2 ends here
 
-;; [[file:shen-elisp.org::*Questions][Questions:1]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Questions][Questions:1]]
 (defun shen/y-or-n? (S)
   (progn
     (shen/shen.prhush (shen/shen.proc-nl S) (shen/stoutput))
@@ -51,7 +51,7 @@
       (shen/nl 1))))
 ;; Questions:1 ends here
 
-;; [[file:shen-elisp.org::*Changing%20Directories][Changing Directories:1]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Changing%20Directories][Changing Directories:1]]
 (defun shen/cd (Path)
   (if (shen/internal/shen->predicate (shen/= Path ""))
       (shen/set '*home-directory* "")
@@ -62,6 +62,6 @@
       PathString)))
 ;; Changing Directories:1 ends here
 
-;; [[file:shen-elisp.org::*Provide%20it][Provide it:1]]
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Provide%20it][Provide it:1]]
 (provide 'shen-overlays)
 ;; Provide it:1 ends here
