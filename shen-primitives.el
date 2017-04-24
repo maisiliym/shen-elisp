@@ -1147,55 +1147,116 @@
        (append . (defun shen/append (Xs Ys) (append Xs Ys)))
        (shen.string->bytes . (defun shen/shen.string->bytes (S)
                                (string-to-list S)))
-       (shen.sum . (defun shen/shen.sum (Xs) (apply #'+ Xs)))
+       (sum . (defun shen/sum (Xs) (apply #'+ Xs)))
+       (hash . (defun shen/hash (N Div) (sxhash N)))
        (shen.mod . (defun shen/shen.mod (N Div) (mod N Div)))
        (integer? . (defun shen/integer? (N) (shen/internal/predicate->shen (integerp N))))
        (abs . (defun shen/shen.abs (N) (abs N)))
        (nth . (defun shen/nth (I Xs) (nth I Xs)))))
 ;; Performance:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Hash%20Table][Hash Table:1]]
-(setq shen/internal/*hash-table-overrides*
-      '(((set *property-vector* (vector 20000)) . (shen/set '*property-vector*
-                                                            (let ((HashTable (make-hash-table
-                                                                              :size 1000
-                                                                              :test 'shen/internal/hash-table-test)))
-                                                              (puthash 0 20000 HashTable)
-                                                              HashTable)))
-        (get . (defun shen/get
-                   (Pointer Key Table)
-                 (let ((Subtable (gethash Pointer Table)))
-                   (if (not Subtable)
-                       (shen/simple-error
-                        (format "pointer not found: %s\n" Pointer))
-                     (let ((Value (gethash Key Subtable)))
-                       (if (not Value)
-                           (shen/simple-error
-                            (format "value not found: %s\n" (list Pointer Key))))
-                       Value)))))
-        (put . (defun shen/put
-                   (Pointer Key Value Table)
-                 (let ((Subtable (gethash Pointer Table)))
-                   (if (not Subtable)
-                       (let ((Subtable (make-hash-table :test 'shen/internal/hash-table-test)))
+;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Performance][Performance:2]]
+(setq shen/internal/*dict-overrides*
+      '((dict . (defun shen/dict
+                    (Size)
+                  (let ((Dict (shen/absvector 4))
+                        (Contents (shen/absvector Size)))
+                    (progn
+                      (shen/address-> Dict 0 'dictionary)
+                      (shen/address-> Dict 1 Size)
+                      (shen/address-> Dict 2 0)
+                      (shen/address-> Dict 3 Contents)
+                      Dict))))
+        (dict-> . (defun shen/dict->
+                      (Dict Key Value)
+                    (let* ((Count (shen/dict-count Dict))
+                          (Contents (shen/<-address Dict 3))
+                          (Exists (shen/<-address Contents Key)))
+                      (progn
+                        (if (not Exists)
+                            (shen/address-> Dict 2 (1+ Count)))
+                        (shen/address-> Contents Key Value)))))
+        (dict<- . (defun shen/<-dict
+                      (Dict Key)
+                    (let* ((Contents (shen/<-address Dict 3))
+                           (Existing (shen/<-address Contents Key)))
+                      (if (not Existing)
+                        (shen/freeze (shen/simple-error "value not found"))
+                        Existing))))
+        (<-dict/or . (defun shen/<-dict/or
+                         (Dict Key Or)
+                       (let* ((Contents (shen/<-address Dict 3))
+                              (Existing (shen/<-address Contents Key)))
+                         (if (not Existing)
+                             (shen/thaw Or)
+                           Existing))))
+        (dict-rm . (defun shen/dict-rm
+                       (Dict Key)
+                     (let* ((Count (shen/dict-count Dict))
+                            (Contents (shen/<-address Dict 3))
+                            (Exists (shen/<-address Contents Key)))
+                       (if (not Exists)
+                           Key
                          (progn
-                           (puthash Pointer Subtable Table)
-                           (puthash Key Value Subtable)))
-                     (puthash Key Value Subtable)))))
+                           (remhash Key Contents)
+                           (shen/address-> Dict 2 (1- Count))
+                           Key)))))
+        (dict-keys . (defun shen/dict-keys
+                         (Dict)
+                       (let* ((Contents (shen/<-address Dict 3)))
+                         (hash-table-keys Contents))))
+        (dict-values . (defun shen/dict-values
+                           (Dict)
+                         (let* ((Contents (shen/<-address Dict 3)))
+                           (hash-table-values Contents))))
+        (dict-fold . (defun shen/dict-fold
+                         (F Dict Acc)
+                       (let ((Contents (shen/<-address Dict 3)))
+                         (progn
+                           (setq NewAcc Acc)
+                           (maphash
+                            (lambda (Key Value)
+                              (setq NewAcc (shen/internal/apply-higher-order-function F (list Key Value NewAcc))))
+                            Contents)
+                           NewAcc))))
+        (get/or . (defun shen/get/or
+                      (X Pointer Or Dict)
+                    (let* ((Contents (shen/<-address Dict 3))
+                           (X-Contents (shen/<-address Contents X)))
+                      (if X-Contents
+                          (let ((Pointer-Contents (shen/<-address X-Contents Pointer)))
+                            (if (not Pointer-Contents)
+                                (shen/thaw Or)
+                              Pointer-Contents))
+                        (shen/thaw Or)))))
+        (put . (defun shen/put
+                   (X Pointer Y Dict)
+                 (let* ((Contents (shen/<-address Dict 3))
+                        (X-Contents (shen/<-address Contents X)))
+                   (if X-Contents
+                       (progn
+                         (puthash Pointer Y X-Contents)
+                         Y)
+                     (progn
+                       (setq X-Contents (shen/absvector 100))
+                       (puthash X X-Contents Contents)
+                       (puthash Pointer Y X-Contents)
+                       Y)))))
         (unput . (defun shen/unput
-                     (Pointer Key Table)
-                   (let ((Subtable (gethash Pointer Table)))
-                     (and Subtable
-                          (remhash Key Subtable))
-                     Pointer)))))
-;; Hash Table:1 ends here
+                     (X Pointer Dict)
+                   (let* ((Contents (shen/<-address Dict 3))
+                          (X-Contents (shen/<-address Contents X)))
+                     (progn
+                       (if X-Contents
+                           (remhash Pointer X-Contents))
+                       X))))))
+;; Performance:2 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Namespacing][Namespacing:1]]
 (setq shen/internal/*namespacing-overrides*
       '((function . (defun shen/function (S)
                       (shen/shen\.lookup-func
-                       (shen/internal/unprefix-symbol S)
-                       (shen/value 'shen\.*symbol-table*))))))
+                       (shen/internal/unprefix-symbol S))))))
 ;; Namespacing:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Bug%20Fixes][Bug Fixes:1]]
@@ -1206,7 +1267,13 @@
                                  (shen/internal/delete-first-eq
                                   F
                                   (shen/value shen.*tracking*)))
-                       (shen/eval (shen/ps F)))))))
+                       (shen/eval (shen/ps F)))))
+        (<-address/or . (defun shen/<-address/or
+                            (Vector N Or)
+                          (let ((Value (shen/<-address Vector N)))
+                            (if (not Value)
+                                (shen/thaw Or)
+                              Value))))))
 ;; Bug Fixes:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluate%20KLambda][Evaluate KLambda:1]]
@@ -1241,7 +1308,7 @@
         (shen/internal/add-overrides
          (append
           shen/internal/*performance-overrides*
-          shen/internal/*hash-table-overrides*
+          shen/internal/*dict-overrides*
           shen/internal/*namespacing-overrides*
           shen/internal/*bugfix-overrides*)
          table)
