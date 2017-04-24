@@ -3,35 +3,6 @@
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 ;; License:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbol%20Table][Symbol Table:1]]
-(defun shen/migrate-symbol-table ()
-  (let ((SymbolTable (shen/value 'shen.*symbol-table*)))
-    (if (not (hash-table-p SymbolTable))
-        (let ((NewTable (make-hash-table)))
-          (dolist (Entry SymbolTable NewTable)
-            (puthash (car Entry) (cdr Entry) NewTable))
-          (shen/set 'shen.*symbol-table* NewTable))
-      SymbolTable)))
-;; Symbol Table:1 ends here
-
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbol%20Table][Symbol Table:2]]
-(defun shen/shen.lookup-func
-    (Name Table)
-  (let ((Form (gethash Name Table)))
-    (if (not Form)
-        (shen/simple-error
-         (shen/shen.app Name " has no lambda expansion\n" 'shen.a))
-      Form)))
-
-(defun shen/shen.update-symbol-table
-    (Name Arity)
-  (let ((lambda-function
-         (shen/eval-kl
-          (shen/shen.lambda-form Name Arity))))
-    (puthash Name lambda-function (shen/value 'shen.*symbol-table*))
-    (shen/value 'shen.*symbol-table*)))
-;; Symbol Table:2 ends here
-
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Questions][Questions:1]]
 (defun shen/y-or-n? (S)
   (progn

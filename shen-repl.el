@@ -240,7 +240,6 @@
         (load "shen-primitives.elc")
         (load "shen-elisp.elc")
         (load "shen-overlays.elc")
-        (shen/migrate-symbol-table)
         (setq lexical-binding 't)
         (shen/set 'shen.*history* '())
         (shen/set '*home-directory* "")

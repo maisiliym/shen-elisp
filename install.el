@@ -209,23 +209,23 @@
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*The%20Runner][The Runner:1]]
 (defun compile-and-load (F)
-  (byte-compile-file
-   (concat (file-name-as-directory default-directory)
-           (file-relative-name F))
-   't))
-(defun load-klambda () (eval-klambda-files *klambda-files*))
-(defun load-only ()
-  (progn
-    (compile-and-load "shen-primitives.el")
-    (compile-and-load "install.el")))
-(defun runner ()
-  (progn
-    (compile-and-load "shen-primitives.el")
-    (compile-and-load "install.el")
-    (eval-klambda-files *klambda-files*)
-    (compile-and-load "shen-elisp.el")
-    (compile-and-load "shen-overlays.el")
-    (compile-and-load "shen-repl.el")
-    (add-to-load-path default-directory)
-    (shen/repl)))
+    (byte-compile-file
+     (concat (file-name-as-directory default-directory)
+             (file-relative-name F))
+     't))
+  (defun load-klambda () (eval-klambda-files *klambda-files*))
+  (defun load-only ()
+    (progn
+      (compile-and-load "shen-primitives.el")
+      (compile-and-load "install.el")))
+  (defun runner ()
+    (progn
+      (compile-and-load "shen-primitives.el")
+      (compile-and-load "install.el")
+      (eval-klambda-files *klambda-files*)
+      (compile-and-load "shen-elisp.el")
+      (compile-and-load "shen-overlays.el")
+      (compile-and-load "shen-repl.el")
+      (add-to-load-path default-directory)
+      (shen/repl)))
 ;; The Runner:1 ends here
