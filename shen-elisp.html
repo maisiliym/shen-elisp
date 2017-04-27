@@ -232,128 +232,128 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgfe7a12b">1. Package Details</a></li>
-<li><a href="#org55c804c">2. KLambda Primitives</a>
+<li><a href="#orgd46c33f">1. Package Details</a></li>
+<li><a href="#org3d5718e">2. KLambda Primitives</a>
 <ul>
-<li><a href="#org7e6a201">2.1. License</a></li>
-<li><a href="#org32e9bc3">2.2. Implementation Constants</a></li>
-<li><a href="#org53784bf">2.3. Symbols</a>
+<li><a href="#orgdcfe35d">2.1. License</a></li>
+<li><a href="#org4f3d3b7">2.2. Implementation Constants</a></li>
+<li><a href="#org30a06ab">2.3. Symbols</a>
 <ul>
-<li><a href="#org00159cc">2.3.1. Prefixing Utilities</a></li>
+<li><a href="#org5411828">2.3.1. Prefixing Utilities</a></li>
 </ul>
 </li>
-<li><a href="#orgef0fa61">2.4. Assignments</a></li>
-<li><a href="#org09123de">2.5. KLambda Constants</a></li>
-<li><a href="#org154b115">2.6. Boolean Operations</a></li>
-<li><a href="#org6c80582">2.7. Lambdas</a></li>
-<li><a href="#orgb975538">2.8. Lets</a></li>
-<li><a href="#org41d8980">2.9. Defuns</a></li>
-<li><a href="#orgba6c438">2.10. Equality</a></li>
-<li><a href="#org8186307">2.11. Other Generic Functions</a></li>
-<li><a href="#orgd192946">2.12. Lists</a></li>
-<li><a href="#org0909f63">2.13. Strings</a></li>
-<li><a href="#org0a8df11">2.14. Error Handling</a></li>
-<li><a href="#org6762506">2.15. Vectors</a></li>
-<li><a href="#orgc78c73a">2.16. Arithmetic Operations</a></li>
-<li><a href="#org5a9e5ad">2.17. Time</a></li>
-<li><a href="#orgb021154">2.18. Streams and I/O</a></li>
+<li><a href="#org3702be3">2.4. Assignments</a></li>
+<li><a href="#orgadf6604">2.5. KLambda Constants</a></li>
+<li><a href="#org57d217a">2.6. Boolean Operations</a></li>
+<li><a href="#orgd3176ab">2.7. Lambdas</a></li>
+<li><a href="#org310ca96">2.8. Lets</a></li>
+<li><a href="#org7f51959">2.9. Defuns</a></li>
+<li><a href="#org09f68a9">2.10. Equality</a></li>
+<li><a href="#org1811c92">2.11. Other Generic Functions</a></li>
+<li><a href="#org1d8557d">2.12. Lists</a></li>
+<li><a href="#orgd7472b4">2.13. Strings</a></li>
+<li><a href="#orgfadfad8">2.14. Error Handling</a></li>
+<li><a href="#orgf71a40d">2.15. Vectors</a></li>
+<li><a href="#orgf6c94d1">2.16. Arithmetic Operations</a></li>
+<li><a href="#org4026359">2.17. Time</a></li>
+<li><a href="#org9eaa534">2.18. Streams and I/O</a></li>
 </ul>
 </li>
-<li><a href="#org649d38e">3. Utilities</a>
+<li><a href="#org4c8afa7">3. Utilities</a>
 <ul>
-<li><a href="#orgc13bddf">3.1. Lookup</a></li>
-<li><a href="#org44422f2">3.2. AST Utilities</a>
+<li><a href="#org3e2c2bc">3.1. Lookup</a></li>
+<li><a href="#org1c81506">3.2. AST Utilities</a>
 <ul>
-<li><a href="#orgd1b004e">3.2.1. Paths</a></li>
-<li><a href="#org4792820">3.2.2. AST Getter/Setter</a></li>
-<li><a href="#org5bab371">3.2.3. AST Search</a></li>
-<li><a href="#org8fa7fee">3.2.4. Path Utilities</a></li>
-<li><a href="#org638e63a">3.2.5. AST Modification</a></li>
+<li><a href="#org1773ad8">3.2.1. Paths</a></li>
+<li><a href="#org9b3d431">3.2.2. AST Getter/Setter</a></li>
+<li><a href="#org474e439">3.2.3. AST Search</a></li>
+<li><a href="#org0ec73cb">3.2.4. Path Utilities</a></li>
+<li><a href="#org1da4a86">3.2.5. AST Modification</a></li>
 </ul>
 </li>
-<li><a href="#orga5d41e4">3.3. List</a>
+<li><a href="#org2d33008">3.3. List</a>
 <ul>
-<li><a href="#orgfbadae9">3.3.1. Detect Dotted Pair</a></li>
-<li><a href="#org4abbcdf">3.3.2. List Filtering</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgfb56d44">4. Rewriting The AST</a>
-<ul>
-<li><a href="#org9fab347">4.1. Walking The AST</a></li>
-<li><a href="#org66cc136">4.2. Function Application</a></li>
-<li><a href="#orgff09d83">4.3. Finding Tail Calls</a></li>
-<li><a href="#org724b2ed">4.4. Generating A TCO'ed Function</a></li>
-<li><a href="#orge53310a">4.5. Modifying The AST</a></li>
-<li><a href="#org2a1d4a3">4.6. (Unused) Isolating and Filling</a></li>
-</ul>
-</li>
-<li><a href="#org341674f">5. Optimizations</a>
-<ul>
-<li><a href="#org8fd4686">5.1. Consolidate Call Chains</a></li>
-<li><a href="#org807db76">5.2. Consolidate Cons</a></li>
-<li><a href="#org63d57aa">5.3. Consolidate @s</a></li>
-<li><a href="#org3e4636d">5.4. Consolidate tl</a></li>
-<li><a href="#org5b115ef">5.5. Add 1+'s</a></li>
-<li><a href="#orgb8234fc">5.6. Nil Comparisons To Null</a></li>
-</ul>
-</li>
-<li><a href="#org87fbbcf">6. Overrides</a>
-<ul>
-<li><a href="#orgbd5e2cd">6.1. Performance</a></li>
-<li><a href="#orgfc99e78">6.2. Namespacing</a></li>
-<li><a href="#orgcd20b82">6.3. Bug Fixes</a></li>
-</ul>
-</li>
-<li><a href="#org8758e9c">7. Evaluate KLambda</a>
-<ul>
-<li><a href="#org397c5aa">7.1. Generate From Seed KLambda Files</a>
-<ul>
-<li><a href="#org80a68d8">7.1.1. Evaluating Bootstrapped KLambda</a></li>
+<li><a href="#orge3b0909">3.3.1. Detect Dotted Pair</a></li>
+<li><a href="#org051a196">3.3.2. List Filtering</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org32b4473">8. Providing The Primitives</a></li>
-<li><a href="#org191b683">9. Overlays</a>
+<li><a href="#org38e5292">4. Rewriting The AST</a>
 <ul>
-<li><a href="#org381d7a5">9.1. License</a></li>
-<li><a href="#orgd959658">9.2. Repl</a>
-<ul>
-<li><a href="#org966c1e1">9.2.1. Questions</a></li>
-<li><a href="#org005ab38">9.2.2. Changing Directories</a></li>
+<li><a href="#org128493a">4.1. Walking The AST</a></li>
+<li><a href="#org79805be">4.2. Function Application</a></li>
+<li><a href="#orgccdb7d1">4.3. Finding Tail Calls</a></li>
+<li><a href="#org4d0ec9e">4.4. Generating A TCO'ed Function</a></li>
+<li><a href="#org1fc70df">4.5. Modifying The AST</a></li>
+<li><a href="#orgda105f3">4.6. (Unused) Isolating and Filling</a></li>
 </ul>
 </li>
-<li><a href="#org0aaa5bc">9.3. Provide it</a></li>
-</ul>
-</li>
-<li><a href="#org4e80968">10. Shen REPL</a>
+<li><a href="#org99957d3">5. Optimizations</a>
 <ul>
-<li><a href="#orgdfe158c">10.1. Credits</a></li>
-<li><a href="#orgc81b9d2">10.2. Prompt</a></li>
-<li><a href="#orge54892b">10.3. Input Events</a></li>
-<li><a href="#orgc956535">10.4. Sending Input</a></li>
-<li><a href="#orgf65be3e">10.5. Evaluating User Input</a></li>
-<li><a href="#org29a66e7">10.6. The REPL Mode</a></li>
-<li><a href="#org1da8a50">10.7. Starting the REPL</a></li>
-<li><a href="#org23a1d9e">10.8. Provide it</a></li>
+<li><a href="#org690e590">5.1. Consolidate Call Chains</a></li>
+<li><a href="#org0967d02">5.2. Consolidate Cons</a></li>
+<li><a href="#org1bb6672">5.3. Consolidate @s</a></li>
+<li><a href="#orgfc3c036">5.4. Consolidate tl</a></li>
+<li><a href="#orgeb9cca8">5.5. Add 1+'s</a></li>
+<li><a href="#org4887c0a">5.6. Nil Comparisons To Null</a></li>
 </ul>
 </li>
-<li><a href="#org06a28e0">11. Bootstrap</a>
+<li><a href="#org4150eb4">6. Overrides</a>
 <ul>
-<li><a href="#org5e788b5">11.1. Collecting KLambda files</a></li>
-<li><a href="#orge4fe6ea">11.2. Modifying The Elisp Reader For KLambda</a></li>
-<li><a href="#orgac4989c">11.3. Iterating over KLambda Files</a></li>
+<li><a href="#orgb386fc4">6.1. Performance</a></li>
+<li><a href="#orgb90d8f5">6.2. Namespacing</a></li>
+<li><a href="#org0b3e962">6.3. Bug Fixes</a></li>
 </ul>
 </li>
-<li><a href="#org604b282">12. The Runner</a></li>
+<li><a href="#org839e346">7. Evaluate KLambda</a>
+<ul>
+<li><a href="#org237d0f0">7.1. Generate From Seed KLambda Files</a>
+<ul>
+<li><a href="#org8c2f5b9">7.1.1. Evaluating Bootstrapped KLambda</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgb0f86bc">8. Providing The Primitives</a></li>
+<li><a href="#org4818e2f">9. Overlays</a>
+<ul>
+<li><a href="#org7588510">9.1. License</a></li>
+<li><a href="#orgaaf41c8">9.2. Repl</a>
+<ul>
+<li><a href="#org53435f5">9.2.1. Questions</a></li>
+<li><a href="#orgeb6168b">9.2.2. Changing Directories</a></li>
+</ul>
+</li>
+<li><a href="#orge09c0f3">9.3. Provide it</a></li>
+</ul>
+</li>
+<li><a href="#orgcb0a6fb">10. Shen REPL</a>
+<ul>
+<li><a href="#org38ac3bc">10.1. Credits</a></li>
+<li><a href="#org414ee14">10.2. Prompt</a></li>
+<li><a href="#orge5627a7">10.3. Input Events</a></li>
+<li><a href="#org324288c">10.4. Sending Input</a></li>
+<li><a href="#org06b169f">10.5. Evaluating User Input</a></li>
+<li><a href="#org0c4cfd5">10.6. The REPL Mode</a></li>
+<li><a href="#orga43b16e">10.7. Starting the REPL</a></li>
+<li><a href="#orgbe9babc">10.8. Provide it</a></li>
+</ul>
+</li>
+<li><a href="#org2deaf8f">11. Bootstrap</a>
+<ul>
+<li><a href="#org7cabf69">11.1. Collecting KLambda files</a></li>
+<li><a href="#org7b0b0c0">11.2. Modifying The Elisp Reader For KLambda</a></li>
+<li><a href="#orge5c205d">11.3. Iterating over KLambda Files</a></li>
+</ul>
+</li>
+<li><a href="#org1a2e5aa">12. The Runner</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgfe7a12b" class="outline-2">
-<h2 id="orgfe7a12b"><span class="section-number-2">1</span> Package Details</h2>
+<div id="outline-container-orgd46c33f" class="outline-2">
+<h2 id="orgd46c33f"><span class="section-number-2">1</span> Package Details</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span>define-package
@@ -367,11 +367,11 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org55c804c" class="outline-2">
-<h2 id="org55c804c"><span class="section-number-2">2</span> KLambda Primitives</h2>
+<div id="outline-container-org3d5718e" class="outline-2">
+<h2 id="org3d5718e"><span class="section-number-2">2</span> KLambda Primitives</h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-org7e6a201" class="outline-3">
-<h3 id="org7e6a201"><span class="section-number-3">2.1</span> License</h3>
+</div><div id="outline-container-orgdcfe35d" class="outline-3">
+<h3 id="orgdcfe35d"><span class="section-number-3">2.1</span> License</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">-*- lexical-binding: t -*-</span>
@@ -381,8 +381,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org32e9bc3" class="outline-3">
-<h3 id="org32e9bc3"><span class="section-number-3">2.2</span> Implementation Constants</h3>
+<div id="outline-container-org4f3d3b7" class="outline-3">
+<h3 id="org4f3d3b7"><span class="section-number-3">2.2</span> Implementation Constants</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defconst</span> <span style="color: #a0522d;">shen/prefix</span> <span style="color: #8b2252;">"shen/"</span><span style="color: #707183;">)</span>
@@ -390,8 +390,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org53784bf" class="outline-3">
-<h3 id="org53784bf"><span class="section-number-3">2.3</span> Symbols</h3>
+<div id="outline-container-org30a06ab" class="outline-3">
+<h3 id="org30a06ab"><span class="section-number-3">2.3</span> Symbols</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Symbols in KLambda (and Shen) are very much like symbols in Elisp :
@@ -440,7 +440,7 @@ But in Elisp we need to use <code>funcall</code>:
 </ol>
 
 <p>
-To deal with these differences a <a href="#org9fab347">pass</a> is taken over the KLambda ast (before
+To deal with these differences a <a href="#org128493a">pass</a> is taken over the KLambda ast (before
 macroexpansion) that identifies symbols that requires quoting and function calls
 that need to be applied correctly.
 </p>
@@ -463,8 +463,8 @@ as does <code>shen/symbol-&gt;string</code>:
 </pre>
 </div>
 </div>
-<div id="outline-container-org00159cc" class="outline-4">
-<h4 id="org00159cc"><span class="section-number-4">2.3.1</span> Prefixing Utilities</h4>
+<div id="outline-container-org5411828" class="outline-4">
+<h4 id="org5411828"><span class="section-number-4">2.3.1</span> Prefixing Utilities</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 Elisp does not have namespaces so to insulate the rest of the user's Emacs image
@@ -506,12 +506,12 @@ symbol with <code>shen/</code>:
 </div>
 </div>
 </div>
-<div id="outline-container-orgef0fa61" class="outline-3">
-<h3 id="orgef0fa61"><span class="section-number-3">2.4</span> Assignments</h3>
+<div id="outline-container-org3702be3" class="outline-3">
+<h3 id="org3702be3"><span class="section-number-3">2.4</span> Assignments</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 When setting and getting a variable, the name is prefixed to prevent the user from stomping over one that
-already exists in the Emacs image. See <a href="#org00159cc">2.3.1</a> for more on how this works.
+already exists in the Emacs image. See <a href="#org5411828">2.3.1</a> for more on how this works.
 </p>
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/set</span> <span style="color: #7388d6;">(</span>X Y<span style="color: #7388d6;">)</span>
@@ -534,11 +534,11 @@ already exists in the Emacs image. See <a href="#org00159cc">2.3.1</a> for more 
 </div>
 </div>
 </div>
-<div id="outline-container-org09123de" class="outline-3">
-<h3 id="org09123de"><span class="section-number-3">2.5</span> KLambda Constants</h3>
+<div id="outline-container-orgadf6604" class="outline-3">
+<h3 id="orgadf6604"><span class="section-number-3">2.5</span> KLambda Constants</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
-Once <a href="#orgef0fa61">the assigning mechanism</a> is in place the spec requires some global variables:
+Once <a href="#org3702be3">the assigning mechanism</a> is in place the spec requires some global variables:
 </p>
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span>shen/set '*home-directory* <span style="color: #8b2252;">""</span><span style="color: #707183;">)</span>
@@ -554,8 +554,8 @@ Once <a href="#orgef0fa61">the assigning mechanism</a> is in place the spec requ
 </div>
 </div>
 </div>
-<div id="outline-container-org154b115" class="outline-3">
-<h3 id="org154b115"><span class="section-number-3">2.6</span> Boolean Operations</h3>
+<div id="outline-container-org57d217a" class="outline-3">
+<h3 id="org57d217a"><span class="section-number-3">2.6</span> Boolean Operations</h3>
 <div class="outline-text-3" id="text-2-6">
 <p>
 Unlike Elisp in KLambda booleans are <code>false</code> and <code>true</code>, distinct symbols which
@@ -600,8 +600,8 @@ predicates must be true.
 </div>
 </div>
 </div>
-<div id="outline-container-org6c80582" class="outline-3">
-<h3 id="org6c80582"><span class="section-number-3">2.7</span> Lambdas</h3>
+<div id="outline-container-orgd3176ab" class="outline-3">
+<h3 id="orgd3176ab"><span class="section-number-3">2.7</span> Lambdas</h3>
 <div class="outline-text-3" id="text-2-7">
 <p>
 Since Shen supports currying by default KLambda's <code>lambda</code> form is stripped down to only accept one
@@ -632,8 +632,8 @@ The implementation delegates to Elisp's <code>lambda</code> form:
 </div>
 </div>
 </div>
-<div id="outline-container-orgb975538" class="outline-3">
-<h3 id="orgb975538"><span class="section-number-3">2.8</span> Lets</h3>
+<div id="outline-container-org310ca96" class="outline-3">
+<h3 id="org310ca96"><span class="section-number-3">2.8</span> Lets</h3>
 <div class="outline-text-3" id="text-2-8">
 <p>
 KLambda's <code>let</code> in a similar way only takes one assignment:
@@ -661,8 +661,8 @@ The implementation delegates to Elisp's <code>let</code>:
 </div>
 </div>
 
-<div id="outline-container-org41d8980" class="outline-3">
-<h3 id="org41d8980"><span class="section-number-3">2.9</span> Defuns</h3>
+<div id="outline-container-org7f51959" class="outline-3">
+<h3 id="org7f51959"><span class="section-number-3">2.9</span> Defuns</h3>
 <div class="outline-text-3" id="text-2-9">
 <p>
 The structure of <code>defun</code> in KLambda is identical to Elisp's so a straight
@@ -681,11 +681,11 @@ before the body is spliced in.
 </div>
 </div>
 
-<div id="outline-container-orgba6c438" class="outline-3">
-<h3 id="orgba6c438"><span class="section-number-3">2.10</span> Equality</h3>
+<div id="outline-container-org09f68a9" class="outline-3">
+<h3 id="org09f68a9"><span class="section-number-3">2.10</span> Equality</h3>
 <div class="outline-text-3" id="text-2-10">
 <p>
-Using <a href="#org6762506">hash-tables for tuples and vectors</a> complicates equality. It also slows
+Using <a href="#orgf71a40d">hash-tables for tuples and vectors</a> complicates equality. It also slows
 down equality tests across the board but using hash-tables still results in
 a substantial net-gain.
 </p>
@@ -783,8 +783,8 @@ up in Elisp.
 </div>
 </div>
 </div>
-<div id="outline-container-org8186307" class="outline-3">
-<h3 id="org8186307"><span class="section-number-3">2.11</span> Other Generic Functions</h3>
+<div id="outline-container-org1811c92" class="outline-3">
+<h3 id="org1811c92"><span class="section-number-3">2.11</span> Other Generic Functions</h3>
 <div class="outline-text-3" id="text-2-11">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defmacro</span> <span style="color: #0000ff;">shen/freeze</span> <span style="color: #7388d6;">(</span>X<span style="color: #7388d6;">)</span>
@@ -795,8 +795,8 @@ up in Elisp.
 </div>
 </div>
 
-<div id="outline-container-orgd192946" class="outline-3">
-<h3 id="orgd192946"><span class="section-number-3">2.12</span> Lists</h3>
+<div id="outline-container-org1d8557d" class="outline-3">
+<h3 id="org1d8557d"><span class="section-number-3">2.12</span> Lists</h3>
 <div class="outline-text-3" id="text-2-12">
 <p>
 List construction in KLambda is done with <code>cons</code> exclusively. The KLambda list
@@ -808,7 +808,7 @@ List construction in KLambda is done with <code>cons</code> exclusively. The KLa
 
 <p>
 Elisp also provides a <code>cons</code> so a straightforward translation is possible <b>but</b>
-it blows the recursion stack after a certain number of elements. They are <a href="#org807db76">rewritten</a> to
+it blows the recursion stack after a certain number of elements. They are <a href="#org0967d02">rewritten</a> to
 <code>list</code> calls below but a <code>cons</code> is provided to adhere to the standard:
 </p>
 <div class="org-src-container">
@@ -828,8 +828,8 @@ The rest of the list operations function as expected:
 </div>
 </div>
 </div>
-<div id="outline-container-org0909f63" class="outline-3">
-<h3 id="org0909f63"><span class="section-number-3">2.13</span> Strings</h3>
+<div id="outline-container-orgd7472b4" class="outline-3">
+<h3 id="orgd7472b4"><span class="section-number-3">2.13</span> Strings</h3>
 <div class="outline-text-3" id="text-2-13">
 <ul class="org-ul">
 <li><p>
@@ -838,7 +838,7 @@ Printing KLambda datatypes.
 
 <p>
 The only weirdness here is why we print the <code>buffer-name</code>
-of a stream. That is explained in the <a href="#orgb021154">2.18</a>.:
+of a stream. That is explained in the <a href="#org9eaa534">2.18</a>.:
 </p></li>
 </ul>
 <div class="org-src-container">
@@ -887,8 +887,8 @@ of the string is considered.
 </p>
 </div>
 </div>
-<div id="outline-container-org0a8df11" class="outline-3">
-<h3 id="org0a8df11"><span class="section-number-3">2.14</span> Error Handling</h3>
+<div id="outline-container-orgfadfad8" class="outline-3">
+<h3 id="orgfadfad8"><span class="section-number-3">2.14</span> Error Handling</h3>
 <div class="outline-text-3" id="text-2-14">
 <p>
 Elisp's <code>error</code> and <code>condition-case</code> covers the primitive error handling
@@ -908,8 +908,8 @@ required by the spec:
 </div>
 </div>
 </div>
-<div id="outline-container-org6762506" class="outline-3">
-<h3 id="org6762506"><span class="section-number-3">2.15</span> Vectors</h3>
+<div id="outline-container-orgf71a40d" class="outline-3">
+<h3 id="orgf71a40d"><span class="section-number-3">2.15</span> Vectors</h3>
 <div class="outline-text-3" id="text-2-15">
 <p>
 Hash tables are used to represent Klambda vectors. This is counter-intuitive
@@ -950,8 +950,8 @@ and only generates a hash for these structures using only their keys and values.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc78c73a" class="outline-3">
-<h3 id="orgc78c73a"><span class="section-number-3">2.16</span> Arithmetic Operations</h3>
+<div id="outline-container-orgf6c94d1" class="outline-3">
+<h3 id="orgf6c94d1"><span class="section-number-3">2.16</span> Arithmetic Operations</h3>
 <div class="outline-text-3" id="text-2-16">
 <p>
 In KLambda there is only <code>number</code> so we have to take care to coerce to between <code>float</code> and
@@ -1035,8 +1035,8 @@ wrap the Elisp functions:
 </div>
 </div>
 
-<div id="outline-container-org5a9e5ad" class="outline-3">
-<h3 id="org5a9e5ad"><span class="section-number-3">2.17</span> Time</h3>
+<div id="outline-container-org4026359" class="outline-3">
+<h3 id="org4026359"><span class="section-number-3">2.17</span> Time</h3>
 <div class="outline-text-3" id="text-2-17">
 <p>
 The <code>get-time</code> primitive given <code>real</code> or <code>unix</code> returns the current Unix time
@@ -1066,8 +1066,8 @@ with 2^16 and add the result to the lower bits.
 </div>
 </div>
 </div>
-<div id="outline-container-orgb021154" class="outline-3">
-<h3 id="orgb021154"><span class="section-number-3">2.18</span> Streams and I/O</h3>
+<div id="outline-container-org9eaa534" class="outline-3">
+<h3 id="org9eaa534"><span class="section-number-3">2.18</span> Streams and I/O</h3>
 <div class="outline-text-3" id="text-2-18">
 <p>
 Streams at the KLambda level are just an abstraction over file I/O. At the Elisp
@@ -1144,7 +1144,7 @@ a Shen program.</li>
 
 <p>
 A further bit of weirdness is that <code>write-byte</code> switches on a <a href="#coderef-write-byte-function" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-write-byte-function');" onmouseout="CodeHighlightOff(this, 'coderef-write-byte-function');">function</a>. This is because
-when writing out to the <a href="#org4e80968">10</a> requires calling a function with the character.
+when writing out to the <a href="#orgcb0a6fb">10</a> requires calling a function with the character.
 </p>
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/close</span> <span style="color: #7388d6;">(</span>Stream<span style="color: #7388d6;">)</span>
@@ -1194,11 +1194,11 @@ when writing out to the <a href="#org4e80968">10</a> requires calling a function
 </div>
 </div>
 </div>
-<div id="outline-container-org649d38e" class="outline-2">
-<h2 id="org649d38e"><span class="section-number-2">3</span> Utilities</h2>
+<div id="outline-container-org4c8afa7" class="outline-2">
+<h2 id="org4c8afa7"><span class="section-number-2">3</span> Utilities</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-orgc13bddf" class="outline-3">
-<h3 id="orgc13bddf"><span class="section-number-3">3.1</span> Lookup</h3>
+</div><div id="outline-container-org3e2c2bc" class="outline-3">
+<h3 id="org3e2c2bc"><span class="section-number-3">3.1</span> Lookup</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/lookup-with-default</span> <span style="color: #7388d6;">(</span>KEY ALIST DEFAULT<span style="color: #7388d6;">)</span>
@@ -1207,16 +1207,16 @@ when writing out to the <a href="#org4e80968">10</a> requires calling a function
 </div>
 </div>
 </div>
-<div id="outline-container-org44422f2" class="outline-3">
-<h3 id="org44422f2"><span class="section-number-3">3.2</span> AST Utilities</h3>
+<div id="outline-container-org1c81506" class="outline-3">
+<h3 id="org1c81506"><span class="section-number-3">3.2</span> AST Utilities</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 The next few sections are about transforming the KLambda AST so we
 need a few utilites to make the job easier.
 </p>
 </div>
-<div id="outline-container-orgd1b004e" class="outline-4">
-<h4 id="orgd1b004e"><span class="section-number-4">3.2.1</span> Paths</h4>
+<div id="outline-container-org1773ad8" class="outline-4">
+<h4 id="org1773ad8"><span class="section-number-4">3.2.1</span> Paths</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 Paths are a way of getting or setting deep inside some tree. For the most part
@@ -1234,11 +1234,11 @@ as a single number <code>1</code> inside a list, like <code>'(1)</code>.
 </div>
 </div>
 
-<div id="outline-container-org4792820" class="outline-4">
-<h4 id="org4792820"><span class="section-number-4">3.2.2</span> AST Getter/Setter</h4>
+<div id="outline-container-org9b3d431" class="outline-4">
+<h4 id="org9b3d431"><span class="section-number-4">3.2.2</span> AST Getter/Setter</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <div class="org-src-container">
-<pre class="src src-elisp" id="org34a6613"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/get-element-at</span> <span style="color: #7388d6;">(</span>path ast<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp" id="orgb4fdb04"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/get-element-at</span> <span style="color: #7388d6;">(</span>path ast<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #a020f0;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>res ast<span style="color: #709870;">)</span><span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #a020f0;">dolist</span> <span style="color: #709870;">(</span>current-index <span style="color: #907373;">(</span>reverse path<span style="color: #907373;">)</span> res<span style="color: #709870;">)</span>
       <span style="color: #709870;">(</span><span style="color: #a020f0;">if</span> <span style="color: #907373;">(</span>listp current-index<span style="color: #907373;">)</span>
@@ -1256,7 +1256,7 @@ iterate down the tree, we have to <i>build</i> the <code>PLACE</code> expression
 before handing it off to <code>setf</code>.
 </p>
 <div class="org-src-container">
-<pre class="src src-elisp" id="orgdd1b1b1"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/nset-element-at</span> <span style="color: #7388d6;">(</span>path ast new-element<span style="color: #7388d6;">)</span>
+<pre class="src src-elisp" id="orgdebeaa1"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/nset-element-at</span> <span style="color: #7388d6;">(</span>path ast new-element<span style="color: #7388d6;">)</span>
   <span style="color: #7388d6;">(</span><span style="color: #a020f0;">if</span> <span style="color: #909183;">(</span>not path<span style="color: #909183;">)</span>
       <span style="color: #909183;">(</span><span style="color: #a020f0;">setf</span> ast new-element<span style="color: #909183;">)</span>
     <span style="color: #909183;">(</span><span style="color: #a020f0;">let</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>place-fn<span style="color: #907373;">)</span>
@@ -1282,10 +1282,10 @@ before handing it off to <code>setf</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-org5bab371" class="outline-4">
-<h4 id="org5bab371"><span class="section-number-4">3.2.3</span> AST Search</h4>
+<div id="outline-container-org474e439" class="outline-4">
+<h4 id="org474e439"><span class="section-number-4">3.2.3</span> AST Search</h4>
 <div class="outline-text-4" id="text-3-2-3">
-</div><ol class="org-ol"><li><a id="orgcd38503"></a>Find All<br /><div class="outline-text-5" id="text-3-2-3-1">
+</div><ol class="org-ol"><li><a id="orgf0e868d"></a>Find All<br /><div class="outline-text-5" id="text-3-2-3-1">
 <p>
 Search the tree and return paths to all the elements that are <code>equal</code> to the given <code>X</code>.
 </p>
@@ -1315,7 +1315,7 @@ Search the tree and return paths to all the elements that are <code>equal</code>
 </pre>
 </div>
 </div></li>
-<li><a id="orgf27ef76"></a>Find Containing List<br /><div class="outline-text-5" id="text-3-2-3-2">
+<li><a id="org74e7384"></a>Find Containing List<br /><div class="outline-text-5" id="text-3-2-3-2">
 <p>
 In addition to accessing and modifying an element given a path we also need
 a function that finds the list that contains an element. This following function,
@@ -1353,8 +1353,8 @@ not a path to the element itself.
 </div>
 </div></li></ol>
 </div>
-<div id="outline-container-org8fa7fee" class="outline-4">
-<h4 id="org8fa7fee"><span class="section-number-4">3.2.4</span> Path Utilities</h4>
+<div id="outline-container-org0ec73cb" class="outline-4">
+<h4 id="org0ec73cb"><span class="section-number-4">3.2.4</span> Path Utilities</h4>
 <div class="outline-text-4" id="text-3-2-4">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/get-path-relative-to</span> <span style="color: #7388d6;">(</span>parent-path path<span style="color: #7388d6;">)</span>
@@ -1386,8 +1386,8 @@ not a path to the element itself.
 </div>
 </div>
 
-<div id="outline-container-org638e63a" class="outline-4">
-<h4 id="org638e63a"><span class="section-number-4">3.2.5</span> AST Modification</h4>
+<div id="outline-container-org1da4a86" class="outline-4">
+<h4 id="org1da4a86"><span class="section-number-4">3.2.5</span> AST Modification</h4>
 <div class="outline-text-4" id="text-3-2-5">
 <p>
 Given an <code>ast</code>, some <code>paths</code>, destructively modify the ast with <code>tx-fn</code>. Note
@@ -1406,11 +1406,11 @@ up the code tree.
 </div>
 </div>
 </div>
-<div id="outline-container-orga5d41e4" class="outline-3">
-<h3 id="orga5d41e4"><span class="section-number-3">3.3</span> List</h3>
+<div id="outline-container-org2d33008" class="outline-3">
+<h3 id="org2d33008"><span class="section-number-3">3.3</span> List</h3>
 <div class="outline-text-3" id="text-3-3">
-</div><div id="outline-container-orgfbadae9" class="outline-4">
-<h4 id="orgfbadae9"><span class="section-number-4">3.3.1</span> Detect Dotted Pair</h4>
+</div><div id="outline-container-orge3b0909" class="outline-4">
+<h4 id="orge3b0909"><span class="section-number-4">3.3.1</span> Detect Dotted Pair</h4>
 <div class="outline-text-4" id="text-3-3-1">
 <p>
 Note this only detects dotted pairs that look like <code>'(a . b)</code>, not ones
@@ -1423,8 +1423,8 @@ that look like <code>'(a b c . d)</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org4abbcdf" class="outline-4">
-<h4 id="org4abbcdf"><span class="section-number-4">3.3.2</span> List Filtering</h4>
+<div id="outline-container-org051a196" class="outline-4">
+<h4 id="org051a196"><span class="section-number-4">3.3.2</span> List Filtering</h4>
 <div class="outline-text-4" id="text-3-3-2">
 <p>
 A partition function that returns a pair of lists where
@@ -1497,11 +1497,11 @@ A function that deletes the first occurrences of X
 </div>
 </div>
 
-<div id="outline-container-orgfb56d44" class="outline-2">
-<h2 id="orgfb56d44"><span class="section-number-2">4</span> Rewriting The AST</h2>
+<div id="outline-container-org38e5292" class="outline-2">
+<h2 id="org38e5292"><span class="section-number-2">4</span> Rewriting The AST</h2>
 <div class="outline-text-2" id="text-4">
-</div><div id="outline-container-org9fab347" class="outline-3">
-<h3 id="org9fab347"><span class="section-number-3">4.1</span> Walking The AST</h3>
+</div><div id="outline-container-org128493a" class="outline-3">
+<h3 id="org128493a"><span class="section-number-3">4.1</span> Walking The AST</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Before evaluating we walk the tree and return locations that require:
@@ -1658,8 +1658,8 @@ and not part of <code>cond</code>, they are also possible function calls.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-org66cc136" class="outline-3">
-<h3 id="org66cc136"><span class="section-number-3">4.2</span> Function Application</h3>
+<div id="outline-container-org79805be" class="outline-3">
+<h3 id="org79805be"><span class="section-number-3">4.2</span> Function Application</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Since KLambda supports partial application and Elisp does not function application is
@@ -1670,7 +1670,7 @@ tricky.
 First we enumerate forms that may never be partially applied:
 </p>
 <div class="org-src-container">
-<pre class="src src-elisp" id="org51ad563"><span style="color: #707183;">(</span><span style="color: #a020f0;">setq</span> shen/*primitive-macros*
+<pre class="src src-elisp" id="org76dcd92"><span style="color: #707183;">(</span><span style="color: #a020f0;">setq</span> shen/*primitive-macros*
       '<span style="color: #7388d6;">(</span>shen/if
         shen/and
         shen/or
@@ -1798,8 +1798,8 @@ instead of:
 </div>
 </div>
 </div>
-<div id="outline-container-orgff09d83" class="outline-3">
-<h3 id="orgff09d83"><span class="section-number-3">4.3</span> Finding Tail Calls</h3>
+<div id="outline-container-orgccdb7d1" class="outline-3">
+<h3 id="orgccdb7d1"><span class="section-number-3">4.3</span> Finding Tail Calls</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 Finding tail calls in a form is complex because:
@@ -1821,9 +1821,9 @@ are tail calls, for instance:
 </pre></li>
 </ul>
 </div>
-<ol class="org-ol"><li><a id="org4b9f458"></a>Detecting Recursive Calls<br /><div class="outline-text-5" id="text-4-3-0-1">
+<ol class="org-ol"><li><a id="orga0a20bb"></a>Detecting Recursive Calls<br /><div class="outline-text-5" id="text-4-3-0-1">
 <p>
-The function follows the same basic template as searching for <a href="#org5bab371">the first
+The function follows the same basic template as searching for <a href="#org474e439">the first
 occurrence</a> of something in the AST but instead of stopping at the first
 encounter keeps a <a href="#coderef-tail-calls-found" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-tail-calls-found');" onmouseout="CodeHighlightOff(this, 'coderef-tail-calls-found');">tally</a> of paths to all tail calls.
 </p>
@@ -1908,7 +1908,7 @@ to the end of the list and continue searching.
 </pre>
 </div>
 </div></li>
-<li><a id="orgb324791"></a>Detecting Function Application Context<br /><div class="outline-text-5" id="text-4-3-0-2">
+<li><a id="orgd7120c6"></a>Detecting Function Application Context<br /><div class="outline-text-5" id="text-4-3-0-2">
 <p>
 This function captures the surrounding function application context around
 a tail call. For instance in the function:
@@ -1981,7 +1981,7 @@ skip it.
 </pre>
 </div>
 </div></li>
-<li><a id="org9cba015"></a>Getting the Tail Calls<br /><div class="outline-text-5" id="text-4-3-0-3">
+<li><a id="orgcf4d3bc"></a>Getting the Tail Calls<br /><div class="outline-text-5" id="text-4-3-0-3">
 <p>
 Now that we can get a list of recursive calls and their surrounding context
 a proper tail call is simply one without any context, i.e it is the last thing
@@ -2004,8 +2004,8 @@ left to do.
 </div>
 </div></li></ol>
 </div>
-<div id="outline-container-org724b2ed" class="outline-3">
-<h3 id="org724b2ed"><span class="section-number-3">4.4</span> Generating A TCO'ed Function</h3>
+<div id="outline-container-org4d0ec9e" class="outline-3">
+<h3 id="org4d0ec9e"><span class="section-number-3">4.4</span> Generating A TCO'ed Function</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
 Finally we can optimize tail calls into trampolines. The body of the trampoline
@@ -2016,7 +2016,7 @@ vector that holds the arguments to the recursive call fully evaluated:
 <p>
 An Elisp vector is chosen because KLambda code can never return one and so
 uniquely identifies an intermediate return value from a recursive function.
-KLambda vectors are represented by <a href="#org6762506">hash-tables</a>
+KLambda vectors are represented by <a href="#orgf71a40d">hash-tables</a>
 </p>
 
 <p>
@@ -2048,16 +2048,16 @@ there would be no way to tell when recursion terminated.
 </div>
 </div>
 
-<div id="outline-container-orge53310a" class="outline-3">
-<h3 id="orge53310a"><span class="section-number-3">4.5</span> Modifying The AST</h3>
+<div id="outline-container-org1fc70df" class="outline-3">
+<h3 id="org1fc70df"><span class="section-number-3">4.5</span> Modifying The AST</h3>
 <div class="outline-text-3" id="text-4-5">
 <p>
 Now that we have mechanisms for
 </p>
 <ul class="org-ul">
-<li><a href="#org9fab347">identifying</a> the parts of the AST that need changing</li>
-<li><a href="#org66cc136">applying functions calls</a> in the face of partial application and</li>
-<li><a href="#orgff09d83">optimizing</a> tail calls</li>
+<li><a href="#org128493a">identifying</a> the parts of the AST that need changing</li>
+<li><a href="#org79805be">applying functions calls</a> in the face of partial application and</li>
+<li><a href="#orgccdb7d1">optimizing</a> tail calls</li>
 </ul>
 <p>
 we are ready to transform incoming KLambda code into Elisp.
@@ -2179,8 +2179,8 @@ To support the above transformation we need functions the namespace and quote th
 </div>
 </div>
 
-<div id="outline-container-org2a1d4a3" class="outline-3">
-<h3 id="org2a1d4a3"><span class="section-number-3">4.6</span> (Unused) Isolating and Filling</h3>
+<div id="outline-container-orgda105f3" class="outline-3">
+<h3 id="orgda105f3"><span class="section-number-3">4.6</span> (Unused) Isolating and Filling</h3>
 <div class="outline-text-3" id="text-4-6">
 <p>
 I was going to do something clever with the function application context but that didn't work
@@ -2220,11 +2220,11 @@ so these functions are unused for now.
 </div>
 </div>
 
-<div id="outline-container-org341674f" class="outline-2">
-<h2 id="org341674f"><span class="section-number-2">5</span> Optimizations</h2>
+<div id="outline-container-org99957d3" class="outline-2">
+<h2 id="org99957d3"><span class="section-number-2">5</span> Optimizations</h2>
 <div class="outline-text-2" id="text-5">
-</div><div id="outline-container-org8fd4686" class="outline-3">
-<h3 id="org8fd4686"><span class="section-number-3">5.1</span> Consolidate Call Chains</h3>
+</div><div id="outline-container-org690e590" class="outline-3">
+<h3 id="org690e590"><span class="section-number-3">5.1</span> Consolidate Call Chains</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 KLambda code is rife with argument chains such as <code>(cons x (cons y
@@ -2261,8 +2261,8 @@ A generic function that takes <code>matcher-fn</code> which finds these chains, 
 </div>
 </div>
 </div>
-<div id="outline-container-org807db76" class="outline-3">
-<h3 id="org807db76"><span class="section-number-3">5.2</span> Consolidate Cons</h3>
+<div id="outline-container-org0967d02" class="outline-3">
+<h3 id="org0967d02"><span class="section-number-3">5.2</span> Consolidate Cons</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 Convert <code>(cons a (cons b (blah)))</code> into <code>(append (list 'a 'b) (blah))</code>
@@ -2287,8 +2287,8 @@ Convert <code>(cons a (cons b (blah)))</code> into <code>(append (list 'a 'b) (b
 </div>
 </div>
 </div>
-<div id="outline-container-org63d57aa" class="outline-3">
-<h3 id="org63d57aa"><span class="section-number-3">5.3</span> Consolidate @s</h3>
+<div id="outline-container-org1bb6672" class="outline-3">
+<h3 id="org1bb6672"><span class="section-number-3">5.3</span> Consolidate @s</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b") (blah))</code>
@@ -2311,8 +2311,8 @@ Convert <code>(@s "a" (@s "b" (blah)))</code> into <code>(concat (concat "a" "b"
 </div>
 </div>
 </div>
-<div id="outline-container-org3e4636d" class="outline-3">
-<h3 id="org3e4636d"><span class="section-number-3">5.4</span> Consolidate tl</h3>
+<div id="outline-container-orgfc3c036" class="outline-3">
+<h3 id="orgfc3c036"><span class="section-number-3">5.4</span> Consolidate tl</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 Convert <code>(tl (tl (tl Xs)))</code> to <code>(nthcdr 3 Xs)</code>
@@ -2335,8 +2335,8 @@ Convert <code>(tl (tl (tl Xs)))</code> to <code>(nthcdr 3 Xs)</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org5b115ef" class="outline-3">
-<h3 id="org5b115ef"><span class="section-number-3">5.5</span> Add 1+'s</h3>
+<div id="outline-container-orgeb9cca8" class="outline-3">
+<h3 id="orgeb9cca8"><span class="section-number-3">5.5</span> Add 1+'s</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 Convert <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
@@ -2362,8 +2362,8 @@ Convert <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
 </div>
 </div>
 </div>
-<div id="outline-container-orgb8234fc" class="outline-3">
-<h3 id="orgb8234fc"><span class="section-number-3">5.6</span> Nil Comparisons To Null</h3>
+<div id="outline-container-org4887c0a" class="outline-3">
+<h3 id="org4887c0a"><span class="section-number-3">5.6</span> Nil Comparisons To Null</h3>
 <div class="outline-text-3" id="text-5-6">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/nil-to-null</span> <span style="color: #7388d6;">(</span>ast<span style="color: #7388d6;">)</span>
@@ -2387,16 +2387,16 @@ Convert <code>(+ X 1)</code> or <code>(+ 1 X)</code> to <code>(1+ X)</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org87fbbcf" class="outline-2">
-<h2 id="org87fbbcf"><span class="section-number-2">6</span> Overrides</h2>
+<div id="outline-container-org4150eb4" class="outline-2">
+<h2 id="org4150eb4"><span class="section-number-2">6</span> Overrides</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 There are four types of overrides, those which:
 </p>
 <ol class="org-ol">
-<li>boost <a href="#orgbd5e2cd">performance</a></li>
-<li>are necessary because Klambda functions are <a href="#orgfc99e78">prefixed</a>.</li>
-<li>fix <a href="#orgcd20b82">klambda bugs</a>.</li>
+<li>boost <a href="#orgb386fc4">performance</a></li>
+<li>are necessary because Klambda functions are <a href="#orgb90d8f5">prefixed</a>.</li>
+<li>fix <a href="#org0b3e962">klambda bugs</a>.</li>
 </ol>
 
 <p>
@@ -2405,8 +2405,8 @@ function name or form which when found in Klambda code is replaces with the
 <code>cdr</code> of the form.
 </p>
 </div>
-<div id="outline-container-orgbd5e2cd" class="outline-3">
-<h3 id="orgbd5e2cd"><span class="section-number-3">6.1</span> Performance</h3>
+<div id="outline-container-orgb386fc4" class="outline-3">
+<h3 id="orgb386fc4"><span class="section-number-3">6.1</span> Performance</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Peephole optimizations that provide native implementations of commonly used functions and the dictionary API.
@@ -2438,7 +2438,20 @@ Peephole optimizations that provide native implementations of commonly used func
        <span style="color: #909183;">(</span>shen.mod . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/shen.mod</span> <span style="color: #907373;">(</span>N Div<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>mod N Div<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
        <span style="color: #909183;">(</span>integer? . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/integer?</span> <span style="color: #907373;">(</span>N<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>shen/internal/predicate-&gt;shen <span style="color: #6276ba;">(</span>integerp N<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
        <span style="color: #909183;">(</span>abs . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/shen.abs</span> <span style="color: #907373;">(</span>N<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>abs N<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
-       <span style="color: #909183;">(</span>nth . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/nth</span> <span style="color: #907373;">(</span>I Xs<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>nth I Xs<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+       <span style="color: #909183;">(</span>nth . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/nth</span> <span style="color: #907373;">(</span>I Xs<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>nth I Xs<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+       <span style="color: #909183;">(</span>element? . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/element?</span> <span style="color: #907373;">(</span>Element Xs<span style="color: #907373;">)</span>
+                     <span style="color: #907373;">(</span><span style="color: #a020f0;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>SearchList Xs<span style="color: #858580;">)</span>
+                           <span style="color: #858580;">(</span>Found nil<span style="color: #858580;">)</span>
+                           <span style="color: #858580;">(</span>Length <span style="color: #80a880;">(</span>length Xs<span style="color: #80a880;">)</span><span style="color: #858580;">)</span>
+                           <span style="color: #858580;">(</span>Current <span style="color: #008b8b;">0</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                       <span style="color: #6276ba;">(</span><span style="color: #a020f0;">while</span> <span style="color: #858580;">(</span><span style="color: #a020f0;">and</span> <span style="color: #80a880;">(</span>not Found<span style="color: #80a880;">)</span> SearchList<span style="color: #858580;">)</span>
+                         <span style="color: #858580;">(</span><span style="color: #a020f0;">setq</span> Found <span style="color: #80a880;">(</span>shen/internal/= Element <span style="color: #887070;">(</span><span style="color: #a020f0;">pop</span> SearchList<span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                       <span style="color: #6276ba;">(</span>shen/internal/predicate-&gt;shen Found<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>
+       <span style="color: #909183;">(</span>shen.compose . <span style="color: #709870;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/shen.compose</span>
+                           <span style="color: #907373;">(</span>Fs X<span style="color: #907373;">)</span>
+                         <span style="color: #907373;">(</span><span style="color: #a020f0;">let</span> <span style="color: #6276ba;">(</span><span style="color: #858580;">(</span>Result X<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span>
+                           <span style="color: #6276ba;">(</span><span style="color: #a020f0;">dolist</span> <span style="color: #858580;">(</span>F Fs Result<span style="color: #858580;">)</span>
+                             <span style="color: #858580;">(</span><span style="color: #a020f0;">setq</span> Result <span style="color: #80a880;">(</span>funcall F Result<span style="color: #80a880;">)</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
 </pre>
 </div>
 <div class="org-src-container">
@@ -2540,8 +2553,8 @@ Peephole optimizations that provide native implementations of commonly used func
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc99e78" class="outline-3">
-<h3 id="orgfc99e78"><span class="section-number-3">6.2</span> Namespacing</h3>
+<div id="outline-container-orgb90d8f5" class="outline-3">
+<h3 id="orgb90d8f5"><span class="section-number-3">6.2</span> Namespacing</h3>
 <div class="outline-text-3" id="text-6-2">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">setq</span> shen/internal/*namespacing-overrides*
@@ -2552,8 +2565,8 @@ Peephole optimizations that provide native implementations of commonly used func
 </div>
 </div>
 </div>
-<div id="outline-container-orgcd20b82" class="outline-3">
-<h3 id="orgcd20b82"><span class="section-number-3">6.3</span> Bug Fixes</h3>
+<div id="outline-container-org0b3e962" class="outline-3">
+<h3 id="org0b3e962"><span class="section-number-3">6.3</span> Bug Fixes</h3>
 <div class="outline-text-3" id="text-6-3">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">setq</span> shen/internal/*bugfix-overrides*
@@ -2576,11 +2589,11 @@ Peephole optimizations that provide native implementations of commonly used func
 </div>
 </div>
 
-<div id="outline-container-org8758e9c" class="outline-2">
-<h2 id="org8758e9c"><span class="section-number-2">7</span> Evaluate KLambda</h2>
+<div id="outline-container-org839e346" class="outline-2">
+<h2 id="org839e346"><span class="section-number-2">7</span> Evaluate KLambda</h2>
 <div class="outline-text-2" id="text-7">
 <p>
-Now that the mechanisms for <a href="#org66cc136">applying functions</a>, and <a href="#orge53310a">quoting/namespacing</a> are in place
+Now that the mechanisms for <a href="#org79805be">applying functions</a>, and <a href="#org1fc70df">quoting/namespacing</a> are in place
 converting KLambda to Elisp is just a couple of function calls.
 </p>
 <div class="org-src-container">
@@ -2609,14 +2622,14 @@ source for introspecting, profiling and tracking.
 </pre>
 </div>
 </div>
-<div id="outline-container-org397c5aa" class="outline-3">
-<h3 id="org397c5aa"><span class="section-number-3">7.1</span> Generate From Seed KLambda Files</h3>
+<div id="outline-container-org237d0f0" class="outline-3">
+<h3 id="org237d0f0"><span class="section-number-3">7.1</span> Generate From Seed KLambda Files</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 Generating <code>shen-elisp.el</code>, the file that contains the Elisp compiled from the
 bootstrap KLambda files, requires a slightly different approach because we
-<a href="#org87fbbcf">override</a> the default generated Elisp with custom implementations. The <a href="#org87fbbcf">overrides</a>
-from above are read into a hash table and will be spliced in <a href="#org80a68d8">below</a>.
+<a href="#org4150eb4">override</a> the default generated Elisp with custom implementations. The <a href="#org4150eb4">overrides</a>
+from above are read into a hash table and will be spliced in <a href="#org8c2f5b9">below</a>.
 </p>
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">shen/internal/add-overrides</span> <span style="color: #7388d6;">(</span>overrides table<span style="color: #7388d6;">)</span>
@@ -2640,11 +2653,11 @@ from above are read into a hash table and will be spliced in <a href="#org80a68d
 </pre>
 </div>
 </div>
-<div id="outline-container-org80a68d8" class="outline-4">
-<h4 id="org80a68d8"><span class="section-number-4">7.1.1</span> Evaluating Bootstrapped KLambda</h4>
+<div id="outline-container-org8c2f5b9" class="outline-4">
+<h4 id="org8c2f5b9"><span class="section-number-4">7.1.1</span> Evaluating Bootstrapped KLambda</h4>
 <div class="outline-text-4" id="text-7-1-1">
 <p>
-When bootstrapping from the seed KLambda files we first need to <a href="#org397c5aa">patch</a> the
+When bootstrapping from the seed KLambda files we first need to <a href="#org237d0f0">patch</a> the
 incoming code with overrides before parsing the AST:
 </p>
 <div class="org-src-container">
@@ -2682,8 +2695,8 @@ to the end of the buffer.
 </div>
 </div>
 
-<div id="outline-container-org32b4473" class="outline-2">
-<h2 id="org32b4473"><span class="section-number-2">8</span> Providing The Primitives</h2>
+<div id="outline-container-orgb0f86bc" class="outline-2">
+<h2 id="orgb0f86bc"><span class="section-number-2">8</span> Providing The Primitives</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">provide</span> '<span style="color: #008b8b;">shen-primitives</span><span style="color: #707183;">)</span>
@@ -2691,15 +2704,15 @@ to the end of the buffer.
 </div>
 </div>
 </div>
-<div id="outline-container-org191b683" class="outline-2">
-<h2 id="org191b683"><span class="section-number-2">9</span> Overlays</h2>
+<div id="outline-container-org4818e2f" class="outline-2">
+<h2 id="org4818e2f"><span class="section-number-2">9</span> Overlays</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Override of some of Shen's default implementations.
 </p>
 </div>
-<div id="outline-container-org381d7a5" class="outline-3">
-<h3 id="org381d7a5"><span class="section-number-3">9.1</span> License</h3>
+<div id="outline-container-org7588510" class="outline-3">
+<h3 id="org7588510"><span class="section-number-3">9.1</span> License</h3>
 <div class="outline-text-3" id="text-9-1">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.</span>
@@ -2708,11 +2721,11 @@ Override of some of Shen's default implementations.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd959658" class="outline-3">
-<h3 id="orgd959658"><span class="section-number-3">9.2</span> Repl</h3>
+<div id="outline-container-orgaaf41c8" class="outline-3">
+<h3 id="orgaaf41c8"><span class="section-number-3">9.2</span> Repl</h3>
 <div class="outline-text-3" id="text-9-2">
-</div><div id="outline-container-org966c1e1" class="outline-4">
-<h4 id="org966c1e1"><span class="section-number-4">9.2.1</span> Questions</h4>
+</div><div id="outline-container-org53435f5" class="outline-4">
+<h4 id="org53435f5"><span class="section-number-4">9.2.1</span> Questions</h4>
 <div class="outline-text-4" id="text-9-2-1">
 <p>
 Overlay the routines that take input from the user in the REPL session to use the mini-buffer
@@ -2738,8 +2751,8 @@ Overlay the routines that take input from the user in the REPL session to use th
 </div>
 </div>
 </div>
-<div id="outline-container-org005ab38" class="outline-4">
-<h4 id="org005ab38"><span class="section-number-4">9.2.2</span> Changing Directories</h4>
+<div id="outline-container-orgeb6168b" class="outline-4">
+<h4 id="orgeb6168b"><span class="section-number-4">9.2.2</span> Changing Directories</h4>
 <div class="outline-text-4" id="text-9-2-2">
 <p>
 When changing directories in the REPL, for convenience, also change Emacs' working directory.
@@ -2758,8 +2771,8 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 </div>
 </div>
 </div>
-<div id="outline-container-org0aaa5bc" class="outline-3">
-<h3 id="org0aaa5bc"><span class="section-number-3">9.3</span> Provide it</h3>
+<div id="outline-container-orge09c0f3" class="outline-3">
+<h3 id="orge09c0f3"><span class="section-number-3">9.3</span> Provide it</h3>
 <div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">provide</span> '<span style="color: #008b8b;">shen-overlays</span><span style="color: #707183;">)</span>
@@ -2768,8 +2781,8 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 </div>
 </div>
 </div>
-<div id="outline-container-org4e80968" class="outline-2">
-<h2 id="org4e80968"><span class="section-number-2">10</span> Shen REPL</h2>
+<div id="outline-container-orgcb0a6fb" class="outline-2">
+<h2 id="orgcb0a6fb"><span class="section-number-2">10</span> Shen REPL</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">-*- lexical-binding: t -*-</span>
@@ -2786,8 +2799,8 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 </pre>
 </div>
 </div>
-<div id="outline-container-orgdfe158c" class="outline-3">
-<h3 id="orgdfe158c"><span class="section-number-3">10.1</span> Credits</h3>
+<div id="outline-container-org38ac3bc" class="outline-3">
+<h3 id="org38ac3bc"><span class="section-number-3">10.1</span> Credits</h3>
 <div class="outline-text-3" id="text-10-1">
 <p>
 The credits that appear at the top of each REPL session.
@@ -2804,8 +2817,8 @@ The credits that appear at the top of each REPL session.
 </div>
 </div>
 
-<div id="outline-container-orgc81b9d2" class="outline-3">
-<h3 id="orgc81b9d2"><span class="section-number-3">10.2</span> Prompt</h3>
+<div id="outline-container-org414ee14" class="outline-3">
+<h3 id="org414ee14"><span class="section-number-3">10.2</span> Prompt</h3>
 <div class="outline-text-3" id="text-10-2">
 <p>
 The Shen REPL prompt looks like <code>(0-)</code> and <code>(100+)</code> where the number is a
@@ -2842,8 +2855,8 @@ and make them:
 </div>
 </div>
 
-<div id="outline-container-orge54892b" class="outline-3">
-<h3 id="orge54892b"><span class="section-number-3">10.3</span> Input Events</h3>
+<div id="outline-container-orge5627a7" class="outline-3">
+<h3 id="orge5627a7"><span class="section-number-3">10.3</span> Input Events</h3>
 <div class="outline-text-3" id="text-10-3">
 <p>
 In addition to evaluating input, the REPL also provides some rudimentary
@@ -2922,8 +2935,8 @@ copies <code>elisp-completion-at-point</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc956535" class="outline-3">
-<h3 id="orgc956535"><span class="section-number-3">10.4</span> Sending Input</h3>
+<div id="outline-container-org324288c" class="outline-3">
+<h3 id="org324288c"><span class="section-number-3">10.4</span> Sending Input</h3>
 <div class="outline-text-3" id="text-10-4">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">shen/repl-input</span><span style="color: #707183;">)</span>
@@ -2945,8 +2958,8 @@ copies <code>elisp-completion-at-point</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf65be3e" class="outline-3">
-<h3 id="orgf65be3e"><span class="section-number-3">10.5</span> Evaluating User Input</h3>
+<div id="outline-container-org06b169f" class="outline-3">
+<h3 id="org06b169f"><span class="section-number-3">10.5</span> Evaluating User Input</h3>
 <div class="outline-text-3" id="text-10-5">
 <p>
 The following is a cut-and-paste of <code>ielm-standard-output-impl</code> which apparently
@@ -3024,8 +3037,8 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-org29a66e7" class="outline-3">
-<h3 id="org29a66e7"><span class="section-number-3">10.6</span> The REPL Mode</h3>
+<div id="outline-container-org0c4cfd5" class="outline-3">
+<h3 id="org0c4cfd5"><span class="section-number-3">10.6</span> The REPL Mode</h3>
 <div class="outline-text-3" id="text-10-6">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defconst</span> <span style="color: #a0522d;">shen/syntax-table</span>
@@ -3077,8 +3090,8 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-org1da8a50" class="outline-3">
-<h3 id="org1da8a50"><span class="section-number-3">10.7</span> Starting the REPL</h3>
+<div id="outline-container-orga43b16e" class="outline-3">
+<h3 id="orga43b16e"><span class="section-number-3">10.7</span> Starting the REPL</h3>
 <div class="outline-text-3" id="text-10-7">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #b22222;">;;;</span><span style="color: #b22222;">###</span><span style="color: #ff0000; font-weight: bold;">autoload</span>
@@ -3103,8 +3116,8 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-org23a1d9e" class="outline-3">
-<h3 id="org23a1d9e"><span class="section-number-3">10.8</span> Provide it</h3>
+<div id="outline-container-orgbe9babc" class="outline-3">
+<h3 id="orgbe9babc"><span class="section-number-3">10.8</span> Provide it</h3>
 <div class="outline-text-3" id="text-10-8">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">provide</span> '<span style="color: #008b8b;">shen-repl</span><span style="color: #707183;">)</span>
@@ -3113,8 +3126,8 @@ It periodically writes to the REPL.
 </div>
 </div>
 </div>
-<div id="outline-container-org06a28e0" class="outline-2">
-<h2 id="org06a28e0"><span class="section-number-2">11</span> Bootstrap</h2>
+<div id="outline-container-org2deaf8f" class="outline-2">
+<h2 id="org2deaf8f"><span class="section-number-2">11</span> Bootstrap</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 Bootstrapping a Shen environment involves
@@ -3126,8 +3139,8 @@ Bootstrapping a Shen environment involves
 <li>providing a runner that kicks off the process</li>
 </ol>
 </div>
-<div id="outline-container-org5e788b5" class="outline-3">
-<h3 id="org5e788b5"><span class="section-number-3">11.1</span> Collecting KLambda files</h3>
+<div id="outline-container-org7cabf69" class="outline-3">
+<h3 id="org7cabf69"><span class="section-number-3">11.1</span> Collecting KLambda files</h3>
 <div class="outline-text-3" id="text-11-1">
 <p>
 In order to bootstrap the environment we specify the location of all the KLambda files
@@ -3152,8 +3165,8 @@ make some adjustments due to the differences between KLambda and Elisp.
 </p>
 </div>
 </div>
-<div id="outline-container-orge4fe6ea" class="outline-3">
-<h3 id="orge4fe6ea"><span class="section-number-3">11.2</span> Modifying The Elisp Reader For KLambda</h3>
+<div id="outline-container-org7b0b0c0" class="outline-3">
+<h3 id="org7b0b0c0"><span class="section-number-3">11.2</span> Modifying The Elisp Reader For KLambda</h3>
 <div class="outline-text-3" id="text-11-2">
 <p>
 In KLambda semicolons, colons, commas, ticks and backquotes are valid symbols. Since they have
@@ -3345,8 +3358,8 @@ And a function that collects paths to all symbols in an s-expression:
 </div>
 </div>
 
-<div id="outline-container-orgac4989c" class="outline-3">
-<h3 id="orgac4989c"><span class="section-number-3">11.3</span> Iterating over KLambda Files</h3>
+<div id="outline-container-orge5c205d" class="outline-3">
+<h3 id="orge5c205d"><span class="section-number-3">11.3</span> Iterating over KLambda Files</h3>
 <div class="outline-text-3" id="text-11-3">
 <p>
 Now we can finally collect, and parse all the s-expressions in the
@@ -3410,8 +3423,8 @@ KLambda code into Elisp.
 </div>
 </div>
 </div>
-<div id="outline-container-org604b282" class="outline-2">
-<h2 id="org604b282"><span class="section-number-2">12</span> The Runner</h2>
+<div id="outline-container-org1a2e5aa" class="outline-2">
+<h2 id="org1a2e5aa"><span class="section-number-2">12</span> The Runner</h2>
 <div class="outline-text-2" id="text-12">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">compile-and-load</span> <span style="color: #7388d6;">(</span>F<span style="color: #7388d6;">)</span>

@@ -1152,7 +1152,20 @@
        (shen.mod . (defun shen/shen.mod (N Div) (mod N Div)))
        (integer? . (defun shen/integer? (N) (shen/internal/predicate->shen (integerp N))))
        (abs . (defun shen/shen.abs (N) (abs N)))
-       (nth . (defun shen/nth (I Xs) (nth I Xs)))))
+       (nth . (defun shen/nth (I Xs) (nth I Xs)))
+       (element? . (defun shen/element? (Element Xs)
+                     (let ((SearchList Xs)
+                           (Found nil)
+                           (Length (length Xs))
+                           (Current 0))
+                       (while (and (not Found) SearchList)
+                         (setq Found (shen/internal/= Element (pop SearchList))))
+                       (shen/internal/predicate->shen Found))))
+       (shen.compose . (defun shen/shen.compose
+                           (Fs X)
+                         (let ((Result X))
+                           (dolist (F Fs Result)
+                             (setq Result (funcall F Result))))))))
 ;; Performance:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Performance][Performance:2]]

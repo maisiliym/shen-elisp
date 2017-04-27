@@ -4369,35 +4369,21 @@
     (V2823 V2824)
   V2824)
 (defun shen/element\?
-    (V2836 V2837)
-  (cl-flet
-      ((tail-trampoline
-        (V2836 V2837)
-        (shen/cond
-         ((shen/internal/predicate->shen
-           (null V2837))
-          'false)
-         ((shen/and
-           (shen/cons\? V2837)
-           (shen/=
-            (shen/hd V2837)
-            V2836))
-          'true)
-         ((shen/cons\? V2837)
-          (vector
-           (list V2836
-                 (nthcdr 1 V2837))))
-         (shen/true
-          (shen/shen\.f_error 'element\?)))))
-    (let
-        ((result
-          (funcall #'tail-trampoline V2836 V2837)))
-      (while
-          (vectorp result)
-        (setq result
-              (apply #'tail-trampoline
-                     (aref result 0))))
-      result)))
+    (Element Xs)
+  (let
+      ((SearchList Xs)
+       (Found nil)
+       (Length
+        (length Xs))
+       (Current 0))
+    (while
+        (and
+         (not Found)
+         SearchList)
+      (setq Found
+            (shen/internal/= Element
+                             (pop SearchList))))
+    (shen/internal/predicate->shen Found)))
 (defun shen/empty\?
     (V2843)
   (shen/cond
@@ -14511,32 +14497,13 @@
           (list 'stinput)))
    (shen/true V1537)))
 (defun shen/shen\.compose
-    (V1540 V1541)
-  (cl-flet
-      ((tail-trampoline
-        (V1540 V1541)
-        (shen/cond
-         ((shen/internal/predicate->shen
-           (null V1540))
-          V1541)
-         ((shen/cons\? V1540)
-          (vector
-           (list
-            (nthcdr 1 V1540)
-            (shen/internal/apply-function-expression
-             (shen/hd V1540)
-             (list V1541)))))
-         (shen/true
-          (shen/shen\.f_error 'shen\.compose)))))
-    (let
-        ((result
-          (funcall #'tail-trampoline V1540 V1541)))
-      (while
-          (vectorp result)
-        (setq result
-              (apply #'tail-trampoline
-                     (aref result 0))))
-      result)))
+    (Fs X)
+  (let
+      ((Result X))
+    (dolist
+        (F Fs Result)
+      (setq Result
+            (funcall F Result)))))
 (defun shen/shen\.compile-macro
     (V1543)
   (shen/cond
