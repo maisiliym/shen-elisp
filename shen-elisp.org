@@ -2384,6 +2384,6 @@ KLambda code into Elisp.
         (compile-and-load "shen-elisp.el")
         (compile-and-load "shen-overlays.el")
         (compile-and-load "shen-repl.el")
-        (add-to-load-path default-directory)
+        (add-to-list 'load-path default-directory)
         (shen/repl)))
 #+END_SRC
