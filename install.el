@@ -4,9 +4,9 @@
 (setq *klambda-directory* (file-name-as-directory (concat (file-name-directory load-file-name) *klambda-directory-name*)))
 (setq *klambda-files*
       (mapcar (lambda (klFile) (concat *klambda-directory* klFile))
-              '("toplevel.kl" "core.kl" "sys.kl" "sequent.kl" "yacc.kl"
-                "reader.kl" "prolog.kl" "track.kl" "load.kl" "writer.kl"
-                "macros.kl" "declarations.kl" "types.kl" "t-star.kl")))
+              '("toplevel.kl" "core.kl" "sys.kl" "dict.kl" "sequent.kl"
+                "yacc.kl" "reader.kl" "prolog.kl" "track.kl" "load.kl"
+                "writer.kl" "macros.kl" "declarations.kl" "t-star.kl" "types.kl")))
 ;; Collecting KLambda files:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Modifying%20The%20Elisp%20Reader%20For%20KLambda][Modifying The Elisp Reader For KLambda:1]]
@@ -226,6 +226,6 @@
       (compile-and-load "shen-elisp.el")
       (compile-and-load "shen-overlays.el")
       (compile-and-load "shen-repl.el")
-      (add-to-load-path default-directory)
+      (add-to-list 'load-path default-directory)
       (shen/repl)))
 ;; The Runner:1 ends here

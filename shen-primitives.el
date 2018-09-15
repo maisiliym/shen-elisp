@@ -66,11 +66,11 @@
 (shen/set '*stoutput* standard-output)
 (shen/set '*stinput* [()])
 (shen/set '*language* "Elisp")
-(shen/set '*implementation* "Elisp")
+(shen/set '*implementation* system-configuration)
 (shen/set '*porters* "Aditya Siram")
-(shen/set '*release* "0.0.0.1")
+(shen/set '*release* emacs-version)
 (shen/set '*port* 1.7)
-(shen/set '*os* "Linux")
+(shen/set '*os* (symbol-name system-type))
 ;; KLambda Constants:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Boolean%20Operations][Boolean Operations:1]]
@@ -1170,78 +1170,61 @@
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Performance][Performance:2]]
 (setq shen/internal/*dict-overrides*
-      '((dict . (defun shen/dict
-                    (Size)
-                  (let ((Dict (shen/absvector 4))
-                        (Contents (shen/absvector Size)))
-                    (progn
-                      (shen/address-> Dict 0 'dictionary)
-                      (shen/address-> Dict 1 Size)
-                      (shen/address-> Dict 2 0)
-                      (shen/address-> Dict 3 Contents)
-                      Dict))))
-        (dict-> . (defun shen/dict->
-                      (Dict Key Value)
-                    (let* ((Count (shen/dict-count Dict))
-                          (Contents (shen/<-address Dict 3))
-                          (Exists (shen/<-address Contents Key)))
-                      (progn
-                        (if (not Exists)
-                            (shen/address-> Dict 2 (1+ Count)))
-                        (shen/address-> Contents Key Value)))))
-        (<-dict . (defun shen/<-dict
-                      (Dict Key)
-                    (let* ((Contents (shen/<-address Dict 3))
-                           (Existing (shen/<-address Contents Key)))
-                      (if (not Existing)
-                        (shen/freeze (shen/simple-error "value not found"))
-                        Existing))))
-        (<-dict/or . (defun shen/<-dict/or
-                         (Dict Key Or)
-                       (let* ((Contents (shen/<-address Dict 3))
-                              (Existing (shen/<-address Contents Key)))
-                         (if (not Existing)
-                             (shen/thaw Or)
-                           Existing))))
-        (dict-rm . (defun shen/dict-rm
-                       (Dict Key)
-                     (let* ((Count (shen/dict-count Dict))
-                            (Contents (shen/<-address Dict 3))
-                            (Exists (shen/<-address Contents Key)))
-                       (if (not Exists)
-                           Key
+      '((shen.dict . (defun shen/shen\.dict
+                         (Size)
+                       (let ((Dict (shen/absvector 4))
+                             (Contents (shen/absvector Size)))
                          (progn
-                           (remhash Key Contents)
-                           (shen/address-> Dict 2 (1- Count))
-                           Key)))))
-        (dict-keys . (defun shen/dict-keys
-                         (Dict)
-                       (let* ((Contents (shen/<-address Dict 3)))
-                         (hash-table-keys Contents))))
-        (dict-values . (defun shen/dict-values
-                           (Dict)
-                         (let* ((Contents (shen/<-address Dict 3)))
-                           (hash-table-values Contents))))
-        (dict-fold . (defun shen/dict-fold
-                         (F Dict Acc)
-                       (let ((Contents (shen/<-address Dict 3)))
-                         (progn
-                           (setq NewAcc Acc)
-                           (maphash
-                            (lambda (Key Value)
-                              (setq NewAcc (shen/internal/apply-higher-order-function F (list Key Value NewAcc))))
-                            Contents)
-                           NewAcc))))
-        (get/or . (defun shen/get/or
-                      (X Pointer Or Dict)
-                    (let* ((Contents (shen/<-address Dict 3))
-                           (X-Contents (shen/<-address Contents X)))
-                      (if X-Contents
-                          (let ((Pointer-Contents (shen/<-address X-Contents Pointer)))
-                            (if (not Pointer-Contents)
-                                (shen/thaw Or)
-                              Pointer-Contents))
-                        (shen/thaw Or)))))
+                           (shen/address-> Dict 0 'dictionary)
+                           (shen/address-> Dict 1 Size)
+                           (shen/address-> Dict 2 0)
+                           (shen/address-> Dict 3 Contents)
+                           Dict))))
+        (shen.dict-> . (defun shen/shen\.dict->
+                           (Dict Key Value)
+                         (let* ((Count (shen/shen\.dict-count Dict))
+                                (Contents (shen/<-address Dict 3))
+                                (Exists (shen/<-address Contents Key)))
+                           (progn
+                             (if (not Exists)
+                                 (shen/address-> Dict 2 (1+ Count)))
+                             (shen/address-> Contents Key Value)))))
+        (shen.<-dict . (defun shen/shen\.<-dict
+                           (Dict Key)
+                         (let* ((Contents (shen/<-address Dict 3))
+                                (Existing (shen/<-address Contents Key)))
+                           (if (not Existing)
+                               (shen/freeze (shen/simple-error "value not found"))
+                             Existing))))
+        (shen.dict-rm . (defun shen/shen\.dict-rm
+                            (Dict Key)
+                          (let* ((Count (shen/shen\.dict-count Dict))
+                                 (Contents (shen/<-address Dict 3))
+                                 (Exists (shen/<-address Contents Key)))
+                            (if (not Exists)
+                                Key
+                              (progn
+                                (remhash Key Contents)
+                                (shen/address-> Dict 2 (1- Count))
+                                Key)))))
+        (shen.dict-keys . (defun shen/shen\.dict-keys
+                              (Dict)
+                            (let* ((Contents (shen/<-address Dict 3)))
+                              (hash-table-keys Contents))))
+        (shen.dict-values . (defun shen/shen\.dict-values
+                                (Dict)
+                              (let* ((Contents (shen/<-address Dict 3)))
+                                (hash-table-values Contents))))
+        (shen.dict-fold . (defun shen/shen\.dict-fold
+                              (F Dict Acc)
+                            (let ((Contents (shen/<-address Dict 3)))
+                              (progn
+                                (setq NewAcc Acc)
+                                (maphash
+                                 (lambda (Key Value)
+                                   (setq NewAcc (shen/internal/apply-higher-order-function F (list Key Value NewAcc))))
+                                 Contents)
+                                NewAcc))))
         (put . (defun shen/put
                    (X Pointer Y Dict)
                  (let* ((Contents (shen/<-address Dict 3))
@@ -1262,7 +1245,15 @@
                      (progn
                        (if X-Contents
                            (remhash Pointer X-Contents))
-                       X))))))
+                       X))))
+        (get . (defun shen/get
+                   (X Pointer Dict)
+                 (let* ((Contents (shen/<-address Dict 3))
+                        (X-Contents (shen/<-address Contents X))
+                        (Pointer-Contents (if X-Contents (shen/<-address X-Contents Pointer))))
+                   (if (not Pointer-Contents)
+                       (shen/simple-error "value not found")
+                     Pointer-Contents))))))
 ;; Performance:2 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Namespacing][Namespacing:1]]
@@ -1280,13 +1271,7 @@
                                  (shen/internal/delete-first-eq
                                   F
                                   (shen/value shen.*tracking*)))
-                       (shen/eval (shen/ps F)))))
-        (<-address/or . (defun shen/<-address/or
-                            (Vector N Or)
-                          (let ((Value (shen/<-address Vector N)))
-                            (if (not Value)
-                                (shen/thaw Or)
-                              Value))))))
+                       (shen/eval (shen/ps F)))))))
 ;; Bug Fixes:1 ends here
 
 ;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluate%20KLambda][Evaluate KLambda:1]]
