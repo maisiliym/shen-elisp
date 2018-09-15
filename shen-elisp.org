@@ -18,7 +18,7 @@
 ** License
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   ;; -*- lexical-binding: t -*-
-  ;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+  ;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
   ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 #+END_SRC
 ** Implementation Constants
@@ -1796,7 +1796,7 @@ to the end of the buffer.
 Override of some of Shen's default implementations.
 ** License
 #+BEGIN_SRC elisp :tangle shen-overlays.el
-  ;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+  ;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
   ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 #+END_SRC
 ** Repl
@@ -1839,7 +1839,7 @@ When changing directories in the REPL, for convenience, also change Emacs' worki
 * Shen REPL
 #+BEGIN_SRC elisp :tangle shen-repl.el :comments no
   ;; -*- lexical-binding: t -*-
-  ;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+  ;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
   ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 #+END_SRC
 
@@ -2323,7 +2323,7 @@ KLambda code into Elisp.
         (insert "\
   ;;; shen-elisp.el --- An implementation of the Shen programming language  -*- lexical-binding: t -*-
 
-  ;; Copyright (C) 2015-2016  Aditya Siram
+  ;; Copyright (C) 2015-2018  Aditya Siram
 
   ;; Author: Aditya Siram <aditya.siram@gmail.com>
   ;; Homepage: https://github.com/deech/shen-elisp
@@ -2367,23 +2367,23 @@ KLambda code into Elisp.
 * The Runner
 #+BEGIN_SRC elisp :tangle install.el
   (defun compile-and-load (F)
-      (byte-compile-file
-       (concat (file-name-as-directory default-directory)
-               (file-relative-name F))
-       't))
-    (defun load-klambda () (eval-klambda-files *klambda-files*))
-    (defun load-only ()
-      (progn
-        (compile-and-load "shen-primitives.el")
-        (compile-and-load "install.el")))
-    (defun runner ()
-      (progn
-        (compile-and-load "shen-primitives.el")
-        (compile-and-load "install.el")
-        (eval-klambda-files *klambda-files*)
-        (compile-and-load "shen-elisp.el")
-        (compile-and-load "shen-overlays.el")
-        (compile-and-load "shen-repl.el")
-        (add-to-list 'load-path default-directory)
-        (shen/repl)))
+    (byte-compile-file
+     (concat (file-name-as-directory default-directory)
+             (file-relative-name F))
+     't))
+  (defun load-klambda () (eval-klambda-files *klambda-files*))
+  (defun load-only ()
+    (progn
+      (compile-and-load "shen-primitives.el")
+      (compile-and-load "install.el")))
+  (defun runner ()
+    (progn
+      (compile-and-load "shen-primitives.el")
+      (compile-and-load "install.el")
+      (eval-klambda-files *klambda-files*)
+      (compile-and-load "shen-elisp.el")
+      (compile-and-load "shen-overlays.el")
+      (compile-and-load "shen-repl.el")
+      (add-to-list 'load-path default-directory)
+      (shen/repl)))
 #+END_SRC
