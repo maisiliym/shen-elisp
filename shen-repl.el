@@ -1,15 +1,15 @@
 ;; -*- lexical-binding: t -*-
-;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Shen%20REPL][Shen REPL:2]]
+;; [[file:shen-elisp.org::*Shen REPL][Shen REPL:2]]
 (require 'comint)
 (require 'shen-primitives)
 (require 'shen-elisp)
 (require 'shen-overlays)
 ;; Shen REPL:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Credits][Credits:1]]
+;; [[file:shen-elisp.org::*Credits][Credits:1]]
 (defconst shen/shen.credits
   (format "%s\n%s\n%s\n%s\n\n"
           "Shen, copyright (C) 2010-2015 Mark Tarver"
@@ -18,7 +18,7 @@
           (format "port %s ported by %s" (shen/value '*port*) (shen/value '*porters*))))
 ;; Credits:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Prompt][Prompt:1]]
+;; [[file:shen-elisp.org::*Prompt][Prompt:1]]
 (defconst shen/repl-prompt-regex
   (rx line-start
       (char ?( )
@@ -28,7 +28,7 @@
       (char ? )))
 ;; Prompt:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Prompt][Prompt:2]]
+;; [[file:shen-elisp.org::*Prompt][Prompt:2]]
 (defun shen/make-prompt nil
   (format "(%d%s) "
           (shen/length (shen/value 'shen.*history*))
@@ -37,7 +37,7 @@
             "-")))
 ;; Prompt:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Input%20Events][Input Events:1]]
+;; [[file:shen-elisp.org::*Input Events][Input Events:1]]
 (defvar shen/repl-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-j" 'shen/repl-send-input)
@@ -98,7 +98,7 @@
           "")))))
 ;; Input Events:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Sending%20Input][Sending Input:1]]
+;; [[file:shen-elisp.org::*Sending Input][Sending Input:1]]
 (defvar shen/repl-input)
 
 (defun shen/repl-send-input nil
@@ -116,7 +116,7 @@
       (goto-char (point-max)))))
 ;; Sending Input:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluating%20User%20Input][Evaluating User Input:1]]
+;; [[file:shen-elisp.org::*Evaluating User Input][Evaluating User Input:1]]
 (defun shen/repl-standard-output-impl (process)
   (let* ((output-buffer nil)
          (flush-timer nil)
@@ -142,7 +142,7 @@
             (setf flush-timer (run-with-timer 0.1 nil flush-buffer))))))))
 ;; Evaluating User Input:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluating%20User%20Input][Evaluating User Input:2]]
+;; [[file:shen-elisp.org::*Evaluating User Input][Evaluating User Input:2]]
 (defun shen/repl-process nil
   ;; Return the current buffer's process.
   (get-buffer-process (current-buffer)))
@@ -181,7 +181,7 @@
       ('shen/error (funcall clean-up active-process ex)))))
 ;; Evaluating User Input:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*The%20REPL%20Mode][The REPL Mode:1]]
+;; [[file:shen-elisp.org::*The REPL Mode][The REPL Mode:1]]
 (defconst shen/syntax-table
   (let ((table (make-syntax-table lisp-mode-syntax-table)))
     (modify-syntax-entry 59 "_") ;; semi-colon
@@ -229,7 +229,7 @@
 (defconst *shen-repl* "*shen-repl*")
 ;; The REPL Mode:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Starting%20the%20REPL][Starting the REPL:1]]
+;; [[file:shen-elisp.org::*Starting the REPL][Starting the REPL:1]]
 ;;;###autoload
 (defun shen/repl nil
   (interactive)
@@ -250,6 +250,6 @@
     (when old-point (push-mark old-point))))
 ;; Starting the REPL:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Provide%20it][Provide it:1]]
+;; [[file:shen-elisp.org::*Provide it][Provide it:1]]
 (provide 'shen-repl)
 ;; Provide it:1 ends here

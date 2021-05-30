@@ -1,4 +1,4 @@
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Package%20Details][Package Details:1]]
+;; [[file:shen-elisp.org::*Package Details][Package Details:1]]
 (define-package
   "shen-elisp"
   "19.2-0.0.1"

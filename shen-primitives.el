@@ -1,48 +1,48 @@
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*License][License:1]]
+;; [[file:shen-elisp.org::*License][License:1]]
 ;; -*- lexical-binding: t -*-
-;; Copyright (c) 2015-2016 Aditya Siram. All Rights Reserved.
+;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 ;; License:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Implementation%20Constants][Implementation Constants:1]]
+;; [[file:shen-elisp.org::*Implementation Constants][Implementation Constants:1]]
 (defconst shen/prefix "shen/")
 ;; Implementation Constants:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbols][Symbols:1]]
+;; [[file:shen-elisp.org::*Symbols][Symbols:1]]
 (defsubst shen/symbol-p (X)
   (not (or (consp X) (bufferp X) (vectorp X) (numberp X) (stringp X))))
 ;; Symbols:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbols][Symbols:2]]
+;; [[file:shen-elisp.org::*Symbols][Symbols:2]]
 (defsubst shen/intern (String)
   (intern String))
 ;; Symbols:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Symbols][Symbols:3]]
+;; [[file:shen-elisp.org::*Symbols][Symbols:3]]
 (defsubst shen/symbol->string (X)
   (symbol-name X))
 ;; Symbols:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Prefixing%20Utilities][Prefixing Utilities:1]]
+;; [[file:shen-elisp.org::*Prefixing Utilities][Prefixing Utilities:1]]
 (defun shen/internal/prefix-symbol (X)
   (if (shen/symbol-p X)
       (intern (concat shen/prefix (symbol-name X)))
     X))
 ;; Prefixing Utilities:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Prefixing%20Utilities][Prefixing Utilities:2]]
+;; [[file:shen-elisp.org::*Prefixing Utilities][Prefixing Utilities:2]]
 (defun shen/internal/symbol-prefixed-p (X)
   (and (shen/symbol-p X) (string-prefix-p shen/prefix (symbol-name X))))
 ;; Prefixing Utilities:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Prefixing%20Utilities][Prefixing Utilities:3]]
+;; [[file:shen-elisp.org::*Prefixing Utilities][Prefixing Utilities:3]]
 (defun shen/internal/unprefix-symbol (X)
   (if (shen/internal/symbol-prefixed-p X)
       (intern (substring (symbol-name X) (length shen/prefix)))
     X))
 ;; Prefixing Utilities:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Assignments][Assignments:1]]
+;; [[file:shen-elisp.org::*Assignments][Assignments:1]]
 (defun shen/set (X Y)
   (set (intern (concat shen/prefix (symbol-name X)))
        (let ((prefixed))
@@ -61,7 +61,7 @@
     ('error (error (format "%s has not been assigned" X)))))
 ;; Assignments:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*KLambda%20Constants][KLambda Constants:1]]
+;; [[file:shen-elisp.org::*KLambda Constants][KLambda Constants:1]]
 (shen/set '*home-directory* "")
 (shen/set '*stoutput* standard-output)
 (shen/set '*stinput* [()])
@@ -73,21 +73,21 @@
 (shen/set '*os* (symbol-name system-type))
 ;; KLambda Constants:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Boolean%20Operations][Boolean Operations:1]]
+;; [[file:shen-elisp.org::*Boolean Operations][Boolean Operations:1]]
 (defsubst shen/internal/shen->predicate (X)
   (eq X 'true))
 (defsubst shen/internal/predicate->shen (X)
   (if X (quote true) (quote false)))
 ;; Boolean Operations:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Boolean%20Operations][Boolean Operations:2]]
+;; [[file:shen-elisp.org::*Boolean Operations][Boolean Operations:2]]
 (defmacro shen/if (X Y Z)
   `(if (eq ,X 'true) ,Y ,Z))
 (defmacro shen/and (X Y) `(shen/internal/predicate->shen (and (eq ,X 'true) (eq ,Y 'true))))
 (defmacro shen/or (X Y) `(shen/internal/predicate->shen (or (eq ,X 'true) (eq ,Y 'true))))
 ;; Boolean Operations:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Boolean%20Operations][Boolean Operations:3]]
+;; [[file:shen-elisp.org::*Boolean Operations][Boolean Operations:3]]
 (defmacro shen/cond (&rest CASES)
   (let* ((predicates-quoted-cases
           (mapcar (lambda (predicate-result-pair)
@@ -100,23 +100,23 @@
     `(cond ,@fallthrough-added)))
 ;; Boolean Operations:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Lambdas][Lambdas:3]]
+;; [[file:shen-elisp.org::*Lambdas][Lambdas:3]]
 (defmacro shen/lambda (X Y)
   (if (eq X nil)
       `(lambda () ,Y)
     `(lambda (,X) ,Y)))
 ;; Lambdas:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Lets][Lets:2]]
+;; [[file:shen-elisp.org::*Lets][Lets:2]]
 (defmacro shen/let (X Y Z)
   `(let ((,X ,Y)) ,Z))
 ;; Lets:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Defuns][Defuns:1]]
+;; [[file:shen-elisp.org::*Defuns][Defuns:1]]
 (defmacro shen/defun (F Args Body) `(defun ,F ,Args ,Body))
 ;; Defuns:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Equality][Equality:1]]
+;; [[file:shen-elisp.org::*Equality][Equality:1]]
 (defun shen/internal/= (X Y)
   (cond ((and (stringp X) (stringp Y)) (string-equal X Y))  ;;; (ref:strings-and-numbers)
         ((and (numberp X) (numberp Y)) (= X Y))
@@ -172,24 +172,24 @@
   (shen/internal/predicate->shen (shen/internal/= X Y)))
 ;; Equality:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Other%20Generic%20Functions][Other Generic Functions:1]]
+;; [[file:shen-elisp.org::*Other Generic Functions][Other Generic Functions:1]]
 (defmacro shen/freeze (X)
   `(function (lambda nil ,X)))
 (defsubst shen/type (X MyType) (declare (ignore MyType)) X)
 ;; Other Generic Functions:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Lists][Lists:1]]
+;; [[file:shen-elisp.org::*Lists][Lists:1]]
 (defsubst shen/cons (A Rest)
   (cons A Rest))
 ;; Lists:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Lists][Lists:2]]
+;; [[file:shen-elisp.org::*Lists][Lists:2]]
 (defsubst shen/hd (List)    (car List))
 (defsubst shen/tl (List)    (cdr List))
 (defsubst shen/cons? (List) (shen/internal/predicate->shen (consp List)))
 ;; Lists:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Strings][Strings:1]]
+;; [[file:shen-elisp.org::*Strings][Strings:1]]
 (defun shen/str (X)
   (cond ((null X) (error "null is not an atom in Shen; str cannot convert it to a string.~%"))
         ((or (symbolp X) (functionp X)) (symbol-name X))
@@ -202,22 +202,22 @@
          (error (format "%s is not an atom, stream or closure; str cannot convert it to a string." X)))))
 ;; Strings:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Strings][Strings:2]]
+;; [[file:shen-elisp.org::*Strings][Strings:2]]
 (defsubst shen/pos (S N) (string (aref S N)))
 ;; Strings:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Strings][Strings:3]]
+;; [[file:shen-elisp.org::*Strings][Strings:3]]
 (defsubst shen/tlstr (X) (substring X 1))
 ;; Strings:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Strings][Strings:4]]
+;; [[file:shen-elisp.org::*Strings][Strings:4]]
 (defsubst shen/string? (S) (shen/internal/predicate->shen (stringp S)))
 (defsubst shen/cn (Str1 Str2) (concat Str1 Str2))
 (defsubst shen/n->string (N) (string N))
 (defsubst shen/string->n (S) (string-to-char S))
 ;; Strings:4 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Error%20Handling][Error Handling:1]]
+;; [[file:shen-elisp.org::*Error Handling][Error Handling:1]]
 (define-error 'shen/error "Shen error" 'error)
 (defsubst shen/simple-error (E)
   (signal 'shen/error
@@ -229,14 +229,14 @@
 (defsubst shen/error-to-string (E) (format "%s" E))
 ;; Error Handling:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Vectors][Vectors:1]]
+;; [[file:shen-elisp.org::*Vectors][Vectors:1]]
 (defsubst shen/absvector (N) (make-hash-table :size N :rehash-size 3.0 :test 'shen/internal/hash-table-test))
 (defsubst shen/address-> (Vector N Value) (progn (puthash N Value Vector) Vector))
 (defsubst shen/<-address (Vector N) (gethash N Vector))
 (defsubst shen/absvector? (X) (shen/internal/predicate->shen (hash-table-p X)))
 ;; Vectors:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Vectors][Vectors:2]]
+;; [[file:shen-elisp.org::*Vectors][Vectors:2]]
 (define-hash-table-test
   'shen/internal/hash-table-test
   (lambda (X Y)
@@ -250,12 +250,12 @@
      (t (sxhash X)))))
 ;; Vectors:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Arithmetic%20Operations][Arithmetic Operations:1]]
+;; [[file:shen-elisp.org::*Arithmetic Operations][Arithmetic Operations:1]]
 (defconst shen/multiplication-limit (floor (sqrt most-positive-fixnum)))
 (defconst shen/addition-limit (floor (/ most-positive-fixnum 2)))
 ;; Arithmetic Operations:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Arithmetic%20Operations][Arithmetic Operations:2]]
+;; [[file:shen-elisp.org::*Arithmetic Operations][Arithmetic Operations:2]]
 (defun shen/number-op (X Y max op)
   (cond
    ((and (integerp X) (integerp Y))
@@ -270,13 +270,13 @@
    (t (error (format "Trying to %s. Both %s and %s must be numbers" op X Y)))))
 ;; Arithmetic Operations:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Arithmetic%20Operations][Arithmetic Operations:3]]
+;; [[file:shen-elisp.org::*Arithmetic Operations][Arithmetic Operations:3]]
 (defsubst shen/* (X Y) (shen/number-op X Y shen/multiplication-limit #'*))
 (defsubst shen/+ (X Y) (shen/number-op X Y shen/addition-limit #'+))
 (defsubst shen/- (X Y) (shen/number-op X Y shen/addition-limit #'-))
 ;; Arithmetic Operations:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Arithmetic%20Operations][Arithmetic Operations:4]]
+;; [[file:shen-elisp.org::*Arithmetic Operations][Arithmetic Operations:4]]
 (defsubst shen// (X Y)
   (cond
    ((or (not (numberp X)) (not (numberp Y)))
@@ -290,7 +290,7 @@
    (t (/ (float X) (float Y)))))
 ;; Arithmetic Operations:4 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Arithmetic%20Operations][Arithmetic Operations:5]]
+;; [[file:shen-elisp.org::*Arithmetic Operations][Arithmetic Operations:5]]
 (defsubst shen/> (X Y)     (shen/internal/predicate->shen (> X Y)))
 (defsubst shen/< (X Y)     (shen/internal/predicate->shen (< X Y)))
 (defsubst shen/>= (X Y)    (shen/internal/predicate->shen (>= X Y)))
@@ -298,7 +298,7 @@
 (defsubst shen/number? (N) (shen/internal/predicate->shen (numberp N)))
 ;; Arithmetic Operations:5 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Time][Time:1]]
+;; [[file:shen-elisp.org::*Time][Time:1]]
 (defconst shen/2^16 65536)
 (defun shen/get-time (Time)
   (cl-flet
@@ -312,11 +312,11 @@
           (t (error (format "get-time does not understand parameter %s." Time))))))
 ;; Time:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Streams%20and%20I/O][Streams and I/O:1]]
+;; [[file:shen-elisp.org::*Streams and I/O][Streams and I/O:1]]
 (defsubst shen/streamp (X) (and (bufferp X) (buffer-file-name X)))
 ;; Streams and I/O:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Streams%20and%20I/O][Streams and I/O:2]]
+;; [[file:shen-elisp.org::*Streams and I/O][Streams and I/O:2]]
 (defun shen/open (Path Direction)
   (let* ((Path (concat (file-name-as-directory (shen/value '*home-directory*))
                        (file-relative-name Path)))
@@ -354,7 +354,7 @@
                   (setq-local shen/shen-buffer 't)))))))))))
 ;; Streams and I/O:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Streams%20and%20I/O][Streams and I/O:3]]
+;; [[file:shen-elisp.org::*Streams and I/O][Streams and I/O:3]]
 (defun shen/close (Stream)
   (if (not Stream)
       (error "Stream is nil.")
@@ -399,12 +399,12 @@
    (t (error (format "Unrecognized stream format %s" S)))))
 ;; Streams and I/O:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Lookup][Lookup:1]]
+;; [[file:shen-elisp.org::*Lookup][Lookup:1]]
 (defun shen/internal/lookup-with-default (KEY ALIST DEFAULT)
   (car (or (assoc-default KEY ALIST) (list DEFAULT))))
 ;; Lookup:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::AST%20Getter][AST Getter]]
+;; [[file:shen-elisp.org::AST Getter][AST Getter]]
 (defun shen/internal/get-element-at (path ast)
   (let ((res ast))
     (dolist (current-index (reverse path) res)
@@ -413,7 +413,7 @@
         (setq res (nth current-index res))))))
 ;; AST Getter ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::AST%20Setter][AST Setter]]
+;; [[file:shen-elisp.org::AST Setter][AST Setter]]
 (defun shen/internal/nset-element-at (path ast new-element)
   (if (not path)
       (setf ast new-element)
@@ -438,7 +438,7 @@
         ast))))
 ;; AST Setter ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Find%20All][Find All:1]]
+;; [[file:shen-elisp.org::*Find All][Find All:1]]
 (defun shen/internal/find-all (X ast)
   (if (not (consp ast))
       'shen/not-found
@@ -463,7 +463,7 @@
       found)))
 ;; Find All:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Find%20Containing%20List][Find Containing List:1]]
+;; [[file:shen-elisp.org::*Find Containing List][Find Containing List:1]]
 (defun shen/internal/list-containing-first-occurrence-of (list-pred ast)
   (if (not (consp ast))
       'shen/not-found
@@ -491,7 +491,7 @@
         found))))
 ;; Find Containing List:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Path%20Utilities][Path Utilities:1]]
+;; [[file:shen-elisp.org::*Path Utilities][Path Utilities:1]]
 (defun shen/internal/get-path-relative-to (parent-path path)
   (and (shen/internal/starts-with-path parent-path path)
        (shen/internal/path-slice path 0 (- (length path) (length parent-path)))))
@@ -518,7 +518,7 @@
       start-to-end)))
 ;; Path Utilities:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*AST%20Modification][AST Modification:1]]
+;; [[file:shen-elisp.org::*AST Modification][AST Modification:1]]
 (defun shen/internal/modify-ast (ast paths tx-fn)
   (let ((deepest-first (sort paths (lambda (A B) (> (length A) (length B)))))
         (current-ast ast))
@@ -527,12 +527,12 @@
             (shen/internal/nset-element-at path ast (funcall tx-fn path ast))))))
 ;; AST Modification:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Detect%20Dotted%20Pair][Detect Dotted Pair:1]]
+;; [[file:shen-elisp.org::*Detect Dotted Pair][Detect Dotted Pair:1]]
 (defun shen/internal/dotted-pair? (X)
   (and (consp X) (not (consp (cdr X)))))
 ;; Detect Dotted Pair:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*List%20Filtering][List Filtering:1]]
+;; [[file:shen-elisp.org::*List Filtering][List Filtering:1]]
 (defun shen/internal/partition (pred Xs)
   (let ((a)
         (b))
@@ -541,7 +541,7 @@
             (if (funcall pred (nth i Xs)) a b)))))
 ;; List Filtering:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*List%20Filtering][List Filtering:2]]
+;; [[file:shen-elisp.org::*List Filtering][List Filtering:2]]
 (defun shen/internal/filter (pred Xs &optional include-index)
   (let ((accum))
     (dotimes (i (length Xs) accum)
@@ -552,7 +552,7 @@
                 accum)))))
 ;; List Filtering:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*List%20Filtering][List Filtering:3]]
+;; [[file:shen-elisp.org::*List Filtering][List Filtering:3]]
 (defun shen/internal/index-of (pred Xs)
   (let ((found)
         (index 0))
@@ -564,7 +564,7 @@
     found))
 ;; List Filtering:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*List%20Filtering][List Filtering:4]]
+;; [[file:shen-elisp.org::*List Filtering][List Filtering:4]]
 (defun shen/internal/delete-first-eq (needle Xs)
   (let ((index (shen/internal/index-of (lambda (X) (eq X needle)) Xs)))
     (if index
@@ -579,7 +579,7 @@
       Xs)))
 ;; List Filtering:4 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Walking%20The%20AST][Walking The AST:1]]
+;; [[file:shen-elisp.org::*Walking The AST][Walking The AST:1]]
 (defun shen/internal/get-function-symbol-and-funcall-paths (ast)
   (let ((namespace-only)        ;; (ref:namespace-only)
         (quote-only)            ;; (ref:quote-only)
@@ -674,7 +674,7 @@
         (list namespace-only quote-only possibly-apply-function))))) ;; (ref:returns)
 ;; Walking The AST:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::Primitive%20Macros][Primitive Macros]]
+;; [[file:shen-elisp.org::Primitive Macros][Primitive Macros]]
 (setq shen/*primitive-macros*
       '(shen/if
         shen/and
@@ -687,7 +687,7 @@
         shen/trap-error))
 ;; Primitive Macros ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Function%20Application][Function Application:2]]
+;; [[file:shen-elisp.org::*Function Application][Function Application:2]]
 (defun shen/internal/apply-function (f args locally-scoped)
   (cond
    (locally-scoped       ;;(ref:higher-order function)
@@ -760,7 +760,7 @@
      (t arity))))
 ;; Function Application:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Detecting%20Recursive%20Calls][Detecting Recursive Calls:1]]
+;; [[file:shen-elisp.org::*Detecting Recursive Calls][Detecting Recursive Calls:1]]
 (defun shen/internal/find-recursive-call-paths (function-name args ast)
   (if (not (consp ast))
       'shen/not-found
@@ -826,7 +826,7 @@
       found)))
 ;; Detecting Recursive Calls:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Detecting%20Function%20Application%20Context][Detecting Function Application Context:1]]
+;; [[file:shen-elisp.org::*Detecting Function Application Context][Detecting Function Application Context:1]]
 (defun shen/start-of-function-chain (tail-call-path ast)
   (let* ((from-the-top (reverse tail-call-path))
          (current-from-top-path)
@@ -871,7 +871,7 @@
       start)))
 ;; Detecting Function Application Context:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Getting%20the%20Tail%20Calls][Getting the Tail Calls:1]]
+;; [[file:shen-elisp.org::*Getting the Tail Calls][Getting the Tail Calls:1]]
 (defun shen/internal/get-tail-call-paths (ast)
   (let* ((function-name (nth 1 ast))
          (args (nth 2 ast))
@@ -886,7 +886,7 @@
                 (push (append tail-call-path (list 3)) accum))))))))
 ;; Getting the Tail Calls:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Generating%20A%20TCO'ed%20Function][Generating A TCO'ed Function:1]]
+;; [[file:shen-elisp.org::*Generating A TCO'ed Function][Generating A TCO'ed Function:1]]
 (defun shen/trampoline-body (ast)
   (let* ((args (nth 2 ast))
          (body (nth 3 ast))
@@ -898,7 +898,7 @@
          result))))
 ;; Generating A TCO'ed Function:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Modifying%20The%20AST][Modifying The AST:1]]
+;; [[file:shen-elisp.org::*Modifying The AST][Modifying The AST:1]]
 (defun shen/internal/parse-ast (ast)
   (if (not (consp ast))
       (if (shen/symbol-p ast) (list 'quote ast) ast)
@@ -955,7 +955,7 @@
               current-ast)))))))
 ;; Modifying The AST:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Modifying%20The%20AST][Modifying The AST:2]]
+;; [[file:shen-elisp.org::*Modifying The AST][Modifying The AST:2]]
 (defun shen/internal/namespace-and-quote (ast namespace-only-paths quote-only-paths)
   (progn
     (shen/internal/modify-ast ast namespace-only-paths
@@ -970,7 +970,7 @@
     ast))
 ;; Modifying The AST:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Modifying%20The%20AST][Modifying The AST:3]]
+;; [[file:shen-elisp.org::*Modifying The AST][Modifying The AST:3]]
 (defun shen/internal/add-funcalls (ast apply-function)
   (let ((paths-only (mapcar (lambda (path-local) (nth 0 path-local)) apply-function)))
     (shen/internal/modify-ast ast (mapcar #'shen/internal/get-path-parent paths-only)
@@ -984,7 +984,7 @@
                           (shen/internal/lookup-with-default (cons 0 path) apply-function nil)))))))
 ;; Modifying The AST:3 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*(Unused)%20Isolating%20and%20Filling][(Unused) Isolating and Filling:1]]
+;; [[file:shen-elisp.org::*(Unused) Isolating and Filling][(Unused) Isolating and Filling:1]]
 (defun shen/make-holed-context (tail-call-path function-chain-path ast)
   (let* ((function-chain (shen/internal/get-element-at function-chain-path ast))
          (tail-call (shen/internal/get-element-at tail-call-path ast))
@@ -1014,7 +1014,7 @@
               (shen/internal/nset-element-at path current-context value)))))))
 ;; (Unused) Isolating and Filling:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Consolidate%20Call%20Chains][Consolidate Call Chains:1]]
+;; [[file:shen-elisp.org::*Consolidate Call Chains][Consolidate Call Chains:1]]
 (defun shen/internal/consolidate (ast matcher-fn collector-fn tx-fn)
   (let* ((current-ast ast)
          (location-containing-chain
@@ -1037,7 +1037,7 @@
     current-ast))
 ;; Consolidate Call Chains:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Consolidate%20Cons][Consolidate Cons:1]]
+;; [[file:shen-elisp.org::*Consolidate Cons][Consolidate Cons:1]]
 (defun shen/internal/consolidate-cons (ast)
   (shen/internal/consolidate
    ast
@@ -1055,7 +1055,7 @@
        `(append (list ,@(reverse accum)) ,remaining-chain)))))
 ;; Consolidate Cons:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Consolidate%20@s][Consolidate @s:1]]
+;; [[file:shen-elisp.org::*Consolidate @s][Consolidate @s:1]]
 (defun shen/internal/consolidate-@s (ast)
   (shen/internal/consolidate
    ast
@@ -1071,7 +1071,7 @@
      (list 'concat (cons 'concat (reverse accum)) remaining-chain))))
 ;; Consolidate @s:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Consolidate%20tl][Consolidate tl:1]]
+;; [[file:shen-elisp.org::*Consolidate tl][Consolidate tl:1]]
 (defun shen/internal/consolidate-tl (ast)
   (shen/internal/consolidate
    ast
@@ -1087,7 +1087,7 @@
      (list 'nthcdr accum remaining-chain))))
 ;; Consolidate tl:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Add%201+'s][Add 1+'s:1]]
+;; [[file:shen-elisp.org::*Add 1+'s][Add 1+'s:1]]
 (defun shen/internal/add-1+ (ast)
   (shen/internal/consolidate
    ast
@@ -1106,7 +1106,7 @@
      (list '1+ accum))))
 ;; Add 1+'s:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Nil%20Comparisons%20To%20Null][Nil Comparisons To Null:1]]
+;; [[file:shen-elisp.org::*Nil Comparisons To Null][Nil Comparisons To Null:1]]
 (defun shen/internal/nil-to-null (ast)
   (shen/internal/consolidate
    ast
@@ -1125,7 +1125,7 @@
      `(shen/internal/predicate->shen (null ,accum)))))
 ;; Nil Comparisons To Null:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Performance][Performance:1]]
+;; [[file:shen-elisp.org::*Performance][Performance:1]]
 (setq shen/internal/*performance-overrides*
       '((map . (defun shen/map (F Xs)
                 (mapcar (lambda (X)
@@ -1168,7 +1168,7 @@
                              (setq Result (funcall F Result))))))))
 ;; Performance:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Performance][Performance:2]]
+;; [[file:shen-elisp.org::*Performance][Performance:2]]
 (setq shen/internal/*dict-overrides*
       '((shen.dict . (defun shen/shen\.dict
                          (Size)
@@ -1256,14 +1256,14 @@
                      Pointer-Contents))))))
 ;; Performance:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Namespacing][Namespacing:1]]
+;; [[file:shen-elisp.org::*Namespacing][Namespacing:1]]
 (setq shen/internal/*namespacing-overrides*
       '((function . (defun shen/function (S)
                       (shen/shen\.lookup-func
                        (shen/internal/unprefix-symbol S))))))
 ;; Namespacing:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Bug%20Fixes][Bug Fixes:1]]
+;; [[file:shen-elisp.org::*Bug Fixes][Bug Fixes:1]]
 (setq shen/internal/*bugfix-overrides*
       '((untrack . (defun shen/untrack (F)
                      (progn
@@ -1274,7 +1274,7 @@
                        (shen/eval (shen/ps F)))))))
 ;; Bug Fixes:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluate%20KLambda][Evaluate KLambda:1]]
+;; [[file:shen-elisp.org::*Evaluate KLambda][Evaluate KLambda:1]]
 (defun shen/internal/kl-to-elisp (Kl)
   (shen/internal/nil-to-null
    (shen/internal/add-1+
@@ -1283,7 +1283,7 @@
       (shen/internal/consolidate-cons (shen/internal/parse-ast Kl)))))))
 ;; Evaluate KLambda:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluate%20KLambda][Evaluate KLambda:2]]
+;; [[file:shen-elisp.org::*Evaluate KLambda][Evaluate KLambda:2]]
 (defun shen/eval-kl (X)
   (if (and (consp X) (eq (car X) 'defun))
       (progn
@@ -1292,7 +1292,7 @@
     (eval (shen/internal/kl-to-elisp X) 't)))
 ;; Evaluate KLambda:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Generate%20From%20Seed%20KLambda%20Files][Generate From Seed KLambda Files:1]]
+;; [[file:shen-elisp.org::*Generate From Seed KLambda Files][Generate From Seed KLambda Files:1]]
 (defun shen/internal/add-overrides (overrides table)
   (mapc
    (lambda (override)
@@ -1313,7 +1313,7 @@
         table))
 ;; Generate From Seed KLambda Files:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluating%20Bootstrapped%20KLambda][Evaluating Bootstrapped KLambda:1]]
+;; [[file:shen-elisp.org::*Evaluating Bootstrapped KLambda][Evaluating Bootstrapped KLambda:1]]
 (defun shen/patch-klambda (ast)
  (if (eq (car ast) 'defun)
        (let ((override (gethash (nth 1 ast) shen/*overrides*)))
@@ -1324,7 +1324,7 @@
            (shen/internal/parse-ast ast)))))
 ;; Evaluating Bootstrapped KLambda:1 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Evaluating%20Bootstrapped%20KLambda][Evaluating Bootstrapped KLambda:2]]
+;; [[file:shen-elisp.org::*Evaluating Bootstrapped KLambda][Evaluating Bootstrapped KLambda:2]]
 (defun shen/kl-to-buffer (X B)
   (with-current-buffer B
     (save-excursion
@@ -1338,6 +1338,6 @@
                     (shen/patch-klambda X)))))))))))
 ;; Evaluating Bootstrapped KLambda:2 ends here
 
-;; [[file:~/Lisp/shen-elisp/shen-elisp.org::*Providing%20The%20Primitives][Providing The Primitives:1]]
+;; [[file:shen-elisp.org::*Providing The Primitives][Providing The Primitives:1]]
 (provide 'shen-primitives)
 ;; Providing The Primitives:1 ends here
