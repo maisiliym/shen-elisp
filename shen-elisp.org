@@ -21,6 +21,12 @@
   ;; Copyright (c) 2015-2018 Aditya Siram. All Rights Reserved.
   ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 #+END_SRC
+** Dependencies
+This emacs-distributed macro library is required for cl-flet,
+which is used for lexically-bound functions:
+#+BEGIN_SRC elisp :tangle shen-primitives.el
+  (require 'cl-macs)
+#+END_SRC
 ** Implementation Constants
 #+BEGIN_SRC elisp :tangle shen-primitives.el
   (defconst shen/prefix "shen/")

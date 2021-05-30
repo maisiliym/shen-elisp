@@ -4,6 +4,10 @@
 ;; BSD 3-Clause License: http://opensource.org/licenses/BSD-3-Clause
 ;; License:1 ends here
 
+;; [[file:shen-elisp.org::*Dependencies][Dependencies:1]]
+(require 'cl-macs)
+;; Dependencies:1 ends here
+
 ;; [[file:shen-elisp.org::*Implementation Constants][Implementation Constants:1]]
 (defconst shen/prefix "shen/")
 ;; Implementation Constants:1 ends here
